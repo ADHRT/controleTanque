@@ -1,6 +1,6 @@
-Próximos passos:
+# Proximos passos:
 
-O aleatório não funciona direito, tem que dar uma melhorada no algoritmo
-Nada de conexão foi feito ainda
-Comentar melhor o código
-Relatório
+- [ ] O aleat√≥rio nao funciona direito, tem que dar uma melhorada no algoritmo
+- [ ] Nada de conexao foi feito ainda
+- [ ] Comentar melhor o codigo
+- [ ] Relatorio
