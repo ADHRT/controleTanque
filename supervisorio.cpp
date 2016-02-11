@@ -40,7 +40,6 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
     double frequencia = ui->doubleSpinBox->value();
     double amplitude = ui->doubleSpinBox_2->value();
     double offset = ui->doubleSpinBox_3->value();
-    int degraus = ui->spinBox->value();
     double duracaoMax = ui->doubleSpinBox_4->value();
     double duracaoMin= ui->doubleSpinBox_5->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
@@ -62,11 +61,11 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
     }
     else if(ui->radioButton_11->isChecked()){//Degrau
         //Enable Step Features
-        ui->label_11->setEnabled(true);
+        /*ui->label_11->setEnabled(true);
         ui->spinBox->setEnabled(true);
         ui->horizontalSlider_4->setEnabled(true);
         sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-        sinalCalculado=sinalCalculado-fmod(sinalCalculado,amplitude/degraus);
+        sinalCalculado=sinalCalculado-fmod(sinalCalculado,amplitude/degraus);*/
     }
     else {//Sinal Aleatório
         //Enable random Features
@@ -88,9 +87,9 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
 
     if(!(ui->radioButton_11->isChecked())){
         //Disable Step Features
-        ui->label_11->setEnabled(false);
-        ui->spinBox->setEnabled(false);
-        ui->horizontalSlider_4->setEnabled(false);
+        //ui->label_11->setEnabled(false);
+        //ui->spinBox->setEnabled(false);
+        //ui->horizontalSlider_4->setEnabled(false);
     }
     if(!(ui->radioButton_15->isChecked())){//Sinal Aleatório
         //Enable random Features
@@ -317,7 +316,7 @@ void supervisorio::on_doubleSpinBox_3_valueChanged(double arg1)
 }
 void supervisorio::on_spinBox_valueChanged(int arg1)
 {
-    ui->horizontalSlider_4->setValue(arg1);
+    //ui->horizontalSlider_4->setValue(arg1);
 }
 void supervisorio::on_doubleSpinBox_4_valueChanged(double arg1)
 {//Primeiro doubleSpinBox do aleatório(max)
@@ -348,7 +347,7 @@ void supervisorio::on_horizontalSlider_3_sliderReleased()
 }
 void supervisorio::on_horizontalSlider_4_sliderReleased()
 {
-    ui->spinBox->setValue(ui->horizontalSlider_4->value());
+    //ui->spinBox->setValue(ui->horizontalSlider_4->value());
 }
 void supervisorio::on_horizontalSlider_5_sliderReleased()
 {//Primeiro slider do aleatório(max)

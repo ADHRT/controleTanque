@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1440</width>
-    <height>900</height>
+    <width>1442</width>
+    <height>914</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,18 +19,18 @@
      <rect>
       <x>420</x>
       <y>40</y>
-      <width>871</width>
-      <height>351</height>
+      <width>831</width>
+      <height>271</height>
      </rect>
     </property>
    </widget>
    <widget class="QCustomPlot" name="customPlot2" native="true">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>460</y>
-      <width>871</width>
-      <height>351</height>
+      <x>410</x>
+      <y>390</y>
+      <width>831</width>
+      <height>271</height>
      </rect>
     </property>
    </widget>
@@ -38,9 +38,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>40</y>
+      <y>20</y>
       <width>381</width>
-      <height>771</height>
+      <height>721</height>
      </rect>
     </property>
     <property name="title">
@@ -50,7 +50,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>110</y>
+       <y>100</y>
        <width>131</width>
        <height>281</height>
       </rect>
@@ -168,12 +168,21 @@
        <string>Canal 7</string>
       </property>
      </widget>
+     <zorder>checkBox</zorder>
+     <zorder>checkBox_2</zorder>
+     <zorder>checkBox_3</zorder>
+     <zorder>checkBox_4</zorder>
+     <zorder>checkBox_5</zorder>
+     <zorder>checkBox_6</zorder>
+     <zorder>checkBox_7</zorder>
+     <zorder>checkBox_8</zorder>
+     <zorder>label_9</zorder>
     </widget>
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>390</y>
+       <y>380</y>
        <width>131</width>
        <height>281</height>
       </rect>
@@ -292,10 +301,10 @@
     <widget class="QGroupBox" name="groupBox_3">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>10</y>
-       <width>211</width>
-       <height>751</height>
+       <x>170</x>
+       <y>0</y>
+       <width>201</width>
+       <height>671</height>
       </rect>
      </property>
      <property name="title">
@@ -360,7 +369,7 @@
         <rect>
          <x>10</x>
          <y>120</y>
-         <width>121</width>
+         <width>151</width>
          <height>20</height>
         </rect>
        </property>
@@ -373,7 +382,7 @@
         <rect>
          <x>10</x>
          <y>150</y>
-         <width>121</width>
+         <width>131</width>
          <height>20</height>
         </rect>
        </property>
@@ -386,7 +395,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>210</y>
+        <y>200</y>
         <width>191</width>
         <height>531</height>
        </rect>
@@ -449,7 +458,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>150</y>
+         <y>140</y>
          <width>161</width>
          <height>24</height>
         </rect>
@@ -477,7 +486,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>240</y>
+         <y>220</y>
          <width>161</width>
          <height>24</height>
         </rect>
@@ -504,14 +513,17 @@
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>130</y>
-         <width>81</width>
-         <height>16</height>
+         <x>20</x>
+         <y>120</y>
+         <width>161</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
         <string>Amplitude (V)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QSlider" name="horizontalSlider">
@@ -543,7 +555,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>180</y>
+         <y>170</y>
          <width>151</width>
          <height>22</height>
         </rect>
@@ -562,7 +574,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>270</y>
+         <y>250</y>
          <width>151</width>
          <height>22</height>
         </rect>
@@ -583,80 +595,17 @@
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
-         <x>70</x>
-         <y>220</y>
-         <width>59</width>
-         <height>16</height>
+         <x>20</x>
+         <y>200</y>
+         <width>161</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
         <string>Offset (V)</string>
        </property>
-      </widget>
-      <widget class="QLabel" name="label_11">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>310</y>
-         <width>59</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Degraus</string>
-       </property>
-      </widget>
-      <widget class="QSpinBox" name="spinBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>330</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>128</number>
-       </property>
-       <property name="value">
-        <number>5</number>
-       </property>
-      </widget>
-      <widget class="QSlider" name="horizontalSlider_4">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>360</y>
-         <width>151</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>128</number>
-       </property>
-       <property name="value">
-        <number>5</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
        </property>
       </widget>
       <widget class="QLabel" name="label_12">
@@ -665,14 +614,17 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>400</y>
-         <width>141</width>
-         <height>16</height>
+         <x>10</x>
+         <y>280</y>
+         <width>181</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
         <string>Duração max e min (s)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
@@ -682,7 +634,7 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>420</y>
+         <y>310</y>
          <width>141</width>
          <height>24</height>
         </rect>
@@ -701,7 +653,7 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>480</y>
+         <y>370</y>
          <width>141</width>
          <height>24</height>
         </rect>
@@ -720,7 +672,7 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>450</y>
+         <y>340</y>
          <width>141</width>
          <height>22</height>
         </rect>
@@ -742,7 +694,7 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>510</y>
+         <y>400</y>
          <width>141</width>
          <height>22</height>
         </rect>
@@ -759,50 +711,11 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>670</y>
-       <width>131</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Conexão</string>
-     </property>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>50</y>
-        <width>131</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Conectar</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>30</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Desconectado</string>
-      </property>
-     </widget>
-    </widget>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
+       <y>0</y>
        <width>131</width>
        <height>91</height>
       </rect>
@@ -843,26 +756,77 @@
       </property>
      </widget>
     </widget>
+    <widget class="QGroupBox" name="groupBox_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>650</y>
+       <width>301</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Conexão</string>
+     </property>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>20</y>
+        <width>131</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Conectar</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>30</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Desconectado</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <zorder>groupBox_2</zorder>
+    <zorder>groupBox</zorder>
+    <zorder>groupBox_3</zorder>
+    <zorder>groupBox_4</zorder>
+    <zorder>groupBox_8</zorder>
+    <zorder>groupBox_7</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_9">
     <property name="geometry">
      <rect>
-      <x>1310</x>
-      <y>40</y>
-      <width>111</width>
-      <height>771</height>
+      <x>1260</x>
+      <y>0</y>
+      <width>91</width>
+      <height>701</height>
      </rect>
     </property>
     <property name="title">
-     <string>Níveis dos Tanques</string>
+     <string>Níveis</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
     <widget class="QProgressBar" name="progressBar">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>40</y>
+       <x>24</x>
+       <y>60</y>
        <width>31</width>
-       <height>351</height>
+       <height>270</height>
       </rect>
      </property>
      <property name="maximum">
@@ -878,11 +842,17 @@
     <widget class="QProgressBar" name="progressBar_2">
      <property name="geometry">
       <rect>
-       <x>70</x>
-       <y>390</y>
+       <x>24</x>
+       <y>410</y>
        <width>31</width>
-       <height>351</height>
+       <height>270</height>
       </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="maximum">
       <number>3000</number>
@@ -897,101 +867,82 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>150</y>
-       <width>59</width>
+       <x>0</x>
+       <y>40</y>
+       <width>91</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>Tanque 1</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>170</y>
-       <width>59</width>
+       <x>0</x>
+       <y>330</y>
+       <width>81</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>12cm</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>490</y>
-       <width>59</width>
+       <x>0</x>
+       <y>390</y>
+       <width>91</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>Tanque 2</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>510</y>
-       <width>59</width>
+       <x>0</x>
+       <y>680</y>
+       <width>81</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>12cm</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
-   </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>20</y>
-      <width>141</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Configurações Gerais</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>20</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Sinal Calculado e Sinal Travado</string>
-    </property>
+    <zorder>progressBar</zorder>
+    <zorder>progressBar_2</zorder>
+    <zorder>label_4</zorder>
+    <zorder>label_5</zorder>
+    <zorder>label_6</zorder>
+    <zorder>label_7</zorder>
+    <zorder>label_9</zorder>
    </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>440</y>
-      <width>121</width>
-      <height>16</height>
+      <x>420</x>
+      <y>360</y>
+      <width>871</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -1003,12 +954,15 @@
     <property name="text">
      <string>Nível dos tanques</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="label_17">
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>400</y>
+      <y>320</y>
       <width>101</width>
       <height>16</height>
      </rect>
@@ -1021,8 +975,8 @@
     <property name="geometry">
      <rect>
       <x>920</x>
-      <y>400</y>
-      <width>91</width>
+      <y>320</y>
+      <width>101</width>
       <height>16</height>
      </rect>
     </property>
@@ -1033,9 +987,9 @@
    <widget class="QLabel" name="label_19">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>820</y>
-      <width>111</width>
+      <x>650</x>
+      <y>670</y>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
@@ -1046,9 +1000,9 @@
    <widget class="QLabel" name="label_20">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>820</y>
-      <width>111</width>
+      <x>800</x>
+      <y>670</y>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
@@ -1059,8 +1013,8 @@
    <widget class="QLabel" name="label_21">
     <property name="geometry">
      <rect>
-      <x>980</x>
-      <y>820</y>
+      <x>960</x>
+      <y>670</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -1072,8 +1026,8 @@
    <widget class="QLabel" name="label_22">
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>820</y>
+      <x>1090</x>
+      <y>670</y>
       <width>59</width>
       <height>16</height>
      </rect>
@@ -1086,7 +1040,7 @@
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>400</y>
+      <y>320</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1111,7 +1065,7 @@
     <property name="geometry">
      <rect>
       <x>900</x>
-      <y>400</y>
+      <y>320</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1135,8 +1089,8 @@
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>820</y>
+      <x>630</x>
+      <y>670</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1160,8 +1114,8 @@
    <widget class="QPushButton" name="pushButton_5">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>820</y>
+      <x>780</x>
+      <y>670</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1185,8 +1139,8 @@
    <widget class="QPushButton" name="pushButton_6">
     <property name="geometry">
      <rect>
-      <x>960</x>
-      <y>820</y>
+      <x>940</x>
+      <y>670</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1210,8 +1164,8 @@
    <widget class="QPushButton" name="pushButton_7">
     <property name="geometry">
      <rect>
-      <x>1080</x>
-      <y>820</y>
+      <x>1070</x>
+      <y>670</y>
       <width>16</width>
       <height>16</height>
      </rect>
@@ -1232,14 +1186,81 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>0</y>
+      <width>341</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Configurações Gerais</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>10</y>
+      <width>831</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Sinal Calculado e Sinal Travado</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>customPlot</zorder>
+   <zorder>customPlot2</zorder>
+   <zorder>groupBox_6</zorder>
+   <zorder>groupBox_9</zorder>
+   <zorder>label_10</zorder>
+   <zorder>label_17</zorder>
+   <zorder>label_18</zorder>
+   <zorder>label_19</zorder>
+   <zorder>label_20</zorder>
+   <zorder>label_21</zorder>
+   <zorder>label_22</zorder>
+   <zorder>pushButton_2</zorder>
+   <zorder>pushButton_3</zorder>
+   <zorder>pushButton_4</zorder>
+   <zorder>pushButton_5</zorder>
+   <zorder>pushButton_6</zorder>
+   <zorder>pushButton_7</zorder>
+   <zorder>groupBox_8</zorder>
+   <zorder>groupBox_2</zorder>
+   <zorder>groupBox_4</zorder>
+   <zorder>groupBox</zorder>
+   <zorder>label_8</zorder>
+   <zorder>label_9</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1440</width>
-     <height>22</height>
+     <width>1442</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>
