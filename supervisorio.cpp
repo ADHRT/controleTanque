@@ -56,7 +56,7 @@ supervisorio::supervisorio(QWidget *parent) :
      connect(cThread,SIGNAL(waterLevelRead(double,double)),this,SLOT(OnWaterLevelRead(double,double)));
 
 
-
+    //OBS: Bom video para Threads
 
 }
 
