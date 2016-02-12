@@ -334,6 +334,9 @@
        <property name="text">
         <string>Degrau</string>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
       </widget>
       <widget class="QRadioButton" name="radioButton_12">
        <property name="geometry">
@@ -348,7 +351,7 @@
         <string>Onda Senoidal</string>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QRadioButton" name="radioButton_13">
@@ -401,8 +404,8 @@
        <rect>
         <x>10</x>
         <y>200</y>
-        <width>191</width>
-        <height>531</height>
+        <width>181</width>
+        <height>471</height>
        </rect>
       </property>
       <property name="title">
@@ -578,7 +581,7 @@
       <widget class="QSlider" name="horizontalSlider_3">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>30</x>
          <y>250</y>
          <width>151</width>
          <height>22</height>
@@ -638,17 +641,20 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>20</x>
          <y>310</y>
-         <width>141</width>
+         <width>161</width>
          <height>24</height>
         </rect>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
        <property name="maximum">
         <double>30.000000000000000</double>
        </property>
        <property name="value">
-        <double>10.000000000000000</double>
+        <double>3.000000000000000</double>
        </property>
       </widget>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
@@ -657,17 +663,23 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>20</x>
          <y>370</y>
-         <width>141</width>
+         <width>161</width>
          <height>24</height>
         </rect>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
        <property name="minimum">
         <double>0.000000000000000</double>
        </property>
        <property name="maximum">
         <double>30.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
        </property>
       </widget>
       <widget class="QSlider" name="horizontalSlider_5">
@@ -678,7 +690,7 @@
         <rect>
          <x>30</x>
          <y>340</y>
-         <width>141</width>
+         <width>151</width>
          <height>22</height>
         </rect>
        </property>
@@ -700,7 +712,7 @@
         <rect>
          <x>30</x>
          <y>400</y>
-         <width>141</width>
+         <width>151</width>
          <height>22</height>
         </rect>
        </property>
@@ -712,6 +724,19 @@
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_8">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>430</y>
+         <width>131</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Atualizar</string>
        </property>
       </widget>
      </widget>
@@ -766,7 +791,7 @@
       <rect>
        <x>10</x>
        <y>650</y>
-       <width>301</width>
+       <width>251</width>
        <height>61</height>
       </rect>
      </property>

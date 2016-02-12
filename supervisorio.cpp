@@ -23,6 +23,36 @@ supervisorio::supervisorio(QWidget *parent) :
     lastTimeStamp=0;
     timeToNextRandomNumber=0;
 
+    //Inicializa valores
+    frequencia = 1;
+    amplitude = 3;
+    offset = 0;
+    duracaoMax = 3;
+    duracaoMin = 1;
+
+    //Set valores
+        //Frequencia
+        ui->doubleSpinBox->setValue(frequencia);
+        ui->horizontalSlider->setValue(frequencia*100);
+        //Amplitude
+        ui->doubleSpinBox_2->setValue(amplitude);
+        ui->horizontalSlider_2->setValue(amplitude*100);
+        //Offset
+        ui->doubleSpinBox_3->setValue(offset);
+        ui->horizontalSlider_3->setValue(offset*100);
+        //Max
+        ui->doubleSpinBox_4->setValue(duracaoMax);
+        ui->horizontalSlider_5->setValue(duracaoMax*100);
+        //Min
+        ui->doubleSpinBox_5->setValue(duracaoMin);
+        ui->horizontalSlider_6->setValue(duracaoMin*100);
+
+     // Configura wave padrao
+     wave = senoidal;
+        ui->radioButton_12->setChecked(true);
+
+
+
 }
 
 supervisorio::~supervisorio()
@@ -36,41 +66,36 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
     // Get timeStamp
     double timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
-    //Get wave configurations
-    double frequencia = ui->doubleSpinBox->value();
-    double amplitude = ui->doubleSpinBox_2->value();
-    double offset = ui->doubleSpinBox_3->value();
-    double duracaoMax = ui->doubleSpinBox_4->value();
-    double duracaoMin= ui->doubleSpinBox_5->value();
-    if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
-
     //Calculates new points
     double nivelTanque1 = qSin(timeStamp)*5+5;
     double nivelTanque2 = qCos(timeStamp)*5+5;
 
-    if(ui->radioButton_12->isChecked()){//Onda senoidal
+    switch(wave)
+    {
+    case degrau:
+        sinalCalculado = amplitude + offset;
+        break;
+    case senoidal:
         sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-    }
-    else if(ui->radioButton_13->isChecked()){//Onda quadrada
+        break;
+    case quadrada:
         sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
         if(sinalCalculado>0)sinalCalculado = amplitude;
         else sinalCalculado = -amplitude;
-    }
-    else if(ui->radioButton_14->isChecked()){//Dente de serra
+        break;
+    case serra:
         sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
-    }
-    else if(ui->radioButton_11->isChecked()){//Degrau
-        sinalCalculado = amplitude + offset;
-    }
-    else {//Sinal Aleatório
-
-        //Essa parte aqui está zuada. Precisa refazer
+        break;
+    case aleatorio:
         if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
-            sinalCalculado = (double)rand()/RAND_MAX * amplitude + offset;
+            sinalCalculado = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
             lastTimeStamp=timeStamp;
             timeToNextRandomNumber= ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
             if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
         }
+        break;
+    default:
+        qDebug() << "ERRO: Nenhuma onda selecionada!";
     }
 
     //Calculates other points
@@ -471,28 +496,47 @@ void supervisorio::on_radioButton_10_clicked()
 void supervisorio::on_radioButton_11_clicked()
 {
     setLayout(false, true, false, false);
+    nextWave = degrau;
 }
 
 //Senoidal layout
 void supervisorio::on_radioButton_12_clicked()
 {
    setLayout(true, true, true, false);
+   nextWave = senoidal;
 }
 
-//Quadrado layout
+//Quadrada layout
 void supervisorio::on_radioButton_13_clicked()
 {
     setLayout(true, true, true, false);
+    nextWave = quadrada;
 }
 
 //Serra layout
 void supervisorio::on_radioButton_14_clicked()
 {
     setLayout(true, true, true, false);
+    nextWave = serra;
+
 }
 
 //Aleatorio layout
 void supervisorio::on_radioButton_15_clicked()
 {
     setLayout(false, true, true, true);
+    nextWave = aleatorio;
+}
+
+//Atualiza valores
+void supervisorio::on_pushButton_8_clicked()
+{
+    //Get wave configurations
+    frequencia = ui->doubleSpinBox->value();
+    amplitude = ui->doubleSpinBox_2->value();
+    offset = ui->doubleSpinBox_3->value();
+    duracaoMax = ui->doubleSpinBox_4->value();
+    duracaoMin= ui->doubleSpinBox_5->value();
+    if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
+    wave = nextWave;
 }

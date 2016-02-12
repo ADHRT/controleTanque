@@ -79,6 +79,8 @@ private slots:
 
   void on_radioButton_10_clicked();
 
+  void on_pushButton_8_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -88,7 +90,18 @@ private:
     double sinalCalculado;
     double timeToNextRandomNumber;
 
+    double frequencia;
+    double amplitude;
+    double offset;
+    double duracaoMax;
+    double duracaoMin;
+
+    enum Wave { degrau, senoidal, quadrada, serra, aleatorio };
+    Wave nextWave;
+    Wave wave;
+
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
+
 };
 
 #endif // SUPERVISORIO_H
