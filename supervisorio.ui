@@ -386,6 +386,11 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <family>Ubuntu</family>
+        </font>
+       </property>
        <property name="text">
         <string>Sinal Aleatório</string>
        </property>

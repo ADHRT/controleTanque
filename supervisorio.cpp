@@ -53,51 +53,24 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
     }
     else if(ui->radioButton_13->isChecked()){//Onda quadrada
         sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-        if(sinalCalculado>0)sinalCalculado=amplitude;
-        else sinalCalculado=-amplitude;
+        if(sinalCalculado>0)sinalCalculado = amplitude;
+        else sinalCalculado = -amplitude;
     }
     else if(ui->radioButton_14->isChecked()){//Dente de serra
         sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude+offset;
     }
     else if(ui->radioButton_11->isChecked()){//Degrau
-        //Enable Step Features
-        /*ui->label_11->setEnabled(true);
-        ui->spinBox->setEnabled(true);
-        ui->horizontalSlider_4->setEnabled(true);
-        sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-        sinalCalculado=sinalCalculado-fmod(sinalCalculado,amplitude/degraus);*/
+        sinalCalculado = amplitude+offset;
     }
     else {//Sinal Aleatório
-        //Enable random Features
-        ui->label_12->setEnabled(true);
-        ui->doubleSpinBox_4->setEnabled(true);
-        ui->doubleSpinBox_5->setEnabled(true);
-        ui->horizontalSlider_5->setEnabled(true);
-        ui->horizontalSlider_6->setEnabled(true);
 
         //Essa parte aqui está zuada. Precisa refazer
         if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
-            sinalCalculado=(double)fmod((double)rand()*10000,(double)amplitude)+(double)offset;
+            sinalCalculado = (double)rand()/RAND_MAX * amplitude + offset * rand();
             lastTimeStamp=timeStamp;
-            timeToNextRandomNumber=fmod((rand()*10000), (duracaoMax-duracaoMin)+0.1)+duracaoMin;
+            timeToNextRandomNumber= ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
             if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
         }
-    }
-
-
-    if(!(ui->radioButton_11->isChecked())){
-        //Disable Step Features
-        //ui->label_11->setEnabled(false);
-        //ui->spinBox->setEnabled(false);
-        //ui->horizontalSlider_4->setEnabled(false);
-    }
-    if(!(ui->radioButton_15->isChecked())){//Sinal Aleatório
-        //Enable random Features
-        ui->label_12->setEnabled(false);
-        ui->doubleSpinBox_4->setEnabled(false);
-        ui->doubleSpinBox_5->setEnabled(false);
-        ui->horizontalSlider_5->setEnabled(false);
-        ui->horizontalSlider_6->setEnabled(false);
     }
 
     //Calculates other points
@@ -252,8 +225,6 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
 
 }
 
-
-
 void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot, double greenPlot, double orangePlot)
 {
 
@@ -301,6 +272,28 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
 
 }
 
+void supervisorio::setLayout(bool frequencia, bool amplitude, bool offset, bool duracao) {
+    //Frequencia
+    ui->comboBox->setEnabled(frequencia);
+    ui->doubleSpinBox->setEnabled(frequencia);
+    ui->horizontalSlider->setEnabled(frequencia);
+    //Amplitude
+    ui->label_2->setEnabled(amplitude);
+    ui->doubleSpinBox_2->setEnabled(amplitude);
+    ui->horizontalSlider_2->setEnabled(amplitude);
+    //Offset
+    ui->label_3->setEnabled(offset);
+    ui->doubleSpinBox_3->setEnabled(offset);
+    ui->horizontalSlider_3->setEnabled(offset);
+    //Duracao Max Min
+    ui->label_12->setEnabled(duracao);
+    //Max
+    ui->doubleSpinBox_4->setEnabled(duracao);
+    ui->horizontalSlider_5->setEnabled(duracao);
+    //Min
+    ui->doubleSpinBox_5->setEnabled(duracao);
+    ui->horizontalSlider_6->setEnabled(duracao);
+}
 //Relações entre objetos do box "Demais conexões"
 void supervisorio::on_doubleSpinBox_valueChanged(double arg1)
 {
@@ -363,10 +356,7 @@ void supervisorio::on_horizontalSlider_6_sliderReleased()
     if((ui->horizontalSlider_5->value())<(ui->horizontalSlider_6->value())){
         ui->horizontalSlider_6->setValue(ui->horizontalSlider_5->value());
     }
-    ui->doubleSpinBox_5->setValue((double)ui->horizontalSlider_6->value()/100);
-}
-
-
+    ui->doubleSpinBox_5->setValue((double)ui->horizontalSlider_6->value()/100);}
 
 void supervisorio::on_comboBox_currentIndexChanged(int index)
 {
@@ -386,9 +376,6 @@ void supervisorio::on_comboBox_currentIndexChanged(int index)
 
 
 //OBS: Para adicionar gráficos vá em Widget -> Promote to -> QCustomPLot
-
-
-
 
 //Enable and disable plots
 void supervisorio::on_pushButton_2_clicked()
@@ -458,13 +445,52 @@ void supervisorio::on_pushButton_7_clicked()
     }
 }
 
+//Malha aberta
 void supervisorio::on_radioButton_9_clicked()
-{//Malha foi aberta
+{
     ui->pushButton_6->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
     plot2Enable[2]=false;
     ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
     plot2Enable[3]=false;
+    ui->label_2->setText("Amplitude (V)");
 }
 
+//Malha fechada
+void supervisorio::on_radioButton_10_clicked()
+{
+    ui->pushButton_6->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green.png")));
+    plot2Enable[2]=true;
+    ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+    plot2Enable[3]=true;
+    ui->label_2->setText("Amplitude (cm)");
+}
 
+//Degrau layout
+void supervisorio::on_radioButton_11_clicked()
+{
+    setLayout(false, true, true, false);
+}
 
+//Senoidal layout
+void supervisorio::on_radioButton_12_clicked()
+{
+   setLayout(true, true, true, false);
+}
+
+//Quadrado layout
+void supervisorio::on_radioButton_13_clicked()
+{
+    setLayout(true, true, true, false);
+}
+
+//Serra layout
+void supervisorio::on_radioButton_14_clicked()
+{
+    setLayout(true, true, true, false);
+}
+
+//Aleatorio layout
+void supervisorio::on_radioButton_15_clicked()
+{
+    setLayout(false, true, true, true);
+}

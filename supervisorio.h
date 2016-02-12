@@ -67,6 +67,18 @@ private slots:
 
   void on_horizontalSlider_6_sliderReleased();
 
+  void on_radioButton_11_clicked();
+
+  void on_radioButton_12_clicked();
+
+  void on_radioButton_13_clicked();
+
+  void on_radioButton_14_clicked();
+
+  void on_radioButton_15_clicked();
+
+  void on_radioButton_10_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -76,6 +88,7 @@ private:
     double sinalCalculado;
     double timeToNextRandomNumber;
 
+    void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
 };
 
 #endif // SUPERVISORIO_H
