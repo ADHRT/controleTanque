@@ -468,7 +468,7 @@ void supervisorio::on_radioButton_10_clicked()
 //Degrau layout
 void supervisorio::on_radioButton_11_clicked()
 {
-    setLayout(false, true, true, false);
+    setLayout(false, true, false, false);
 }
 
 //Senoidal layout
