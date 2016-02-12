@@ -57,16 +57,16 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
         else sinalCalculado = -amplitude;
     }
     else if(ui->radioButton_14->isChecked()){//Dente de serra
-        sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude+offset;
+        sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
     }
     else if(ui->radioButton_11->isChecked()){//Degrau
-        sinalCalculado = amplitude+offset;
+        sinalCalculado = amplitude + offset;
     }
     else {//Sinal Aleatório
 
         //Essa parte aqui está zuada. Precisa refazer
         if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
-            sinalCalculado = (double)rand()/RAND_MAX * amplitude + offset * rand();
+            sinalCalculado = (double)rand()/RAND_MAX * amplitude + offset;
             lastTimeStamp=timeStamp;
             timeToNextRandomNumber= ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
             if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
@@ -453,6 +453,7 @@ void supervisorio::on_radioButton_9_clicked()
     ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
     plot2Enable[3]=false;
     ui->label_2->setText("Amplitude (V)");
+    ui->label_3->setText("Offset (V)");
 }
 
 //Malha fechada
@@ -463,6 +464,7 @@ void supervisorio::on_radioButton_10_clicked()
     ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
     plot2Enable[3]=true;
     ui->label_2->setText("Amplitude (cm)");
+    ui->label_3->setText("Offset (cm)");
 }
 
 //Degrau layout
