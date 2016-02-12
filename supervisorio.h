@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "qcustomplot.h"
+#include "commthread.h"
 
 
 namespace Ui {
@@ -22,6 +23,10 @@ public:
      void updatePlot1(double timeStamp, double redPlot, double bluePlot);
      void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
      double lockSignal(double sinalCalculado, double nivelTanque1);
+     commThread *cThread;
+
+public slots:
+     void OnWaterLevelRead(double, double);
 
 private slots:
   void screenUpdateSlot();
@@ -80,6 +85,8 @@ private slots:
   void on_radioButton_10_clicked();
 
   void on_pushButton_8_clicked();
+
+  void on_pushButton_clicked();
 
 private:
     Ui::supervisorio *ui;

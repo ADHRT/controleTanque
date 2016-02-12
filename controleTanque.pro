@@ -17,10 +17,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         supervisorio.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    commthread.cpp
 
 HEADERS  += supervisorio.h \
-    qcustomplot.h
+    qcustomplot.h \
+    commthread.h
 
 FORMS += \
     supervisorio.ui

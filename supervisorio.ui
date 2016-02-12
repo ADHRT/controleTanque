@@ -168,15 +168,6 @@
        <string>Canal 7</string>
       </property>
      </widget>
-     <zorder>checkBox</zorder>
-     <zorder>checkBox_2</zorder>
-     <zorder>checkBox_3</zorder>
-     <zorder>checkBox_4</zorder>
-     <zorder>checkBox_5</zorder>
-     <zorder>checkBox_6</zorder>
-     <zorder>checkBox_7</zorder>
-     <zorder>checkBox_8</zorder>
-     <zorder>label_9</zorder>
     </widget>
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
@@ -828,12 +819,6 @@
       </property>
      </widget>
     </widget>
-    <zorder>groupBox_2</zorder>
-    <zorder>groupBox</zorder>
-    <zorder>groupBox_3</zorder>
-    <zorder>groupBox_4</zorder>
-    <zorder>groupBox_8</zorder>
-    <zorder>groupBox_7</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_9">
     <property name="geometry">
@@ -958,13 +943,6 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <zorder>progressBar</zorder>
-    <zorder>progressBar_2</zorder>
-    <zorder>label_4</zorder>
-    <zorder>label_5</zorder>
-    <zorder>label_6</zorder>
-    <zorder>label_7</zorder>
-    <zorder>label_9</zorder>
    </widget>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
@@ -1260,29 +1238,19 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <zorder>customPlot</zorder>
-   <zorder>customPlot2</zorder>
-   <zorder>groupBox_6</zorder>
-   <zorder>groupBox_9</zorder>
-   <zorder>label_10</zorder>
-   <zorder>label_17</zorder>
-   <zorder>label_18</zorder>
-   <zorder>label_19</zorder>
-   <zorder>label_20</zorder>
-   <zorder>label_21</zorder>
-   <zorder>label_22</zorder>
-   <zorder>pushButton_2</zorder>
-   <zorder>pushButton_3</zorder>
-   <zorder>pushButton_4</zorder>
-   <zorder>pushButton_5</zorder>
-   <zorder>pushButton_6</zorder>
-   <zorder>pushButton_7</zorder>
-   <zorder>groupBox_8</zorder>
-   <zorder>groupBox_2</zorder>
-   <zorder>groupBox_4</zorder>
-   <zorder>groupBox</zorder>
-   <zorder>label_8</zorder>
-   <zorder>label_9</zorder>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>10</y>
+      <width>191</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>number should appera here</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -1290,7 +1258,7 @@
      <x>0</x>
      <y>0</y>
      <width>1442</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

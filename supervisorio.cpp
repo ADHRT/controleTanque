@@ -49,7 +49,12 @@ supervisorio::supervisorio(QWidget *parent) :
 
      // Configura wave padrao
      wave = senoidal;
-        ui->radioButton_12->setChecked(true);
+     ui->radioButton_12->setChecked(true);
+
+     //Cria e linca Threads
+     cThread = new commThread(this);
+     connect(cThread,SIGNAL(waterLevelRead(double,double)),this,SLOT(OnWaterLevelRead(double,double)));
+
 
 
 
@@ -539,4 +544,14 @@ void supervisorio::on_pushButton_8_clicked()
     duracaoMin= ui->doubleSpinBox_5->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
     wave = nextWave;
+}
+
+void supervisorio::OnWaterLevelRead(double waterLevelTank1, double waterLevelTank2){
+    ui->label_11->setText(QString::number(waterLevelTank1));
+}
+
+void supervisorio::on_pushButton_clicked()
+{
+   //Inicia Thread de comunicação
+   cThread->start();
 }
