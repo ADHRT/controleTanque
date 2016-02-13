@@ -807,7 +807,7 @@
      <property name="title">
       <string>Conexão</string>
      </property>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="connect">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -819,8 +819,11 @@
       <property name="text">
        <string>Conectar</string>
       </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="connectLabel">
       <property name="geometry">
        <rect>
         <x>130</x>

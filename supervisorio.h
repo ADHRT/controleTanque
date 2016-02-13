@@ -58,11 +58,6 @@ private slots:
 
   void on_radioButton_9_clicked();
 
-
-
-  void on_horizontalSlider_4_sliderReleased();
-
-
   void on_doubleSpinBox_4_valueChanged(double arg1);
 
   void on_horizontalSlider_5_sliderReleased();
@@ -85,9 +80,9 @@ private slots:
 
   void on_pushButton_8_clicked();
 
-  void on_pushButton_clicked();
-
   void on_scaleValue_valueChanged(int value);
+
+  void on_connect_clicked(bool checked);
 
 private:
     Ui::supervisorio *ui;

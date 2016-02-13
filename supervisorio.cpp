@@ -390,10 +390,7 @@ void supervisorio::on_horizontalSlider_3_sliderReleased()
 {
     ui->doubleSpinBox_3->setValue(((double)ui->horizontalSlider_3->value()-1000)/100);
 }
-void supervisorio::on_horizontalSlider_4_sliderReleased()
-{
-    //ui->spinBox->setValue(ui->horizontalSlider_4->value());
-}
+
 void supervisorio::on_horizontalSlider_5_sliderReleased()
 {//Primeiro slider do aleatório(max)
     if((ui->horizontalSlider_5->value())<(ui->horizontalSlider_6->value())){
@@ -572,14 +569,22 @@ void supervisorio::OnWaterLevelRead(double waterLevelTank1, double waterLevelTan
     ui->label_11->setText(QString::number(waterLevelTank1));
 }
 
-void supervisorio::on_pushButton_clicked()
-{
-   //Inicia Thread de comunicação
-   cThread->start();
-}
-
 void supervisorio::on_scaleValue_valueChanged(int value)
 {
     plotRange = value;
     setTickStep();
+}
+
+
+void supervisorio::on_connect_clicked(bool checked)
+{
+    //Inicia Thread de comunicação
+    if (checked) {
+        ui->connect->setText("Desconectar");
+        ui->connectLabel->setText("Conectado");
+        cThread->start();
+    } else {
+        ui->connect->setText("Conectar");
+        ui->connectLabel->setText("Desconectado");
+    }
 }
