@@ -10,9 +10,13 @@ public:
     explicit commThread(QObject *parent =0);
     void run();
 
+
+
 signals:
     void waterLevelRead(double,double);
+
 public slots:
+    void OnOutputVoltageChanged(double, double);
 
 
 };

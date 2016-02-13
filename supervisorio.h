@@ -109,6 +109,9 @@ private:
 
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
 
+signals:
+     void OutputVoltageChanged(double, double);
+
 };
 
 #endif // SUPERVISORIO_H

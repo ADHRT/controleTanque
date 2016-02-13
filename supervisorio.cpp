@@ -51,9 +51,10 @@ supervisorio::supervisorio(QWidget *parent) :
      wave = senoidal;
      ui->radioButton_12->setChecked(true);
 
-     //Cria e linca Threads
+     //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
      connect(cThread,SIGNAL(waterLevelRead(double,double)),this,SLOT(OnWaterLevelRead(double,double)));
+     connect(this,SIGNAL(OutputVoltageChanged(double,double)),cThread,SLOT(OnOutputVoltageChanged(double,double)));
 
 
     //OBS: Bom video para Threads
@@ -118,6 +119,9 @@ void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
     ui->label_5->setText(QString::number(nivelTanque1,'g',2)+" cm");
     ui->progressBar_2->setValue(nivelTanque2*100);
     ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
+
+    //Enviar sinal de tensão para thread de comunicação
+    emit OutputVoltageChanged(sinalSaturado,0);
 
 
 }
