@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1442</width>
-    <height>914</height>
+    <width>1436</width>
+    <height>786</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,9 +39,12 @@
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>381</width>
-      <height>721</height>
+      <width>371</width>
+      <height>711</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
     </property>
     <property name="title">
      <string/>
@@ -288,6 +291,15 @@
        <string>Canal 5</string>
       </property>
      </widget>
+     <zorder>radioButton</zorder>
+     <zorder>radioButton_2</zorder>
+     <zorder>radioButton_7</zorder>
+     <zorder>radioButton_4</zorder>
+     <zorder>radioButton_8</zorder>
+     <zorder>radioButton_5</zorder>
+     <zorder>radioButton_3</zorder>
+     <zorder>radioButton_6</zorder>
+     <zorder>groupBox_7</zorder>
     </widget>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="geometry">
@@ -780,11 +792,17 @@
     <widget class="QGroupBox" name="groupBox_7">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>650</y>
-       <width>251</width>
-       <height>61</height>
+       <width>261</width>
+       <height>72</height>
       </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="title">
       <string>Conexão</string>
@@ -828,6 +846,9 @@
       <width>91</width>
       <height>701</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
     <property name="title">
      <string>Níveis</string>
@@ -1251,24 +1272,48 @@
      <string>Aqui aparece o que vem da thread (teste)</string>
     </property>
    </widget>
+   <widget class="QSlider" name="scaleValue">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>710</y>
+      <width>160</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>8</number>
+    </property>
+    <property name="maximum">
+     <number>120</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="scale">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>710</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Escala eixo x</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1442</width>
-     <height>22</height>
+     <width>1436</width>
+     <height>25</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->setupUi(this);
   setGeometry(400, 250, 542, 390);
   
-  setupDemo(0);
+  setupDemo(10);
   //setupPlayground(ui->customPlot);
   // 0:  setupQuadraticDemo(ui->customPlot);
   // 1:  setupSimpleDemo(ui->customPlot);
@@ -746,6 +746,8 @@ void MainWindow::setupRealtimeDataDemo(QCustomPlot *customPlot)
   customPlot->xAxis->setAutoTickStep(false);
   customPlot->xAxis->setTickStep(2);
   customPlot->axisRect()->setupFullAxesBox();
+  customPlot->xAxis->scaleRange(3.0,120.0);
+  customPlot->replot();
   
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
@@ -1475,15 +1477,15 @@ void MainWindow::realtimeDataSlot()
     ui->customPlot->graph(3)->clearData();
     ui->customPlot->graph(3)->addData(key, value1);
     // remove data of lines that's outside visible range:
-    ui->customPlot->graph(0)->removeDataBefore(key-8);
-    ui->customPlot->graph(1)->removeDataBefore(key-8);
+    ui->customPlot->graph(0)->removeDataBefore(key-20);
+    ui->customPlot->graph(1)->removeDataBefore(key-20);
     // rescale value (vertical) axis to fit the current data:
     ui->customPlot->graph(0)->rescaleValueAxis();
     ui->customPlot->graph(1)->rescaleValueAxis(true);
     lastPointKey = key;
   }
   // make key axis range scroll with the data (at a constant range size of 8):
-  ui->customPlot->xAxis->setRange(key+0.25, 8, Qt::AlignRight);
+  ui->customPlot->xAxis->setRange(key+0.25, 20, Qt::AlignRight);
   ui->customPlot->replot();
   
   // calculate frames per second:

@@ -62,7 +62,6 @@ private slots:
 
   void on_horizontalSlider_4_sliderReleased();
 
-  void on_spinBox_valueChanged(int arg1);
 
   void on_doubleSpinBox_4_valueChanged(double arg1);
 
@@ -88,6 +87,8 @@ private slots:
 
   void on_pushButton_clicked();
 
+  void on_scaleValue_valueChanged(int value);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -107,8 +108,11 @@ private:
     Wave nextWave;
     Wave wave;
 
+    int plotRange;
+
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
 
+    void setTickStep();
 signals:
      void OutputVoltageChanged(double, double);
 

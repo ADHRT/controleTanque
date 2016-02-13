@@ -11,6 +11,8 @@ supervisorio::supervisorio(QWidget *parent) :
     ui->setupUi(this);
     QMainWindow::showFullScreen();
 
+    plotRange = 8;
+
     // Setup plots
     setupPlot1(ui->customPlot);
     setupPlot2(ui->customPlot2);
@@ -50,6 +52,7 @@ supervisorio::supervisorio(QWidget *parent) :
      // Configura wave padrao
      wave = senoidal;
      ui->radioButton_12->setChecked(true);
+
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
@@ -173,8 +176,10 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   customPlot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   customPlot->xAxis->setDateTimeFormat("hh:mm:ss");
   customPlot->xAxis->setAutoTickStep(false);
-  customPlot->xAxis->setTickStep(2);
+  //Valores no eixo X por segundo, proporcao utilizada no exemplo 8/4=2s
+  customPlot->xAxis->setTickStep(plotRange/4);
   customPlot->axisRect()->setupFullAxesBox();
+
 
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
@@ -223,7 +228,8 @@ void supervisorio::setupPlot2(QCustomPlot *customPlot2)
   customPlot2->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   customPlot2->xAxis->setDateTimeFormat("hh:mm:ss");
   customPlot2->xAxis->setAutoTickStep(false);
-  customPlot2->xAxis->setTickStep(2);
+  //Valores no eixo X por segundo, proporcao utilizada no exemplo 8/4=2s
+  customPlot2->xAxis->setTickStep(plotRange/4);
   customPlot2->axisRect()->setupFullAxesBox();
 
   // make left and bottom axes transfer their ranges to right and top axes:
@@ -240,7 +246,7 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
         ui->customPlot->graph(0)->addData(timeStamp, redPlot);
         ui->customPlot->graph(2)->clearData();
         ui->customPlot->graph(2)->addData(timeStamp, redPlot);
-        ui->customPlot->graph(0)->removeDataBefore(timeStamp-8);
+        ui->customPlot->graph(0)->removeDataBefore(timeStamp-plotRange);
         ui->customPlot->graph(0)->rescaleValueAxis();
     }
 
@@ -249,12 +255,12 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
         ui->customPlot->graph(1)->addData(timeStamp, bluePlot);
         ui->customPlot->graph(3)->clearData();
         ui->customPlot->graph(3)->addData(timeStamp, bluePlot);
-        ui->customPlot->graph(1)->removeDataBefore(timeStamp-8);
+        ui->customPlot->graph(1)->removeDataBefore(timeStamp-plotRange);
         ui->customPlot->graph(1)->rescaleValueAxis(true);
     }
 
     // make key axis range scroll with the data (at a constant range size of 8):
-    ui->customPlot->xAxis->setRange(timeStamp+0.25, 8, Qt::AlignRight);
+    ui->customPlot->xAxis->setRange(timeStamp+0.25, plotRange, Qt::AlignRight);
     ui->customPlot->replot();
 
 }
@@ -268,7 +274,7 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
       ui->customPlot2->graph(0)->addData(timeStamp, redPlot);
       ui->customPlot2->graph(4)->clearData();
       ui->customPlot2->graph(4)->addData(timeStamp, redPlot);
-      ui->customPlot2->graph(0)->removeDataBefore(timeStamp-8);
+      ui->customPlot2->graph(0)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(0)->rescaleValueAxis(true);
   }
 
@@ -277,7 +283,7 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
       ui->customPlot2->graph(1)->addData(timeStamp, bluePlot);
       ui->customPlot2->graph(5)->clearData();
       ui->customPlot2->graph(5)->addData(timeStamp, bluePlot);
-      ui->customPlot2->graph(1)->removeDataBefore(timeStamp-8);
+      ui->customPlot2->graph(1)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(1)->rescaleValueAxis(true);
   }
 
@@ -286,7 +292,7 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
       ui->customPlot2->graph(2)->addData(timeStamp, greenPlot);
       ui->customPlot2->graph(6)->clearData();
       ui->customPlot2->graph(6)->addData(timeStamp, greenPlot);
-      ui->customPlot2->graph(2)->removeDataBefore(timeStamp-8);
+      ui->customPlot2->graph(2)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(2)->rescaleValueAxis(true);
   }
 
@@ -295,13 +301,13 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
       ui->customPlot2->graph(3)->addData(timeStamp, orangePlot);
       ui->customPlot2->graph(7)->clearData();
       ui->customPlot2->graph(7)->addData(timeStamp, orangePlot);
-      ui->customPlot2->graph(3)->removeDataBefore(timeStamp-8);
+      ui->customPlot2->graph(3)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(3)->rescaleValueAxis(true);
   }
 
 
   // make key axis range scroll with the data (at a constant range size of 8):
-  ui->customPlot2->xAxis->setRange(timeStamp+0.25, 8, Qt::AlignRight);
+  ui->customPlot2->xAxis->setRange(timeStamp+0.25, plotRange, Qt::AlignRight);
   ui->customPlot2->replot();
 
 }
@@ -328,6 +334,21 @@ void supervisorio::setLayout(bool frequencia, bool amplitude, bool offset, bool 
     ui->doubleSpinBox_5->setEnabled(duracao);
     ui->horizontalSlider_6->setEnabled(duracao);
 }
+
+void supervisorio::setTickStep(void) {
+    //Valores no eixo X por segundo, proporcao utilizada no exemplo 8/4=2s
+    ui->customPlot->xAxis->setTickStep(plotRange/4);
+    ui->customPlot2->xAxis->setTickStep(plotRange/4);
+
+}
+
+//==================================================================================================
+//==================================================================================================
+//END PLOT
+//==================================================================================================
+//==================================================================================================
+
+
 //Relações entre objetos do box "Demais conexões"
 void supervisorio::on_doubleSpinBox_valueChanged(double arg1)
 {
@@ -341,10 +362,7 @@ void supervisorio::on_doubleSpinBox_3_valueChanged(double arg1)
 {
     ui->horizontalSlider_3->setValue((arg1+10)*100);
 }
-void supervisorio::on_spinBox_valueChanged(int arg1)
-{
-    //ui->horizontalSlider_4->setValue(arg1);
-}
+
 void supervisorio::on_doubleSpinBox_4_valueChanged(double arg1)
 {//Primeiro doubleSpinBox do aleatório(max)
     if(arg1<(ui->doubleSpinBox_5->value())){
@@ -558,4 +576,10 @@ void supervisorio::on_pushButton_clicked()
 {
    //Inicia Thread de comunicação
    cThread->start();
+}
+
+void supervisorio::on_scaleValue_valueChanged(int value)
+{
+    plotRange = value;
+    setTickStep();
 }
