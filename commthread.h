@@ -23,7 +23,7 @@ public:
     void setParameters(double, double, double, double, double, int);
 
 signals:
-    void plotValues(double,double,double,double,double,double);
+    void plotValues(double,double,double,double,double,double,double);
 
 
 

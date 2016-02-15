@@ -50,7 +50,7 @@ void commThread::run(){
         double setPoint = qSin(timeStamp*0.5+1);
         double erro = nivelTanque1-setPoint;
         this->msleep(100);
-        emit plotValues(timeStamp, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
+        emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
     }
     /*for(int i=0;i<1000;i++){
         emit waterLevelRead(i*0.25,i*0.5); //Envia sinal do nível dos tanques para ser lido por um slot do supervisório

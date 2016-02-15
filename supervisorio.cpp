@@ -52,7 +52,7 @@ supervisorio::supervisorio(QWidget *parent) :
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
-     connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double,int)),this,SLOT(onPlotValues(double,double,double,double,double,double)));
+     connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double)));
 
 
     //OBS: Bom video para Threads
@@ -481,7 +481,7 @@ void supervisorio::on_pushButton_8_clicked()
     cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave);
 }
 
-void supervisorio::onPlotValues(double timeStamp, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){
+void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){
 
     //Update plots
     supervisorio::updatePlot1(timeStamp,sinalCalculado,sinalSaturado);

@@ -27,7 +27,7 @@ public:
      commThread *cThread;
 
 public slots:
-     void onPlotValues(double timeStamp, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro);
+     void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro);
 
 private slots:
   void on_doubleSpinBox_valueChanged(double arg1);
