@@ -5,5 +5,3 @@
 - [x] Fazer animação do botão ‘conectar’ 
 - [ ] Testes com os tanques
 - [ ] Atribuir o relatório a um dos elementos do grupo.
-
-Rosenildo teste
