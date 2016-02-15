@@ -17,10 +17,6 @@ supervisorio::supervisorio(QWidget *parent) :
     setupPlot1(ui->customPlot);
     setupPlot2(ui->customPlot2);
 
-    // Setup a timer for updating the screen
-    connect(&dataTimer, SIGNAL(timeout()), this, SLOT(screenUpdateSlot()));
-    dataTimer.start(16); // 16ms= ~ 60fps
-
     //Inicialização para o plot randômico
     lastTimeStamp=0;
     timeToNextRandomNumber=0;
@@ -50,14 +46,13 @@ supervisorio::supervisorio(QWidget *parent) :
         ui->horizontalSlider_6->setValue(duracaoMin*100);
 
      // Configura wave padrao
-     wave = senoidal;
+     wave = 0;
      ui->radioButton_12->setChecked(true);
 
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
-     connect(cThread,SIGNAL(waterLevelRead(double,double)),this,SLOT(OnWaterLevelRead(double,double)));
-     connect(this,SIGNAL(OutputVoltageChanged(double,double)),cThread,SLOT(OnOutputVoltageChanged(double,double)));
+     connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double,int)),this,SLOT(onPlotValues(double,double,double,double,double,double)));
 
 
     //OBS: Bom video para Threads
@@ -67,86 +62,6 @@ supervisorio::supervisorio(QWidget *parent) :
 supervisorio::~supervisorio()
 {
     delete ui;
-}
-
-
-void supervisorio::screenUpdateSlot(){//Runs every time that timer times out
-
-    // Get timeStamp
-    double timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
-
-    //Calculates new points
-    double nivelTanque1 = qSin(timeStamp)*5+5;
-    double nivelTanque2 = qCos(timeStamp)*5+5;
-
-    switch(wave)
-    {
-    case degrau:
-        sinalCalculado = amplitude + offset;
-        break;
-    case senoidal:
-        sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-        break;
-    case quadrada:
-        sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-        if(sinalCalculado>0)sinalCalculado = amplitude;
-        else sinalCalculado = -amplitude;
-        break;
-    case serra:
-        sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
-        break;
-    case aleatorio:
-        if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
-            sinalCalculado = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
-            lastTimeStamp=timeStamp;
-            timeToNextRandomNumber= ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
-            if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
-        }
-        break;
-    default:
-        qDebug() << "ERRO: Nenhuma onda selecionada!";
-    }
-
-    //Calculates other points
-    double sinalSaturado = supervisorio::lockSignal(sinalCalculado,nivelTanque1);
-    double setPoint = qSin(timeStamp*0.5+1);
-    double erro = nivelTanque1-setPoint;
-
-
-    //Update plots
-    supervisorio::updatePlot1(timeStamp,sinalCalculado,sinalSaturado);
-    supervisorio::updatePlot2(timeStamp,nivelTanque1,nivelTanque2,setPoint,erro);
-
-    //Update Water Level
-    ui->progressBar->setValue(nivelTanque1*100);
-    ui->label_5->setText(QString::number(nivelTanque1,'g',2)+" cm");
-    ui->progressBar_2->setValue(nivelTanque2*100);
-    ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
-
-    //Enviar sinal de tensão para thread de comunicação
-    emit OutputVoltageChanged(sinalSaturado,0);
-
-
-}
-
-double supervisorio::lockSignal(double sinalCalculado, double nivelTanque1){
-
-    double sinalSaturado=sinalCalculado;
-
-    //Trava 1
-    if(sinalCalculado>4) sinalSaturado=4;
-    else if(sinalCalculado<-4) sinalSaturado=-4;
-
-    //Trava 2
-    if(nivelTanque1<3 && sinalCalculado<0) sinalSaturado=0;
-
-    //Trava 3
-    if(nivelTanque1>28 && sinalCalculado>3.25) sinalSaturado=3.25;
-
-    //Trava 4
-    if(nivelTanque1>29 && sinalCalculado>0) sinalSaturado=0;
-
-    return sinalSaturado;
 }
 
 void supervisorio::setupPlot1(QCustomPlot *customPlot)
@@ -563,10 +478,20 @@ void supervisorio::on_pushButton_8_clicked()
     duracaoMin= ui->doubleSpinBox_5->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
     wave = nextWave;
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave);
 }
 
-void supervisorio::OnWaterLevelRead(double waterLevelTank1, double waterLevelTank2){
-    ui->label_11->setText(QString::number(waterLevelTank1));
+void supervisorio::onPlotValues(double timeStamp, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){
+
+    //Update plots
+    supervisorio::updatePlot1(timeStamp,sinalCalculado,sinalSaturado);
+    supervisorio::updatePlot2(timeStamp,nivelTanque1,nivelTanque2,setPoint,erro);
+
+    //Update Water Level
+    ui->progressBar->setValue(nivelTanque1*100);
+    ui->label_5->setText(QString::number(nivelTanque1,'g',2)+" cm");
+    ui->progressBar_2->setValue(nivelTanque2*100);
+    ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
 }
 
 void supervisorio::on_scaleValue_valueChanged(int value)
@@ -583,6 +508,7 @@ void supervisorio::on_connect_clicked(bool checked)
         ui->connect->setText("Desconectar");
         ui->connectLabel->setText("Conectado");
         cThread->start();
+        cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, 0);
     } else {
         ui->connect->setText("Conectar");
         ui->connectLabel->setText("Desconectado");

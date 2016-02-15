@@ -18,6 +18,7 @@ class supervisorio : public QMainWindow
 public:
     explicit supervisorio(QWidget *parent = 0);
     ~supervisorio();
+    enum Wave { degrau, senoidal, quadrada, serra, aleatorio };
      void setupPlot1(QCustomPlot *customPlot);
      void setupPlot2(QCustomPlot *customPlo2);
      void updatePlot1(double timeStamp, double redPlot, double bluePlot);
@@ -26,10 +27,9 @@ public:
      commThread *cThread;
 
 public slots:
-     void OnWaterLevelRead(double, double);
+     void onPlotValues(double timeStamp, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro);
 
 private slots:
-  void screenUpdateSlot();
   void on_doubleSpinBox_valueChanged(double arg1);
   void on_doubleSpinBox_2_valueChanged(double arg1);
 
@@ -84,6 +84,8 @@ private slots:
 
   void on_connect_clicked(bool checked);
 
+
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -99,17 +101,16 @@ private:
     double duracaoMax;
     double duracaoMin;
 
-    enum Wave { degrau, senoidal, quadrada, serra, aleatorio };
-    Wave nextWave;
-    Wave wave;
+    int nextWave;
+    int wave;
 
     int plotRange;
 
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
 
     void setTickStep();
-signals:
-     void OutputVoltageChanged(double, double);
+
+//signals:
 
 };
 

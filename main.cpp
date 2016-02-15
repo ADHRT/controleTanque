@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
     QApplication::setFont(newFont);
 
     supervisorio w;
-    //Controle c;
     w.show();
 
 
