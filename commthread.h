@@ -17,6 +17,7 @@ private:
     int wave;
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
     double lockSignal(double sinalCalculado, double nivelTanque1);
+    double lastLoopTimeStamp;
 
 public:
     explicit commThread(QObject *parent =0);

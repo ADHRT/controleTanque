@@ -1,0 +1,2 @@
+1 - Caso n‹o tenha permiss‹o para escrever no arquivo:
+	sudo chmod -R 0777 controleTanque/

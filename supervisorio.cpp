@@ -18,7 +18,6 @@ supervisorio::supervisorio(QWidget *parent) :
     setupPlot2(ui->customPlot2);
 
     //Inicialização para o plot randômico
-    lastTimeStamp=0;
     timeToNextRandomNumber=0;
 
     //Inicializa valores
