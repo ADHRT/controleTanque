@@ -586,5 +586,6 @@ void supervisorio::on_connect_clicked(bool checked)
     } else {
         ui->connect->setText("Conectar");
         ui->connectLabel->setText("Desconectado");
+        cThread->terminate();
     }
 }
