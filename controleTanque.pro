@@ -22,7 +22,8 @@ SOURCES += main.cpp\
 
 HEADERS  += supervisorio.h \
     qcustomplot.h \
-    commthread.h
+    commthread.h \
+    quanser.h
 
 FORMS += \
     supervisorio.ui

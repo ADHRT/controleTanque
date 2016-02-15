@@ -2,6 +2,7 @@
 #define COMMTHREAD_H
 
 #include <QThread>
+#include "quanser.h"
 
 class commThread : public QThread
 {

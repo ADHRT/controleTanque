@@ -9,13 +9,25 @@ commThread::commThread(QObject *parent):
 }
 
 void commThread::run(){
+
+    // Conecta
+    Quanser* q = new Quanser("10.13.97.69", 20072);
+
     while(1) {
+
+        // Le
+        double nivelTanque1 = q->readAD(0) * 6.25;
+        double nivelTanque2 = q->readAD(1) * 6.25;
+
+
+        // Calcula
+
         // Get timeStamp
         double timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
         //Calculates new points
-        double nivelTanque1 = qSin(timeStamp)*5+5;
-        double nivelTanque2 = qCos(timeStamp)*5+5;
+        //double nivelTanque1 = qSin(timeStamp)*5+5;
+        //double nivelTanque2 = qCos(timeStamp)*5+5;
 
         switch(wave)
         {
@@ -49,7 +61,14 @@ void commThread::run(){
         double sinalSaturado = commThread::lockSignal(sinalCalculado,nivelTanque1);
         double setPoint = qSin(timeStamp*0.5+1);
         double erro = nivelTanque1-setPoint;
+
+        // Dorme
         this->msleep(100);
+
+        // Escreve no canal 0
+        q->writeDA(0, sinalSaturado);
+
+        // Envia valores para o supervisorio
         emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
     }
     /*for(int i=0;i<1000;i++){
