@@ -12,7 +12,7 @@ commThread::commThread(QObject *parent):
 void commThread::run(){
 
     // Conecta com os tanques
-    Quanser* q = new Quanser("10.13.99.69", 20081);
+    //Quanser* q = new Quanser("10.13.99.69", 20081);
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -26,25 +26,25 @@ void commThread::run(){
             lastLoopTimeStamp=timeStamp;
 
             // Le
-            double nivelTanque1 = q->readAD(0) * 6.25;
-            double nivelTanque2 = q->readAD(1) * 6.25;
+            //double nivelTanque1 = q->readAD(0) * 6.25;
+            //double nivelTanque2 = q->readAD(1) * 6.25;
 
             //Calculates new points
-            //double nivelTanque1 = qSin(timeStamp)*5+5;
-            //double nivelTanque2 = qCos(timeStamp)*5+5;
+            double nivelTanque1 = qSin(timeStamp)*5+5;
+            double nivelTanque2 = qCos(timeStamp)*5+5;
 
             switch(wave)
             {
             case 0://degrau:
-                sinalCalculado = amplitude + offset;
+                sinalCalculado = offset;
                 break;
             case 1://senoidal:
                 sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
                 break;
             case 2://quadrada:
-                sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
-                if(sinalCalculado>0)sinalCalculado = amplitude;
-                else sinalCalculado = -amplitude;
+                sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude;
+                if(sinalCalculado>0)sinalCalculado = amplitude+offset;
+                else sinalCalculado = -amplitude+offset;
                 break;
             case 3://serra:
                 sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
@@ -67,7 +67,7 @@ void commThread::run(){
             double erro = nivelTanque1-setPoint;
 
             // Escreve no canal 0
-            q->writeDA(0, sinalSaturado);
+            //q->writeDA(0, sinalSaturado);
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
@@ -97,7 +97,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     if(nivelTanque1>29 && sinalCalculado>0) sinalSaturado=0;
 
     //Trava 5
-    if(nivelTanque2 > 26 && nivelTanque1 > 5) sinalSaturado = -4;
+    if(nivelTanque2 > 26 && nivelTanque1 > 8) sinalSaturado = -4;
     else if (nivelTanque2 > 26) sinalSaturado = 0;
 
     return sinalSaturado;

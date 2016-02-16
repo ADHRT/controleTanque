@@ -36,7 +36,7 @@ supervisorio::supervisorio(QWidget *parent) :
         ui->horizontalSlider_2->setValue(amplitude*100);
         //Offset
         ui->doubleSpinBox_3->setValue(offset);
-        ui->horizontalSlider_3->setValue(offset*100);
+        ui->horizontalSlider_3->setValue(1000+offset*100);
         //Max
         ui->doubleSpinBox_4->setValue(duracaoMax);
         ui->horizontalSlider_5->setValue(duracaoMax*100);
@@ -433,7 +433,7 @@ void supervisorio::on_radioButton_10_clicked()
 //Degrau layout
 void supervisorio::on_radioButton_11_clicked()
 {
-    setLayout(false, true, false, false);
+    setLayout(false, false, true, false);
     nextWave = degrau;
 }
 
