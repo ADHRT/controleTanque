@@ -291,15 +291,6 @@
        <string>Canal 5</string>
       </property>
      </widget>
-     <zorder>radioButton</zorder>
-     <zorder>radioButton_2</zorder>
-     <zorder>radioButton_7</zorder>
-     <zorder>radioButton_4</zorder>
-     <zorder>radioButton_8</zorder>
-     <zorder>radioButton_5</zorder>
-     <zorder>radioButton_3</zorder>
-     <zorder>radioButton_6</zorder>
-     <zorder>groupBox_7</zorder>
     </widget>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="geometry">
@@ -512,10 +503,10 @@
         <set>Qt::AlignCenter</set>
        </property>
        <property name="minimum">
-        <double>-10.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>10.000000000000000</double>
+        <double>30.000000000000000</double>
        </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
@@ -584,20 +575,20 @@
       <widget class="QSlider" name="horizontalSlider_3">
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>20</x>
          <y>250</y>
          <width>151</width>
          <height>22</height>
         </rect>
        </property>
        <property name="maximum">
-        <number>2000</number>
+        <number>3000</number>
        </property>
        <property name="value">
-        <number>1000</number>
+        <number>0</number>
        </property>
        <property name="sliderPosition">
-        <number>1000</number>
+        <number>0</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -761,7 +752,7 @@
        <rect>
         <x>10</x>
         <y>60</y>
-        <width>111</width>
+        <width>141</width>
         <height>20</height>
        </rect>
       </property>
@@ -769,7 +760,7 @@
        <string>Malha Fechada</string>
       </property>
       <property name="checked">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton_9">
@@ -785,7 +776,7 @@
        <string>Malha Aberta</string>
       </property>
       <property name="checked">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
      </widget>
     </widget>

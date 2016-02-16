@@ -36,7 +36,7 @@ supervisorio::supervisorio(QWidget *parent) :
         ui->horizontalSlider_2->setValue(amplitude*100);
         //Offset
         ui->doubleSpinBox_3->setValue(offset);
-        ui->horizontalSlider_3->setValue(1000+offset*100);
+        ui->horizontalSlider_3->setValue(offset*100);
         //Max
         ui->doubleSpinBox_4->setValue(duracaoMax);
         ui->horizontalSlider_5->setValue(duracaoMax*100);
@@ -274,7 +274,12 @@ void supervisorio::on_doubleSpinBox_2_valueChanged(double arg1)
 }
 void supervisorio::on_doubleSpinBox_3_valueChanged(double arg1)
 {
-    ui->horizontalSlider_3->setValue((arg1+10)*100);
+    if(ui->radioButton_9->isChecked()){//malha aberta
+        ui->horizontalSlider_3->setValue((arg1+15)*100);
+    }
+    else{//malha fechada
+        ui->horizontalSlider_3->setValue((arg1)*100);
+    }
 }
 
 void supervisorio::on_doubleSpinBox_4_valueChanged(double arg1)
@@ -302,7 +307,12 @@ void supervisorio::on_horizontalSlider_2_sliderReleased()
 }
 void supervisorio::on_horizontalSlider_3_sliderReleased()
 {
-    ui->doubleSpinBox_3->setValue(((double)ui->horizontalSlider_3->value()-1000)/100);
+    if(ui->radioButton_9->isChecked()){//malha aberta
+        ui->doubleSpinBox_3->setValue(((double)ui->horizontalSlider_3->value()-1500)/100);
+    }
+    else{//malha fechada
+        ui->doubleSpinBox_3->setValue(((double)ui->horizontalSlider_3->value())/100);
+    }
 }
 
 void supervisorio::on_horizontalSlider_5_sliderReleased()
@@ -417,6 +427,12 @@ void supervisorio::on_radioButton_9_clicked()
     plot2Enable[3]=false;
     ui->label_2->setText("Amplitude (V)");
     ui->label_3->setText("Offset (V)");
+
+
+    ui->horizontalSlider_3->setValue(1500);
+    ui->doubleSpinBox_3->setValue(0);
+    ui->doubleSpinBox_3->setMaximum(15);
+    ui->doubleSpinBox_3->setMinimum(-15);
 }
 
 //Malha fechada
@@ -428,6 +444,11 @@ void supervisorio::on_radioButton_10_clicked()
     plot2Enable[3]=true;
     ui->label_2->setText("Amplitude (cm)");
     ui->label_3->setText("Offset (cm)");
+
+    ui->horizontalSlider_3->setValue(0);
+    ui->doubleSpinBox_3->setValue(0);
+    ui->doubleSpinBox_3->setMaximum(30);
+    ui->doubleSpinBox_3->setMinimum(0);
 }
 
 //Degrau layout
