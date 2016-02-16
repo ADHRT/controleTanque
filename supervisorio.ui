@@ -475,7 +475,7 @@
         <set>Qt::AlignCenter</set>
        </property>
        <property name="maximum">
-        <double>10.000000000000000</double>
+        <double>20.000000000000000</double>
        </property>
        <property name="singleStep">
         <double>0.100000000000000</double>
@@ -863,7 +863,7 @@
       <number>3000</number>
      </property>
      <property name="value">
-      <number>24</number>
+      <number>0</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -888,7 +888,7 @@
       <number>3000</number>
      </property>
      <property name="value">
-      <number>24</number>
+      <number>0</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -920,7 +920,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>12cm</string>
+      <string>0cm</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -952,7 +952,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>12cm</string>
+      <string>0cm</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1271,7 +1271,7 @@
      <rect>
       <x>790</x>
       <y>710</y>
-      <width>160</width>
+      <width>161</width>
       <height>16</height>
      </rect>
     </property>
@@ -1288,14 +1288,30 @@
    <widget class="QLabel" name="scale">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>710</y>
-      <width>91</width>
+      <x>660</x>
+      <y>708</y>
+      <width>141</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Escala eixo x</string>
+     <string>Escala de tempo (s)</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>700</y>
+      <width>51</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>8</number>
+    </property>
+    <property name="maximum">
+     <number>120</number>
     </property>
    </widget>
   </widget>

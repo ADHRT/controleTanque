@@ -517,6 +517,7 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
 
 void supervisorio::on_scaleValue_valueChanged(int value)
 {
+    ui->spinBox->setValue(value);
     plotRange = value;
     setTickStep();
 }
@@ -539,4 +540,9 @@ void supervisorio::on_connect_clicked(bool checked)
         //Termina a thread
         cThread->terminate();
     }
+}
+
+void supervisorio::on_spinBox_valueChanged(int arg1)
+{
+    ui->scaleValue->setValue(arg1);
 }

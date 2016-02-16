@@ -27,7 +27,9 @@ void commThread::run(){
 
             // Le
             double nivelTanque1 = q->readAD(0) * 6.25;
+            if (nivelTanque1 < 0) nivelTanque1 = 0;
             double nivelTanque2 = q->readAD(1) * 6.25;
+            if (nivelTanque2 < 0) nivelTanque2 = 0;
 
             //Calculates new points
             //double nivelTanque1 = qSin(timeStamp)*5+5;

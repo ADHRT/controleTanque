@@ -3,8 +3,7 @@
 - [ ] Ao alterar a onda voltar para o zero
 - [x] Consertar onda quadrada
 - [x] O degrau nao deixa escrever negativo
-- [ ] Malha fechada (SP é a onda e o sinal escrito na bomba (cm) = erro)
-- [ ] A janela de tempo de 0 a 200
+- [x] Malha fechada (SP é a onda e o sinal escrito na bomba (cm) = erro)
 - [ ] Poder setar o valor da janela de tempo sem o slider
 - [ ] Transferir erro de conexao para o supervisorio
 - [x] Testes com os tanques
@@ -13,3 +12,4 @@
 - [x] Fazer animação do botão ‘conectar’
 - [x] Garantir .1s
 - [x] Atribuir o relatório a um dos elementos do grupo.
+- [ ] A janela de tempo de 0 a 200
