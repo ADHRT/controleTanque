@@ -477,7 +477,8 @@ void supervisorio::on_pushButton_8_clicked()
     duracaoMin= ui->doubleSpinBox_5->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
     wave = nextWave;
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave);
+    bool malha = ui->radioButton_9->isChecked();
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){

@@ -1,8 +1,8 @@
 # Próximos passos (ordem decrescente de prioridade):
 - [ ] Modo simulacao
 - [ ] Ao alterar a onda voltar para o zero
-- [ ] Consertar onda quadrada
-- [ ] O degrau nao deixa escrever negativo
+- [x] Consertar onda quadrada
+- [x] O degrau nao deixa escrever negativo
 - [ ] Malha fechada (SP é a onda e o sinal escrito na bomba (cm) = erro)
 - [ ] A janela de tempo de 0 a 200
 - [ ] Poder setar o valor da janela de tempo sem o slider

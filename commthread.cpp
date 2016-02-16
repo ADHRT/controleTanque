@@ -12,7 +12,7 @@ commThread::commThread(QObject *parent):
 void commThread::run(){
 
     // Conecta com os tanques
-    //Quanser* q = new Quanser("10.13.99.69", 20081);
+    Quanser* q = new Quanser("10.13.99.69", 20081);
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -26,12 +26,13 @@ void commThread::run(){
             lastLoopTimeStamp=timeStamp;
 
             // Le
-            //double nivelTanque1 = q->readAD(0) * 6.25;
-            //double nivelTanque2 = q->readAD(1) * 6.25;
+            double nivelTanque1 = q->readAD(0) * 6.25;
+            double nivelTanque2 = q->readAD(1) * 6.25;
 
             //Calculates new points
-            double nivelTanque1 = qSin(timeStamp)*5+5;
-            double nivelTanque2 = qCos(timeStamp)*5+5;
+            //double nivelTanque1 = qSin(timeStamp)*5+5;
+            //double nivelTanque2 = qCos(timeStamp)*5+5;
+
 
             switch(wave)
             {
@@ -61,13 +62,24 @@ void commThread::run(){
                 qDebug() << "ERRO: Nenhuma onda selecionada!";
             }
 
+
+
             //Calculates other points
             double sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
-            double setPoint = qSin(timeStamp*0.5+1);
-            double erro = nivelTanque1-setPoint;
+            double setPoint =0;
+            double erro = 0;
+
+
+            if(malha == false){//malha fechada
+             setPoint = sinalCalculado;
+             erro = setPoint - nivelTanque1;
+             sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
+            }
+
+
 
             // Escreve no canal 0
-            //q->writeDA(0, sinalSaturado);
+            q->writeDA(0, sinalSaturado);
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
@@ -86,7 +98,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     else if(sinalCalculado<-4) sinalSaturado=-4;
 
     //Trava 2
-    if(nivelTanque1<3 && sinalCalculado<0) sinalSaturado=0;
+    if(nivelTanque1<8 && sinalCalculado<0) sinalSaturado=0;
 
     //Trava 3
     //if(nivelTanque1>28 && sinalCalculado>3.25) sinalSaturado=3.25;
@@ -100,10 +112,11 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     if(nivelTanque2 > 26 && nivelTanque1 > 8) sinalSaturado = -4;
     else if (nivelTanque2 > 26) sinalSaturado = 0;
 
+
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -111,6 +124,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->duracaoMax = duracaoMax;
     this->duracaoMin = duracaoMin;
     this->wave = wave;
+    this->malha = malha;
 }
 
 // Zera todos os valores

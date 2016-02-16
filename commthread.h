@@ -15,6 +15,7 @@ private:
     double duracaoMax;
     double duracaoMin;
     int wave;
+    bool malha;
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
     double lastLoopTimeStamp;
@@ -22,7 +23,7 @@ private:
 public:
     explicit commThread(QObject *parent =0);
     void run();
-    void setParameters(double, double, double, double, double, int);
+    void setParameters(double, double, double, double, double, int, bool);
     void setNullParameters(void);
 
 signals:
