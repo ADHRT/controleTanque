@@ -46,8 +46,8 @@ supervisorio::supervisorio(QWidget *parent) :
 
      // Configura wave padrao
      wave = 0;
-     ui->radioButton_12->setChecked(true);
-
+     //ui->radioButton_11->setChecked(true);
+     on_radioButton_11_clicked();
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
@@ -507,10 +507,14 @@ void supervisorio::on_connect_clicked(bool checked)
         ui->connect->setText("Desconectar");
         ui->connectLabel->setText("Conectado");
         cThread->start();
-        cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, 0);
+        cThread->setNullParameters();
     } else {
         ui->connect->setText("Conectar");
         ui->connectLabel->setText("Desconectado");
+        cThread->setNullParameters();
+        //Espera a thread ler os valores
+        QThread::msleep (200);
+        //Termina a thread
         cThread->terminate();
     }
 }

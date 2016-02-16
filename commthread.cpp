@@ -1,17 +1,18 @@
-#include "commthread.h"
+﻿#include "commthread.h"
 #include <QtCore>
 
 commThread::commThread(QObject *parent):
     QThread(parent)
 {
-
+    //Quadrada
+    wave = 0;
 
 }
 
 void commThread::run(){
 
     // Conecta com os tanques
-    //Quanser* q = new Quanser("10.13.97.69", 20072);
+    Quanser* q = new Quanser("10.13.99.69", 20081);
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -21,16 +22,16 @@ void commThread::run(){
         //Reads Time
         double timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
-        if(timeStamp-lastLoopTimeStamp>0.1){
+        if(timeStamp-lastLoopTimeStamp > 0.1){
             lastLoopTimeStamp=timeStamp;
 
             // Le
-            //double nivelTanque1 = q->readAD(0) * 6.25;
-            //double nivelTanque2 = q->readAD(1) * 6.25;
+            double nivelTanque1 = q->readAD(0) * 6.25;
+            double nivelTanque2 = q->readAD(1) * 6.25;
 
             //Calculates new points
-            double nivelTanque1 = qSin(timeStamp)*5+5;
-            double nivelTanque2 = qCos(timeStamp)*5+5;
+            //double nivelTanque1 = qSin(timeStamp)*5+5;
+            //double nivelTanque2 = qCos(timeStamp)*5+5;
 
             switch(wave)
             {
@@ -61,12 +62,12 @@ void commThread::run(){
             }
 
             //Calculates other points
-            double sinalSaturado = commThread::lockSignal(sinalCalculado,nivelTanque1);
+            double sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
             double setPoint = qSin(timeStamp*0.5+1);
             double erro = nivelTanque1-setPoint;
 
             // Escreve no canal 0
-            //q->writeDA(0, sinalSaturado);
+            q->writeDA(0, sinalSaturado);
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
@@ -75,9 +76,10 @@ void commThread::run(){
 
 }
 
-double commThread::lockSignal(double sinalCalculado, double nivelTanque1){
+double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
 
     double sinalSaturado=sinalCalculado;
+
 
     //Trava 1
     if(sinalCalculado>4) sinalSaturado=4;
@@ -87,10 +89,16 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1){
     if(nivelTanque1<3 && sinalCalculado<0) sinalSaturado=0;
 
     //Trava 3
-    if(nivelTanque1>28 && sinalCalculado>3.25) sinalSaturado=3.25;
+    //if(nivelTanque1>28 && sinalCalculado>3.25) sinalSaturado=3.25;
+    // valor impiricamente calculuado  = 2.97
+    if(nivelTanque1>28 && sinalCalculado>2.97) sinalSaturado=2.97;
 
     //Trava 4
     if(nivelTanque1>29 && sinalCalculado>0) sinalSaturado=0;
+
+    //Trava 5
+    if(nivelTanque2 > 26 && nivelTanque1 > 5) sinalSaturado = -4;
+    else if (nivelTanque2 > 26) sinalSaturado = 0;
 
     return sinalSaturado;
 }
@@ -103,5 +111,16 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->duracaoMax = duracaoMax;
     this->duracaoMin = duracaoMin;
     this->wave = wave;
+}
+
+// Zera todos os valores
+void commThread::setNullParameters()
+{
+    frequencia = 0;
+    amplitude = 0;
+    offset = 0;
+    duracaoMax = 0;
+    duracaoMin = 0;
+    sinalCalculado = 0;
 }
 

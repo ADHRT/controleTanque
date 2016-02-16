@@ -16,13 +16,14 @@ private:
     double duracaoMin;
     int wave;
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
-    double lockSignal(double sinalCalculado, double nivelTanque1);
+    double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
     double lastLoopTimeStamp;
 
 public:
     explicit commThread(QObject *parent =0);
     void run();
     void setParameters(double, double, double, double, double, int);
+    void setNullParameters(void);
 
 signals:
     void plotValues(double,double,double,double,double,double,double);
