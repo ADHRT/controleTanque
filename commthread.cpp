@@ -12,7 +12,7 @@ commThread::commThread(QObject *parent):
 void commThread::run(){
 
     // Conecta com os tanques
-    //Quanser* q = new Quanser("10.13.99.69", 20081);
+    Quanser* q = new Quanser("10.13.99.69", 20081);
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -26,12 +26,12 @@ void commThread::run(){
             lastLoopTimeStamp=timeStamp;
 
             // Le
-            //double nivelTanque1 = q->readAD(0) * 6.25;
-            //double nivelTanque2 = q->readAD(1) * 6.25;
+            double nivelTanque1 = q->readAD(0) * 6.25;
+            double nivelTanque2 = q->readAD(1) * 6.25;
 
             //Calculates new points
-            double nivelTanque1 = qSin(timeStamp)*5+5;
-            double nivelTanque2 = qCos(timeStamp)*5+5;
+            //double nivelTanque1 = qSin(timeStamp)*5+5;
+            //double nivelTanque2 = qCos(timeStamp)*5+5;
 
 
             switch(wave)
@@ -79,7 +79,7 @@ void commThread::run(){
 
 
             // Escreve no canal 0
-            //q->writeDA(0, sinalSaturado);
+            q->writeDA(0, sinalSaturado);
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);

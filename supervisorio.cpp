@@ -535,7 +535,7 @@ void supervisorio::on_connect_clicked(bool checked)
         ui->connectLabel->setText("Desconectado");
         cThread->setNullParameters();
         //Espera a thread ler os valores
-        QThread::msleep (200);
+        QThread::msleep (1000);
         //Termina a thread
         cThread->terminate();
     }
