@@ -6,13 +6,18 @@ commThread::commThread(QObject *parent):
 {
     //Quadrada
     wave = 0;
-
+    simulationMode = false;
+    channel = 0;
 }
 
 void commThread::run(){
 
     // Conecta com os tanques
-    //Quanser* q = new Quanser("10.13.99.69", 20081);
+    Quanser* q = new Quanser("10.13.99.69", 20081);
+    double nivelTanque1 = 0, nivelTanque2;
+    if(!simulationMode) {
+        q->connectServer();
+    }
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -25,16 +30,17 @@ void commThread::run(){
         if(timeStamp-lastLoopTimeStamp > 0.1){
             lastLoopTimeStamp=timeStamp;
 
-            // Le
-            //double nivelTanque1 = q->readAD(0) * 6.25;
-            //if (nivelTanque1 < 0) nivelTanque1 = 0;
-            //double nivelTanque2 = q->readAD(1) * 6.25;
-            //if (nivelTanque2 < 0) nivelTanque2 = 0;
-
-            //Calculates new points
-            double nivelTanque1 = qSin(timeStamp)*5+5;
-            double nivelTanque2 = qCos(timeStamp)*5+5;
-
+            if(!simulationMode) {
+                // Le
+                nivelTanque1 = q->readAD(0) * 6.25;
+                if (nivelTanque1 < 0) nivelTanque1 = 0;
+                nivelTanque2 = q->readAD(1) * 6.25;
+                if (nivelTanque2 < 0) nivelTanque2 = 0;
+            } else {
+                //Calculates new points
+                nivelTanque1 = qSin(timeStamp)*5+5;
+                nivelTanque2 = qCos(timeStamp)*5+5;
+            }
 
             switch(wave)
             {
@@ -79,9 +85,9 @@ void commThread::run(){
             }
 
 
-
-            // Escreve no canal 0
-            //q->writeDA(0, sinalSaturado);
+            // Escreve no canal selecionado
+            if(!simulationMode)
+                q->writeDA(channel, sinalSaturado);
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
@@ -117,7 +123,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -126,6 +132,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->duracaoMin = duracaoMin;
     this->wave = wave;
     this->malha = malha;
+    this->channel = channel;
 }
 
 // Zera todos os valores
@@ -137,5 +144,10 @@ void commThread::setNullParameters()
     duracaoMax = 0;
     duracaoMin = 0;
     sinalCalculado = 0;
+}
+
+void commThread::setSimulationMode(bool on)
+{
+    simulationMode = on;
 }
 
