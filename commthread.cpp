@@ -8,19 +8,12 @@ commThread::commThread(QObject *parent):
     wave = 0;
     simulationMode = false;
     channel = 0;
+    q = new Quanser("10.13.99.69", 20081);
 }
 
 void commThread::run(){
 
-    // Conecta com os tanques
-    Quanser* q = new Quanser("10.13.99.69", 20081);
     double nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
-    if(!simulationMode) {
-        int erro = q->connectServer();
-        if(erro){
-            qDebug() << "Deu erro mesmo";
-        }
-    }
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -172,6 +165,17 @@ void commThread::terminate(void)
     QThread::msleep(100);
     super::terminate();
     //while(!super::isFinished());
+}
+
+int commThread::start(void)
+{
+    // Conecta com os tanques
+    int erro = 0;
+    if(!simulationMode) {
+        erro = q->connectServer();
+    }
+    if(!erro) super::start();
+    return erro;
 }
 
 
