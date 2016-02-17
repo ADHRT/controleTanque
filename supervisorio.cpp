@@ -576,11 +576,16 @@ void supervisorio::on_connect_clicked(bool checked)
             //Muda o estilo
             ui->demo->setChecked(false);
         }
-        ui->connect->setText("Desconectar");
-        ui->connectLabel->setText("Conectado");
         cThread->setNullParameters();
         cThread->setSimulationMode(false);
-        cThread->start();
+        int erro = cThread->start();
+        if(!erro) {
+            ui->connect->setText("Desconectar");
+            ui->connectLabel->setText("Conectado");
+        } else {
+            ui->connectLabel->setText("No route to host");
+            ui->connect->setChecked(false);
+        }
     } else {
         ui->connect->setText("Conectar");
         ui->connectLabel->setText("Desconectado");

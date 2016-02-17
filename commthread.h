@@ -21,9 +21,10 @@ private:
     bool malha;
     bool simulationMode;
     bool connected;
-    double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
     int channel;
     double waveTime, waveTimeStamp;
+    Quanser* q;
+    double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
 public:
     explicit commThread(QObject *parent =0);
@@ -33,6 +34,7 @@ public:
     void setSimulationMode(bool on);
     void disconnect(void);
     void terminate(void);
+    int start();
 signals:
     void plotValues(double,double,double,double,double,double,double);
 
