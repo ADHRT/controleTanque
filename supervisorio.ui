@@ -184,7 +184,7 @@
      <property name="title">
       <string>Canais de Escrita</string>
      </property>
-     <widget class="QRadioButton" name="radioButton">
+     <widget class="QRadioButton" name="canal0">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -200,7 +200,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_2">
+     <widget class="QRadioButton" name="canal1">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -213,7 +213,7 @@
        <string>Canal 1</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_7">
+     <widget class="QRadioButton" name="canal6">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -226,7 +226,7 @@
        <string>Canal 6</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_4">
+     <widget class="QRadioButton" name="canal3">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -239,7 +239,7 @@
        <string>Canal 3</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_8">
+     <widget class="QRadioButton" name="canal7">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -252,7 +252,7 @@
        <string>Canal 7</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_5">
+     <widget class="QRadioButton" name="canal4">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -265,7 +265,7 @@
        <string>Canal 4</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_3">
+     <widget class="QRadioButton" name="canal2">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -278,7 +278,7 @@
        <string>Canal 2</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_6">
+     <widget class="QRadioButton" name="canal5">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1298,7 +1298,7 @@
      <number>8</number>
     </property>
     <property name="maximum">
-     <number>120</number>
+     <number>200</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -1330,7 +1330,7 @@
      <number>8</number>
     </property>
     <property name="maximum">
-     <number>120</number>
+     <number>200</number>
     </property>
    </widget>
   </widget>

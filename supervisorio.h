@@ -90,6 +90,24 @@ private slots:
 
   void on_demo_clicked(bool checked);
 
+  void on_radioButton_clicked();
+
+  void on_canal0_clicked();
+
+  void on_canal1_clicked();
+
+  void on_canal2_clicked();
+
+  void on_canal3_clicked();
+
+  void on_canal4_clicked();
+
+  void on_canal5_clicked();
+
+  void on_canal6_clicked();
+
+  void on_canal7_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -109,6 +127,8 @@ private:
     int wave;
 
     int plotRange;
+
+    int channel;
 
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
 

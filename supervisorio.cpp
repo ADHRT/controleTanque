@@ -28,31 +28,33 @@ supervisorio::supervisorio(QWidget *parent) :
     duracaoMin = 1;
 
     //Set valores
-        //Frequencia
-        ui->doubleSpinBox->setValue(frequencia);
-        ui->horizontalSlider->setValue(frequencia*100);
-        //Amplitude
-        ui->doubleSpinBox_2->setValue(amplitude);
-        ui->horizontalSlider_2->setValue(amplitude*100);
-        //Offset
-        ui->doubleSpinBox_3->setValue(offset);
-        ui->horizontalSlider_3->setValue(offset*100);
-        //Max
-        ui->doubleSpinBox_4->setValue(duracaoMax);
-        ui->horizontalSlider_5->setValue(duracaoMax*100);
-        //Min
-        ui->doubleSpinBox_5->setValue(duracaoMin);
-        ui->horizontalSlider_6->setValue(duracaoMin*100);
+    //Frequencia
+    ui->doubleSpinBox->setValue(frequencia);
+    ui->horizontalSlider->setValue(frequencia*100);
+    //Amplitude
+    ui->doubleSpinBox_2->setValue(amplitude);
+    ui->horizontalSlider_2->setValue(amplitude*100);
+    //Offset
+    ui->doubleSpinBox_3->setValue(offset);
+    ui->horizontalSlider_3->setValue(offset*100);
+    //Max
+    ui->doubleSpinBox_4->setValue(duracaoMax);
+    ui->horizontalSlider_5->setValue(duracaoMax*100);
+    //Min
+    ui->doubleSpinBox_5->setValue(duracaoMin);
+    ui->horizontalSlider_6->setValue(duracaoMin*100);
 
      // Configura wave padrao
      wave = 0;
      //ui->radioButton_11->setChecked(true);
      on_radioButton_11_clicked();
 
+     // Configura canal padrao
+     channel = 0;
+
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
      connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double)));
-
 
     //OBS: Bom video para Threads
 
@@ -347,6 +349,47 @@ void supervisorio::on_comboBox_currentIndexChanged(int index)
 
 }
 
+// Channel
+
+void supervisorio::on_canal0_clicked()
+{
+    channel = 0;
+}
+
+void supervisorio::on_canal1_clicked()
+{
+    channel = 1;
+}
+
+void supervisorio::on_canal2_clicked()
+{
+    channel = 2;
+}
+
+void supervisorio::on_canal3_clicked()
+{
+    channel = 3;
+}
+
+void supervisorio::on_canal4_clicked()
+{
+    channel = 4;
+}
+
+void supervisorio::on_canal5_clicked()
+{
+    channel = 5;
+}
+
+void supervisorio::on_canal6_clicked()
+{
+    channel = 6;
+}
+
+void supervisorio::on_canal7_clicked()
+{
+    channel = 7;
+}
 
 //OBS: Para adicionar gráficos vá em Widget -> Promote to -> QCustomPLot
 
@@ -499,7 +542,7 @@ void supervisorio::on_pushButton_8_clicked()
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
     wave = nextWave;
     bool malha = ui->radioButton_9->isChecked();
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha);
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){

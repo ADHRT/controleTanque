@@ -22,11 +22,12 @@ private:
     bool simulationMode;
     bool connected;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
+    int channel;
 
 public:
     explicit commThread(QObject *parent =0);
     void run();
-    void setParameters(double, double, double, double, double, int, bool);
+    void setParameters(double, double, double, double, double, int, bool, int);
     void setNullParameters(void);
     void setSimulationMode(bool on);
     void disconnect(void);

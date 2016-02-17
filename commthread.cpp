@@ -7,7 +7,7 @@ commThread::commThread(QObject *parent):
     //Quadrada
     wave = 0;
     simulationMode = false;
-
+    channel = 0;
 }
 
 void commThread::run(){
@@ -79,20 +79,20 @@ void commThread::run(){
 
             //Calculates other points
             double sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
-            double setPoint =0;
+            double setPoint = 0;
             double erro = 0;
 
 
             if(malha == false){//malha fechada
-             setPoint = sinalCalculado;
-             erro = setPoint - nivelTanque1;
-             sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
+                setPoint = sinalCalculado;
+                erro = setPoint - nivelTanque1;
+                sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
             }
 
 
-            // Escreve no canal 0
+            // Escreve no canal selecionado
             if(!simulationMode)
-                q->writeDA(0, sinalSaturado);
+                q->writeDA(channel, sinalSaturado);
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
@@ -102,7 +102,6 @@ void commThread::run(){
         q->writeDA(0, 0);
         delete q;
     }
-
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
@@ -133,7 +132,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -142,6 +141,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->duracaoMin = duracaoMin;
     this->wave = wave;
     this->malha = malha;
+    this->channel = channel;
 }
 
 // Zera todos os valores
