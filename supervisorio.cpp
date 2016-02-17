@@ -570,7 +570,6 @@ void supervisorio::on_connect_clicked(bool checked)
 {
     //Inicia Thread de comunicação
     if (checked) {
-        cThread->setSimulationMode(false);
         if(ui->demo->isChecked()) {
             //Desconect via software
             on_demo_clicked(false);
@@ -580,23 +579,17 @@ void supervisorio::on_connect_clicked(bool checked)
         ui->connect->setText("Desconectar");
         ui->connectLabel->setText("Conectado");
         cThread->setNullParameters();
+        cThread->setSimulationMode(false);
         cThread->start();
     } else {
         ui->connect->setText("Conectar");
         ui->connectLabel->setText("Desconectado");
-        cThread->setNullParameters();
-        //Espera a thread ler os valores
-        QThread::msleep(300);
         //Termina a thread
         cThread->terminate();
-        //cThread->start();
+        while(!cThread->isFinished());
     }
 }
 
-void supervisorio::on_spinBox_valueChanged(int arg1)
-{
-    ui->scaleValue->setValue(arg1);
-}
 
 void supervisorio::on_demo_clicked(bool checked)
 {
@@ -606,15 +599,16 @@ void supervisorio::on_demo_clicked(bool checked)
             on_connect_clicked(false);
             //Muda o estilo
             ui->connect->setChecked(false);
-            QThread::msleep(1);
         }
         cThread->setSimulationMode(true);
         cThread->start();
     } else {
-        cThread->setSimulationMode(false);
-        //Espera a thread ler os valores
-        //QThread::msleep (200);
-        //Termina a thread
         cThread->terminate();
+        while(!cThread->isFinished());
     }
+}
+
+void supervisorio::on_spinBox_valueChanged(int arg1)
+{
+    ui->scaleValue->setValue(arg1);
 }
