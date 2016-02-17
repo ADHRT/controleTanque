@@ -88,6 +88,8 @@ private slots:
 
   void on_spinBox_valueChanged(int arg1);
 
+  void on_demo_clicked(bool checked);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;

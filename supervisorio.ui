@@ -818,7 +818,7 @@
       <property name="geometry">
        <rect>
         <x>130</x>
-        <y>30</y>
+        <y>40</y>
         <width>131</width>
         <height>20</height>
        </rect>
@@ -830,6 +830,25 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+    </widget>
+    <widget class="QPushButton" name="demo">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>670</y>
+       <width>51</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Demo</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_9">

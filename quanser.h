@@ -33,30 +33,7 @@ private:
    struct sockaddr_in address;
 
    
-   /**
-    * Tenta conectar ao servidor, se conseguir conectar, retorna 0, se não
-    * conseguir, retorna 1
-    */
-   int connectServer () {
-      this->sockfd  = socket(AF_INET, SOCK_STREAM,0);  // criacao do socket
-      this->address.sin_family = AF_INET;
 
-      this->address.sin_addr.s_addr = inet_addr(this->server);
-      this->address.sin_port = htons(this->tcpPort);
-
-      int len = sizeof(this->address);
-
-      int result = connect(this->sockfd, (struct sockaddr *)
-         &this->address, len);
-
-      if (result == -1)  {
-         perror ("Houve erro no cliente");
-         return 1;
-      }
-      else {
-         return 0;
-      }
-   }
    
    /**
     *Converte de inteiro para std::string
@@ -103,13 +80,39 @@ private:
 ///////////////////////////////////////////////////////////////////////
    
 public:
+
+   /**
+    * Tenta conectar ao servidor, se conseguir conectar, retorna 0, se não
+    * conseguir, retorna 1
+    */
+   int connectServer () {
+      this->sockfd  = socket(AF_INET, SOCK_STREAM,0);  // criacao do socket
+      this->address.sin_family = AF_INET;
+
+      this->address.sin_addr.s_addr = inet_addr(this->server);
+      this->address.sin_port = htons(this->tcpPort);
+
+      int len = sizeof(this->address);
+
+      int result = connect(this->sockfd, (struct sockaddr *)
+         &this->address, len);
+
+      if (result == -1)  {
+         perror ("Houve erro no cliente");
+         return 1;
+      }
+      else {
+         return 0;
+      }
+   }
+
+
    /**
     *Construtor
     */
    Quanser (char* _server, int _tcpPort) {
       this->tcpPort = _tcpPort;
       this->server = _server;
-      this->connectServer();
    }
 
    /**

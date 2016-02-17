@@ -19,12 +19,14 @@ private:
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
     double lastLoopTimeStamp;
+    bool simulationMode;
 
 public:
     explicit commThread(QObject *parent =0);
     void run();
     void setParameters(double, double, double, double, double, int, bool);
     void setNullParameters(void);
+    void setSimulationMode(bool on);
 
 signals:
     void plotValues(double,double,double,double,double,double,double);
