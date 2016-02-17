@@ -90,8 +90,6 @@ private slots:
 
   void on_demo_clicked(bool checked);
 
-  void on_radioButton_clicked();
-
   void on_canal0_clicked();
 
   void on_canal1_clicked();

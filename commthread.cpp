@@ -169,7 +169,7 @@ void commThread::terminate(void)
 {
     //setNullParameters();
     disconnect();
-    //QThread::msleep(100);
+    QThread::msleep(100);
     super::terminate();
     //while(!super::isFinished());
 }
