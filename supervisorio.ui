@@ -1279,7 +1279,7 @@
      <number>8</number>
     </property>
     <property name="maximum">
-     <number>120</number>
+     <number>200</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -1311,7 +1311,7 @@
      <number>8</number>
     </property>
     <property name="maximum">
-     <number>120</number>
+     <number>200</number>
     </property>
    </widget>
   </widget>
