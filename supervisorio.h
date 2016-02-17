@@ -84,13 +84,9 @@ private slots:
 
   void on_connect_clicked(bool checked);
 
-
-
   void on_spinBox_valueChanged(int arg1);
 
   void on_demo_clicked(bool checked);
-
-  void on_radioButton_clicked();
 
   void on_canal0_clicked();
 

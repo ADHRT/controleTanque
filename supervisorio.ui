@@ -522,7 +522,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Amplitude (V)</string>
+        <string>Amplitude (cm)</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -604,7 +604,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Offset (V)</string>
+        <string>Offset (cm)</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignBottom|Qt::AlignHCenter</set>

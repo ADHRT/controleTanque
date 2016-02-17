@@ -21,6 +21,7 @@ private:
     double lastLoopTimeStamp;
     bool simulationMode;
     int channel;
+    int connectionStatus;
 
 public:
     explicit commThread(QObject *parent =0);

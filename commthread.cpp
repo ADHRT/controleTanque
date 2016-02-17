@@ -8,6 +8,7 @@ commThread::commThread(QObject *parent):
     wave = 0;
     simulationMode = false;
     channel = 0;
+    connectionStatus = 1;
 }
 
 void commThread::run(){
@@ -16,7 +17,7 @@ void commThread::run(){
     Quanser* q = new Quanser("10.13.99.69", 20081);
     double nivelTanque1 = 0, nivelTanque2;
     if(!simulationMode) {
-        q->connectServer();
+        connectionStatus = q->connectServer();
     }
 
     //Inicia a contagem de tempo
