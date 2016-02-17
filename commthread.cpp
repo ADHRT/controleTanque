@@ -8,6 +8,7 @@ commThread::commThread(QObject *parent):
     wave = 0;
     simulationMode = false;
     channel = 0;
+    waveTime = 0;
 }
 
 void commThread::run(){
@@ -24,12 +25,14 @@ void commThread::run(){
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
-
+    waveTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
+    timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
     //Mantem o loop ate a funcao disconnect ser chamada
     connected = true;
     while(connected) {
 
         //Reads Time
+        waveTime = timeStamp - waveTimeStamp;
         timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
         if(timeStamp-lastLoopTimeStamp > 0.1 || !connected){
@@ -53,15 +56,15 @@ void commThread::run(){
                 sinalCalculado = offset;
                 break;
             case 1://senoidal:
-                sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude+offset;
+                sinalCalculado = qSin((waveTime)*3.14159265359*frequencia)*amplitude+offset;
                 break;
             case 2://quadrada:
-                sinalCalculado = qSin(timeStamp*3.14159265359*frequencia)*amplitude;
+                sinalCalculado = qSin(waveTime*3.14159265359*frequencia)*amplitude;
                 if(sinalCalculado>0)sinalCalculado = amplitude+offset;
                 else sinalCalculado = -amplitude+offset;
                 break;
             case 3://serra:
-                sinalCalculado = (fmod((timeStamp*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
+                sinalCalculado = (fmod((waveTime*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
                 break;
             case 4://aleatorio:
                 if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
@@ -74,7 +77,6 @@ void commThread::run(){
             default:
                 qDebug() << "ERRO: Nenhuma onda selecionada!";
             }
-
 
 
             //Calculates other points
@@ -99,7 +101,7 @@ void commThread::run(){
         }
     }
     if(!simulationMode) {
-        q->writeDA(0, 0);
+        q->writeDA(channel, 0);
         delete q;
     }
 }
@@ -139,6 +141,11 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->offset = offset;
     this->duracaoMax = duracaoMax;
     this->duracaoMin = duracaoMin;
+    if (wave != this->wave)
+    {
+        waveTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
+        waveTime = 0;
+    }
     this->wave = wave;
     this->malha = malha;
     this->channel = channel;

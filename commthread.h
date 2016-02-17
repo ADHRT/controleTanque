@@ -23,6 +23,7 @@ private:
     bool connected;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
     int channel;
+    double waveTime, waveTimeStamp;
 
 public:
     explicit commThread(QObject *parent =0);

@@ -1266,23 +1266,10 @@
      </font>
     </property>
     <property name="text">
-     <string>Sinal Calculado e Sinal Travado</string>
+     <string>Sinal Calculado e Sinal Saturado</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_11">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>10</y>
-      <width>251</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Aqui aparece o que vem da thread (teste)</string>
     </property>
    </widget>
    <widget class="QSlider" name="scaleValue">
