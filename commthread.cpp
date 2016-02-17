@@ -14,20 +14,25 @@ void commThread::run(){
 
     // Conecta com os tanques
     Quanser* q = new Quanser("10.13.99.69", 20081);
-    double nivelTanque1 = 0, nivelTanque2;
+    double nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
     if(!simulationMode) {
-        q->connectServer();
+        int erro = q->connectServer();
+        if(erro){
+            qDebug() << "Deu erro mesmo";
+        }
     }
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
-    while(1) {
+    //Mantem o loop ate a funcao disconnect ser chamada
+    connected = true;
+    while(connected) {
 
         //Reads Time
-        double timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
+        timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
-        if(timeStamp-lastLoopTimeStamp > 0.1){
+        if(timeStamp-lastLoopTimeStamp > 0.1 || !connected){
             lastLoopTimeStamp=timeStamp;
 
             if(!simulationMode) {
@@ -93,6 +98,10 @@ void commThread::run(){
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
         }
     }
+    if(!simulationMode) {
+        q->writeDA(0, 0);
+        delete q;
+    }
 
 }
 
@@ -150,4 +159,19 @@ void commThread::setSimulationMode(bool on)
 {
     simulationMode = on;
 }
+
+void commThread::disconnect(void)
+{
+    connected = false;
+}
+
+void commThread::terminate(void)
+{
+    //setNullParameters();
+    disconnect();
+    //QThread::msleep(100);
+    super::terminate();
+    //while(!super::isFinished());
+}
+
 
