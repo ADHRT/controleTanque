@@ -619,3 +619,26 @@ void supervisorio::on_spinBox_valueChanged(int arg1)
     ui->scaleValue->setValue(arg1);
 }
 
+
+void supervisorio::on_comboBox_tipoControle_currentIndexChanged(int index)
+{
+    if(index ==0){//P
+
+    }
+    else if(index==1){//PI
+
+    }
+    else if(index==1){//PD
+
+    }
+    else if(index==1){//PID
+
+    }
+    else if(index==1){//PI-D
+
+    }
+    else if(index==1){//Sem
+
+    }
+}
+

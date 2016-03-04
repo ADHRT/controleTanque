@@ -961,7 +961,7 @@
        <property name="title">
         <string>Controle e Parâmetros</string>
        </property>
-       <widget class="QComboBox" name="comboBox_2">
+       <widget class="QComboBox" name="comboBox_tipoControle">
         <property name="geometry">
          <rect>
           <x>10</x>

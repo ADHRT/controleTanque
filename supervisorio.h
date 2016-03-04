@@ -96,6 +96,8 @@ private slots:
 
   void on_comboBox_6_currentIndexChanged(int index);
 
+  void on_comboBox_tipoControle_currentIndexChanged(int index);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
