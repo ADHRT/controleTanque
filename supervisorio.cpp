@@ -47,7 +47,7 @@ supervisorio::supervisorio(QWidget *parent) :
      // Configura wave padrao
      wave = 0;
      //ui->radioButton_11->setChecked(true);
-     on_radioButton_11_clicked();
+     on_comboBox_6_currentIndexChanged(0);//Degrau
 
      // Configura canal padrao
      channel = 0;
@@ -476,6 +476,9 @@ void supervisorio::on_radioButton_9_clicked()
     ui->doubleSpinBox_3->setValue(0);
     ui->doubleSpinBox_3->setMaximum(15);
     ui->doubleSpinBox_3->setMinimum(-15);
+
+    //Desativa a combo box dos parâmetros de controle
+    ui->groupBox_10->setEnabled(false);
 }
 
 //Malha fechada
@@ -492,43 +495,41 @@ void supervisorio::on_radioButton_10_clicked()
     ui->doubleSpinBox_3->setValue(0);
     ui->doubleSpinBox_3->setMaximum(30);
     ui->doubleSpinBox_3->setMinimum(0);
+
+    //Ativa a combo box dos parâmetros de controle
+    ui->groupBox_10->setEnabled(true);
 }
 
-//Degrau layout
-void supervisorio::on_radioButton_11_clicked()
+
+
+
+
+void supervisorio::on_comboBox_6_currentIndexChanged(int index)
 {
-    setLayout(false, false, true, false);
-    nextWave = degrau;
-}
+    if(index==0){//Degrau
+        setLayout(false, false, true, false);
+        nextWave = degrau;
+    }
+    else if(index==1){//Senoidal
+        setLayout(true, true, true, false);
+        nextWave = senoidal;
+    }
+    else if(index==2){//Quadrada
+        setLayout(true, true, true, false);
+        nextWave = quadrada;
+    }
+    else if(index==3){//Dente de Serra
+        setLayout(true, true, true, false);
+        nextWave = serra;
+    }
+    else if(index==4){//Aleatorio
+        setLayout(false, true, true, true);
+        nextWave = aleatorio;
+    }
 
-//Senoidal layout
-void supervisorio::on_radioButton_12_clicked()
-{
-   setLayout(true, true, true, false);
-   nextWave = senoidal;
-}
-
-//Quadrada layout
-void supervisorio::on_radioButton_13_clicked()
-{
-    setLayout(true, true, true, false);
-    nextWave = quadrada;
-}
-
-//Serra layout
-void supervisorio::on_radioButton_14_clicked()
-{
-    setLayout(true, true, true, false);
-    nextWave = serra;
 
 }
 
-//Aleatorio layout
-void supervisorio::on_radioButton_15_clicked()
-{
-    setLayout(false, true, true, true);
-    nextWave = aleatorio;
-}
 
 //Atualiza valores
 void supervisorio::on_pushButton_8_clicked()
@@ -617,3 +618,4 @@ void supervisorio::on_spinBox_valueChanged(int arg1)
 {
     ui->scaleValue->setValue(arg1);
 }
+

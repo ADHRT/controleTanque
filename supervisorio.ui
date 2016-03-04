@@ -503,7 +503,7 @@
         <x>0</x>
         <y>0</y>
         <width>391</width>
-        <height>721</height>
+        <height>551</height>
        </rect>
       </property>
       <property name="autoFillBackground">
@@ -518,7 +518,7 @@
          <x>180</x>
          <y>0</y>
          <width>201</width>
-         <height>671</height>
+         <height>541</height>
         </rect>
        </property>
        <property name="title">
@@ -530,96 +530,55 @@
           <x>10</x>
           <y>20</y>
           <width>191</width>
-          <height>191</height>
+          <height>71</height>
          </rect>
         </property>
         <property name="title">
          <string>Onda</string>
         </property>
-        <widget class="QRadioButton" name="radioButton_11">
+        <widget class="QComboBox" name="comboBox_6">
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>30</y>
-           <width>131</width>
-           <height>20</height>
+           <width>171</width>
+           <height>26</height>
           </rect>
          </property>
-         <property name="text">
-          <string>Degrau</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="radioButton_12">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>60</y>
-           <width>131</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Onda Senoidal</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="radioButton_13">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>90</y>
-           <width>151</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Onda Quadrada</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="radioButton_14">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>120</y>
-           <width>151</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Dente de Serra</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="radioButton_15">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>150</y>
-           <width>131</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Ubuntu</family>
-          </font>
-         </property>
-         <property name="text">
-          <string>Sinal Aleatório</string>
-         </property>
+         <item>
+          <property name="text">
+           <string>Degrau</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Senoidal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Quadrada</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dente de Serra</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Sinal Aleatório</string>
+          </property>
+         </item>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_8">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>210</y>
+          <y>90</y>
           <width>181</width>
-          <height>471</height>
+          <height>441</height>
          </rect>
         </property>
         <property name="title">
@@ -904,7 +863,7 @@
           <rect>
            <x>30</x>
            <y>340</y>
-           <width>151</width>
+           <width>141</width>
            <height>22</height>
           </rect>
          </property>
@@ -926,7 +885,7 @@
           <rect>
            <x>30</x>
            <y>400</y>
-           <width>151</width>
+           <width>141</width>
            <height>22</height>
           </rect>
          </property>
@@ -938,19 +897,6 @@
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton_8">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>430</y>
-           <width>131</width>
-           <height>32</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Atualizar</string>
          </property>
         </widget>
        </widget>
@@ -1000,77 +946,10 @@
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_7">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>280</y>
-         <width>151</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="title">
-        <string>Conexão</string>
-       </property>
-       <widget class="QPushButton" name="connect">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>20</y>
-          <width>121</width>
-          <height>32</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Conectar</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-       <widget class="QLabel" name="connectLabel">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>50</y>
-          <width>131</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Desconectado</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="demo">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>70</y>
-          <width>51</width>
-          <height>32</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Demo</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </widget>
       <widget class="QGroupBox" name="groupBox_10">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1114,6 +993,11 @@
         <item>
          <property name="text">
           <string>PI-D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Sem</string>
          </property>
         </item>
        </widget>
@@ -1203,6 +1087,89 @@
         </property>
        </widget>
       </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>560</y>
+        <width>361</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Atualizar</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>590</y>
+        <width>231</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="title">
+       <string>Conexão</string>
+      </property>
+      <widget class="QPushButton" name="connect">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>121</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Conectar</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="connectLabel">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>20</y>
+         <width>131</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Desconectado</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="demo">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>610</y>
+        <width>121</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Demo</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
