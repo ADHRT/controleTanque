@@ -66,16 +66,6 @@ private slots:
 
   void on_horizontalSlider_6_sliderReleased();
 
-  void on_radioButton_11_clicked();
-
-  void on_radioButton_12_clicked();
-
-  void on_radioButton_13_clicked();
-
-  void on_radioButton_14_clicked();
-
-  void on_radioButton_15_clicked();
-
   void on_radioButton_10_clicked();
 
   void on_pushButton_8_clicked();
@@ -104,6 +94,10 @@ private slots:
 
   void on_canal7_clicked();
 
+  void on_comboBox_6_currentIndexChanged(int index);
+
+  void on_comboBox_tipoControle_currentIndexChanged(int index);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -127,6 +121,7 @@ private:
     int channel;
 
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
+    void setControlParams(bool kp, bool ki, bool kd);
 
     void setTickStep();
 
