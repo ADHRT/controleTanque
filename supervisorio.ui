@@ -23,6 +23,7 @@
       <height>271</height>
      </rect>
     </property>
+    <zorder>customPlot2</zorder>
    </widget>
    <widget class="QCustomPlot" name="customPlot2" native="true">
     <property name="geometry">
@@ -101,12 +102,15 @@
       <rect>
        <x>0</x>
        <y>40</y>
-       <width>91</width>
+       <width>80</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>Tanque 1</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <widget class="QGroupBox" name="groupBox_5">
       <property name="geometry">
@@ -539,19 +543,6 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>131</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Tipo de Malha</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
@@ -573,7 +564,7 @@
       <rect>
        <x>0</x>
        <y>390</y>
-       <width>91</width>
+       <width>80</width>
        <height>16</height>
       </rect>
      </property>
@@ -927,11 +918,11 @@
       <x>10</x>
       <y>30</y>
       <width>391</width>
-      <height>751</height>
+      <height>689</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -956,7 +947,7 @@
        <property name="geometry">
         <rect>
          <x>180</x>
-         <y>0</y>
+         <y>10</y>
          <width>201</width>
          <height>541</height>
         </rect>
@@ -979,9 +970,9 @@
         <widget class="QComboBox" name="comboBox_6">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>20</x>
            <y>30</y>
-           <width>171</width>
+           <width>161</width>
            <height>26</height>
           </rect>
          </property>
@@ -1017,7 +1008,7 @@
          <rect>
           <x>10</x>
           <y>90</y>
-          <width>181</width>
+          <width>191</width>
           <height>441</height>
          </rect>
         </property>
@@ -1150,9 +1141,9 @@
         <widget class="QSlider" name="horizontalSlider">
          <property name="geometry">
           <rect>
-           <x>20</x>
+           <x>30</x>
            <y>90</y>
-           <width>151</width>
+           <width>141</width>
            <height>22</height>
           </rect>
          </property>
@@ -1175,9 +1166,9 @@
         <widget class="QSlider" name="horizontalSlider_2">
          <property name="geometry">
           <rect>
-           <x>20</x>
+           <x>30</x>
            <y>170</y>
-           <width>151</width>
+           <width>141</width>
            <height>22</height>
           </rect>
          </property>
@@ -1194,9 +1185,9 @@
         <widget class="QSlider" name="horizontalSlider_3">
          <property name="geometry">
           <rect>
-           <x>20</x>
+           <x>30</x>
            <y>250</y>
-           <width>151</width>
+           <width>141</width>
            <height>22</height>
           </rect>
          </property>
@@ -1345,8 +1336,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>0</y>
-         <width>151</width>
+         <y>10</y>
+         <width>165</width>
          <height>91</height>
         </rect>
        </property>
@@ -1358,7 +1349,7 @@
          <rect>
           <x>10</x>
           <y>60</y>
-          <width>141</width>
+          <width>121</width>
           <height>20</height>
          </rect>
         </property>
@@ -1394,7 +1385,7 @@
         <rect>
          <x>10</x>
          <y>100</y>
-         <width>151</width>
+         <width>165</width>
          <height>171</height>
         </rect>
        </property>
@@ -1613,7 +1604,7 @@
         <x>250</x>
         <y>610</y>
         <width>121</width>
-        <height>51</height>
+        <height>32</height>
        </rect>
       </property>
       <property name="text">
