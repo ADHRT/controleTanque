@@ -251,6 +251,19 @@ void supervisorio::setLayout(bool frequencia, bool amplitude, bool offset, bool 
     ui->horizontalSlider_6->setEnabled(duracao);
 }
 
+void supervisorio::setControlParams(bool kp, bool ki, bool kd)
+{
+    //kp
+    ui->comboBox_5->setEnabled(kp);
+    ui->doubleSpinBox_6->setEnabled(kp);
+    //ki
+    ui->comboBox_3->setEnabled(ki);
+    ui->doubleSpinBox_7->setEnabled(ki);
+    //kd
+    ui->comboBox_4->setEnabled(kd);
+    ui->doubleSpinBox_8->setEnabled(kd);
+}
+
 void supervisorio::setTickStep(void) {
     //Valores no eixo X por segundo, proporcao utilizada no exemplo 8/4=2s
     ui->customPlot->xAxis->setTickStep(plotRange/4);
@@ -623,22 +636,22 @@ void supervisorio::on_spinBox_valueChanged(int arg1)
 void supervisorio::on_comboBox_tipoControle_currentIndexChanged(int index)
 {
     if(index ==0){//P
-
+        setControlParams(true,false,false);
     }
     else if(index==1){//PI
-
+        setControlParams(true,true,false);
     }
-    else if(index==1){//PD
-
+    else if(index==2){//PD
+        setControlParams(true,false,true);
     }
-    else if(index==1){//PID
-
+    else if(index==3){//PID
+        setControlParams(true,true,true);
     }
-    else if(index==1){//PI-D
-
+    else if(index==4){//PI-D
+        setControlParams(true,true,true);
     }
-    else if(index==1){//Sem
-
+    else if(index==5){//Sem
+        setControlParams(false,false,false);
     }
 }
 

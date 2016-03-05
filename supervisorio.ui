@@ -970,6 +970,9 @@
           <height>26</height>
          </rect>
         </property>
+        <property name="currentText">
+         <string>P</string>
+        </property>
         <item>
          <property name="text">
           <string>P</string>
@@ -1002,6 +1005,9 @@
         </item>
        </widget>
        <widget class="QComboBox" name="comboBox_4">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1032,6 +1038,9 @@
         </property>
        </widget>
        <widget class="QComboBox" name="comboBox_3">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1067,6 +1076,9 @@
         </item>
        </widget>
        <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>70</x>
@@ -1077,6 +1089,9 @@
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="doubleSpinBox_8">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>70</x>
@@ -1428,7 +1443,7 @@
      <x>0</x>
      <y>0</y>
      <width>1436</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

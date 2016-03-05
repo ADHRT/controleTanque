@@ -121,6 +121,7 @@ private:
     int channel;
 
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
+    void setControlParams(bool kp, bool ki, bool kd);
 
     void setTickStep();
 
