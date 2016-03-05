@@ -19,12 +19,13 @@ public:
     explicit supervisorio(QWidget *parent = 0);
     ~supervisorio();
     enum Wave { degrau, senoidal, quadrada, serra, aleatorio };
-     void setupPlot1(QCustomPlot *customPlot);
-     void setupPlot2(QCustomPlot *customPlo2);
-     void updatePlot1(double timeStamp, double redPlot, double bluePlot);
-     void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
-     double lockSignal(double sinalCalculado, double nivelTanque1);
-     commThread *cThread;
+    enum Control { P, PI, PD, PID, PI_D, SEM };
+    void setupPlot1(QCustomPlot *customPlot);
+    void setupPlot2(QCustomPlot *customPlo2);
+    void updatePlot1(double timeStamp, double redPlot, double bluePlot);
+    void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
+    double lockSignal(double sinalCalculado, double nivelTanque1);
+    commThread *cThread;
 
 public slots:
      void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro);
@@ -112,9 +113,13 @@ private:
     double offset;
     double duracaoMax;
     double duracaoMin;
+    double kp, ki, kd;
 
     int nextWave;
     int wave;
+
+    Control nextControl;
+    Control control;
 
     int plotRange;
 

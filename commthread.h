@@ -7,6 +7,16 @@
 class commThread : public QThread
 {
     Q_OBJECT
+public:
+    explicit commThread(QObject *parent =0);
+    enum Control { P, PI, PD, PID, PI_D, SEM };
+    void run();
+    void setParameters(double, double, double, double, double, int, bool, int, int, double, double, double);
+    void setNullParameters(void);
+    void setSimulationMode(bool on);
+    void disconnect(void);
+    void terminate(void);
+    int start();
 
 private:
     typedef QThread super;
@@ -18,6 +28,8 @@ private:
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
     double lastLoopTimeStamp;
     int wave;
+    Control control;
+    double kp, ki, kd;
     bool malha;
     bool simulationMode;
     bool connected;
@@ -26,15 +38,6 @@ private:
     Quanser* q;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
-public:
-    explicit commThread(QObject *parent =0);
-    void run();
-    void setParameters(double, double, double, double, double, int, bool, int);
-    void setNullParameters(void);
-    void setSimulationMode(bool on);
-    void disconnect(void);
-    void terminate(void);
-    int start();
 signals:
     void plotValues(double,double,double,double,double,double,double);
 

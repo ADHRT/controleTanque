@@ -23,9 +23,16 @@ supervisorio::supervisorio(QWidget *parent) :
     //Inicializa valores
     frequencia = 1;
     amplitude = 3;
-    offset = 0;
+    offset = 3;
     duracaoMax = 3;
     duracaoMin = 1;
+    wave = 0;
+    nextWave = 0;
+    control = P;
+    nextControl = P;
+    ki = 1;
+    kd = 1;
+    kp = 1;
 
     //Set valores
     //Frequencia
@@ -45,9 +52,17 @@ supervisorio::supervisorio(QWidget *parent) :
     ui->horizontalSlider_6->setValue(duracaoMin*100);
 
      // Configura wave padrao
-     wave = 0;
      //ui->radioButton_11->setChecked(true);
      on_comboBox_6_currentIndexChanged(0);//Degrau
+
+     // Configura sinal de controle
+     int index = ui->comboBox_tipoControle->findText("P");
+     ui->comboBox_tipoControle->setCurrentIndex(index);
+
+     ui->doubleSpinBox_6->setValue(kp);
+     ui->doubleSpinBox_7->setValue(ki);
+     ui->doubleSpinBox_8->setValue(kd);
+
 
      // Configura canal padrao
      channel = 0;
@@ -555,8 +570,9 @@ void supervisorio::on_pushButton_8_clicked()
     duracaoMin= ui->doubleSpinBox_5->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
     wave = nextWave;
+    control = nextControl;
     bool malha = ui->radioButton_9->isChecked();
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel);
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){
@@ -635,23 +651,29 @@ void supervisorio::on_spinBox_valueChanged(int arg1)
 
 void supervisorio::on_comboBox_tipoControle_currentIndexChanged(int index)
 {
-    if(index ==0){//P
+    if(index==0){//P
         setControlParams(true,false,false);
+        nextControl = P;
     }
     else if(index==1){//PI
         setControlParams(true,true,false);
+        nextControl = PI;
     }
     else if(index==2){//PD
         setControlParams(true,false,true);
+        nextControl = PD;
     }
     else if(index==3){//PID
         setControlParams(true,true,true);
+        nextControl = PID;
     }
     else if(index==4){//PI-D
         setControlParams(true,true,true);
+        nextControl = PI_D;
     }
     else if(index==5){//Sem
         setControlParams(false,false,false);
+        nextControl = SEM;
     }
 }
 

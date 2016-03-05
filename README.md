@@ -1,6 +1,9 @@
 # Próximos passos 
 - [T] Animação dos botões :3
-- [H] Implementar P
-- [ ] Implementar lógica do controle
-- [ ] Implementar lógica do “sem” 
+- [X] Implementar P
+- [ ] Implementar PI
+- [ ] Implementar PD
+- [ ] Implementar PID
+- [ ] Implementar PI_D
+- [X] Implementar SEM
 - [ ] Anti-reset Wind up e integral condicional

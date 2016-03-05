@@ -9,7 +9,8 @@ commThread::commThread(QObject *parent):
     simulationMode = false;
     channel = 0;
     waveTime = 0;
-
+    kp = 1;
+    control = P;
     q = new Quanser("10.13.99.69", 20081);
 
 }
@@ -82,7 +83,24 @@ void commThread::run(){
 
             if(malha == false){//malha fechada
                 setPoint = sinalCalculado;
-                erro = setPoint - nivelTanque1;
+                enum Control { P, PI, PD, PID, PI_D, SEM };
+                switch (control) {
+                case SEM:
+                    erro = setPoint - nivelTanque1;
+                    break;
+                case P:
+                    erro = kp*(setPoint - nivelTanque1);
+                case PI:
+                    break;
+                case PD:
+                    break;
+                case PID:
+                    break;
+                case PI_D:
+                    break;
+                default:
+                    qDebug() << "Nenhum sinal de controle selecionado";
+                }
                 sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
             }
 
@@ -129,7 +147,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -144,6 +162,10 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->wave = wave;
     this->malha = malha;
     this->channel = channel;
+    this->control = static_cast<Control>(control);
+    this->kp = kp;
+    this->ki = ki;
+    this->kd = kd;
 }
 
 // Zera todos os valores
@@ -155,6 +177,9 @@ void commThread::setNullParameters()
     duracaoMax = 0;
     duracaoMin = 0;
     sinalCalculado = 0;
+    kp = 0;
+    ki = 0;
+    kd = 0;
 }
 
 void commThread::setSimulationMode(bool on)
