@@ -39,9 +39,9 @@
     <property name="geometry">
      <rect>
       <x>1260</x>
-      <y>0</y>
+      <y>10</y>
       <width>91</width>
-      <height>701</height>
+      <height>711</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -56,8 +56,8 @@
     <widget class="QProgressBar" name="progressBar">
      <property name="geometry">
       <rect>
-       <x>24</x>
-       <y>60</y>
+       <x>34</x>
+       <y>50</y>
        <width>31</width>
        <height>270</height>
       </rect>
@@ -75,8 +75,8 @@
     <widget class="QProgressBar" name="progressBar_2">
      <property name="geometry">
       <rect>
-       <x>24</x>
-       <y>410</y>
+       <x>34</x>
+       <y>400</y>
        <width>31</width>
        <height>270</height>
       </rect>
@@ -100,8 +100,8 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>40</y>
+       <x>10</x>
+       <y>30</y>
        <width>80</width>
        <height>16</height>
       </rect>
@@ -116,8 +116,8 @@
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>330</y>
+       <x>10</x>
+       <y>320</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -132,8 +132,8 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>390</y>
+       <x>10</x>
+       <y>380</y>
        <width>80</width>
        <height>16</height>
       </rect>
@@ -148,8 +148,8 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>680</y>
+       <x>10</x>
+       <y>670</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -486,9 +486,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
+      <y>10</y>
       <width>391</width>
-      <height>689</height>
+      <height>711</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -1108,7 +1108,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>560</y>
+        <y>570</y>
         <width>361</width>
         <height>32</height>
        </rect>
@@ -1121,7 +1121,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>590</y>
+        <y>610</y>
         <width>231</width>
         <height>61</height>
        </rect>
@@ -1172,7 +1172,7 @@
       <property name="geometry">
        <rect>
         <x>250</x>
-        <y>610</y>
+        <y>630</y>
         <width>121</width>
         <height>32</height>
        </rect>
