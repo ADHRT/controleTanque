@@ -21,9 +21,9 @@ supervisorio::supervisorio(QWidget *parent) :
     timeToNextRandomNumber=0;
 
     //Inicializa valores
-    frequencia = 1;
+    frequencia = 5;
     amplitude = 3;
-    offset = 3;
+    offset = 20;
     duracaoMax = 3;
     duracaoMin = 1;
     wave = 0;
@@ -36,6 +36,9 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //Set valores
     //Frequencia
+    // Configura sinal de controle
+    int index = ui->comboBox->findText("Período (s)");
+    ui->comboBox->setCurrentIndex(index);
     ui->doubleSpinBox->setValue(frequencia);
     ui->horizontalSlider->setValue(frequencia*100);
     //Amplitude
@@ -56,7 +59,7 @@ supervisorio::supervisorio(QWidget *parent) :
      on_comboBox_6_currentIndexChanged(0);//Degrau
 
      // Configura sinal de controle
-     int index = ui->comboBox_tipoControle->findText("P");
+     index = ui->comboBox_tipoControle->findText("PID");
      ui->comboBox_tipoControle->setCurrentIndex(index);
 
      ui->doubleSpinBox_6->setValue(kp);
