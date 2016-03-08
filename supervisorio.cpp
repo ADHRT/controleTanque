@@ -33,6 +33,7 @@ supervisorio::supervisorio(QWidget *parent) :
     kp = 2;
     ki = 0.05;
     kd = 0.005;
+    windup = true;
 
     //Set valores
     //Frequencia
@@ -66,7 +67,8 @@ supervisorio::supervisorio(QWidget *parent) :
      ui->doubleSpinBox_7->setValue(ki);
      ui->doubleSpinBox_8->setValue(kd);
 
-
+     // Wind Up
+     ui->checkBox_windup->setChecked(windup);
      // Configura canal padrao
      channel = 0;
 
@@ -590,7 +592,8 @@ void supervisorio::on_pushButton_8_clicked()
     wave = nextWave;
     control = nextControl;
     bool malha = ui->radioButton_9->isChecked();
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd);
+    windup = ui->checkBox_windup->isChecked();
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){

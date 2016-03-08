@@ -18,6 +18,7 @@ commThread::commThread(QObject *parent):
     lastI = 0;
     lastD = 0;
     period = 0.1;
+    windup = true;
 }
 
 void commThread::run(){
@@ -105,8 +106,15 @@ void commThread::run(){
                 case PI:
                     //I
                     p = kp*erro;
-                    i = lastI + (ki*period*erro);
-                    lastI = i;
+                    if(sinalSaturado != sinalCalculado && windup)
+                    {
+                        i = lastI;
+                    }
+                    else
+                    {
+                        i = lastI + (ki*period*erro);
+                        lastI = i;
+                    }
                     erro = p + i;
                     break;
                 case PD:
@@ -119,16 +127,30 @@ void commThread::run(){
                     p = kp*erro;
                     d = kd*(erro - lastD)/period;
                     lastD = erro;
-                    i = lastI + (ki*period*erro);
-                    lastI = i;
+                    if(sinalSaturado != sinalCalculado && windup)
+                    {
+                        i = lastI;
+                    }
+                    else
+                    {
+                        i = lastI + (ki*period*erro);
+                        lastI = i;
+                    }
                     erro = p + i + d;
                     break;
                 case PI_D:
                     p = kp*erro;
                     d = kd*(nivelTanque1 - lastD)/period;
                     lastD = nivelTanque1;
-                    i = lastI + (ki*period*erro);
-                    lastI = i;
+                    if(sinalSaturado != sinalCalculado && windup)
+                    {
+                        i = lastI;
+                    }
+                    else
+                    {
+                        i = lastI + (ki*period*erro);
+                        lastI = i;
+                    }
                     erro = p + i + d;
                     break;
                 default:
@@ -181,7 +203,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -200,6 +222,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->kp = kp;
     this->ki = ki;
     this->kd = kd;
+    this->windup = windup;
 }
 
 // Zera todos os valores

@@ -114,6 +114,7 @@ private:
     double duracaoMax;
     double duracaoMin;
     double kp, ki, kd;
+    bool windup;
 
     int nextWave;
     int wave;
