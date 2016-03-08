@@ -101,6 +101,10 @@ private slots:
 
   void on_comboBox_windup_currentIndexChanged(int index);
 
+  void on_comboBox_3_currentIndexChanged(int index);
+
+  void on_comboBox_4_currentIndexChanged(int index);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;

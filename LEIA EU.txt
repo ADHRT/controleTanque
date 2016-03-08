@@ -1,6 +1,6 @@
-Próximos passos:
 
-O aleatório não funciona direito, tem que dar uma melhorada no algoritmo
-Nada de conexão foi feito ainda
-Comentar melhor o código
-Relatório
+
+
+	O windup integral é a situação que ocorre em um controle com parte integrativa qtquando uma grande mudança do setpoint ocorre os termos integrativos acumulam um erro significante durante a subida (windup). Assim, ocorre um overshoot demasiadamente grande devido ao grande tamanho do fator integrativo, que não é limitado.
+	A integração condicional é um método anti windup, que simplesmente desliga a ação interativa quando se está longe do regime permanente. Para desligar o integrador, podemos simplesmente fazer com que a entrada do fator integrativo seja zero nesses momentos. Podemos, por exemplo, fazer com que a entrada do fator integrativo seja zero quando o erro está saturado.
+	

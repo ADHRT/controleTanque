@@ -393,6 +393,25 @@ void supervisorio::on_comboBox_currentIndexChanged(int index)
 
 }
 
+void supervisorio::on_comboBox_3_currentIndexChanged(int index)
+{
+    double aux = ui->doubleSpinBox_7->value();
+    ui->doubleSpinBox_7->setValue(kp/aux);
+    index++;
+}
+
+void supervisorio::on_comboBox_4_currentIndexChanged(int index)
+{
+    double aux = ui->doubleSpinBox_8->value();
+
+    if (index == 0){
+        ui->doubleSpinBox_8->setValue(kp*aux);
+    }
+    else {
+        ui->doubleSpinBox_8->setValue(aux/kp);
+    }
+}
+
 // Channel
 
 void supervisorio::on_canal0_clicked()
@@ -590,7 +609,7 @@ void supervisorio::on_pushButton_8_clicked()
     ki = ui->doubleSpinBox_7->value();
     if(ui->comboBox_3->currentIndex()==1) ki=kp/ki;
     kd = ui->doubleSpinBox_8->value();
-    if(ui->comboBox_4->currentIndex()==1) kd=kp*ki;
+    if(ui->comboBox_4->currentIndex()==1) kd=kd/kp;
 
     wave = nextWave;
     control = nextControl;
