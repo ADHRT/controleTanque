@@ -71,7 +71,6 @@ supervisorio::supervisorio(QWidget *parent) :
      cThread = new commThread(this);
      connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double)));
 
-    //OBS: Bom video para Threads
 
 }
 
@@ -115,6 +114,11 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
   connect(customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->yAxis2, SLOT(setRange(QCPRange)));
+
+  //Coloca o Label dos eixos
+  customPlot->xAxis->setLabel("Tempo (s)");
+  customPlot->yAxis->setLabel("Tensão (v)");
+
 
 }
 
@@ -166,6 +170,10 @@ void supervisorio::setupPlot2(QCustomPlot *customPlot2)
   // make left and bottom axes transfer their ranges to right and top axes:
   connect(customPlot2->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot2->xAxis2, SLOT(setRange(QCPRange)));
   connect(customPlot2->yAxis, SIGNAL(rangeChanged(QCPRange)), customPlot2->yAxis2, SLOT(setRange(QCPRange)));
+
+  //Coloca o Label dos eixos
+  customPlot2->xAxis->setLabel("Tempo (s)");
+  customPlot2->yAxis->setLabel("Centímetro (cm)");
 
 }
 
