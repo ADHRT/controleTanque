@@ -30,9 +30,9 @@ supervisorio::supervisorio(QWidget *parent) :
     nextWave = 0;
     control = P;
     nextControl = P;
-    ki = 1;
-    kd = 1;
-    kp = 1;
+    kp = 2;
+    ki = 0.05;
+    kd = 0.005;
 
     //Set valores
     //Frequencia
@@ -572,11 +572,18 @@ void supervisorio::on_pushButton_8_clicked()
 {
     //Get wave configurations
     frequencia = ui->doubleSpinBox->value();
+    if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
     amplitude = ui->doubleSpinBox_2->value();
     offset = ui->doubleSpinBox_3->value();
     duracaoMax = ui->doubleSpinBox_4->value();
     duracaoMin= ui->doubleSpinBox_5->value();
-    if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
+
+    kp = ui->doubleSpinBox_6->value();
+    ki = ui->doubleSpinBox_7->value();
+    if(ui->comboBox_3->currentIndex()==1) ki=kp/ki;
+    kd = ui->doubleSpinBox_8->value();
+    if(ui->comboBox_4->currentIndex()==1) kd=kp*ki;
+
     wave = nextWave;
     control = nextControl;
     bool malha = ui->radioButton_9->isChecked();

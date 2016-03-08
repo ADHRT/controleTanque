@@ -9,10 +9,15 @@ commThread::commThread(QObject *parent):
     simulationMode = false;
     channel = 0;
     waveTime = 0;
-    kp = 1;
+    kp = 2;
+    ki = 0.05;
+    kd = 0.005;
     control = P;
+    lastControl = control;
     q = new Quanser("10.13.99.69", 20081);
-
+    lastI = 0;
+    lastD = 0;
+    period = 0.1;
 }
 
 void commThread::run(){
@@ -31,7 +36,7 @@ void commThread::run(){
         waveTime = timeStamp - waveTimeStamp;
         timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
 
-        if(timeStamp-lastLoopTimeStamp > 0.1 || !connected){
+        if(timeStamp-lastLoopTimeStamp > period || !connected){
             lastLoopTimeStamp=timeStamp;
 
             if(!simulationMode) {
@@ -78,29 +83,58 @@ void commThread::run(){
             //Calculates other points
             double sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
             double setPoint = 0;
-            double erro = 0;
+            double erro = 0, i, d, p;
 
 
             if(malha == false){//malha fechada
                 setPoint = sinalCalculado;
                 enum Control { P, PI, PD, PID, PI_D, SEM };
+                erro = setPoint - nivelTanque1;
+                //kp=2 ki=0.05 kd=0.005
+                //Se houver mudanca de controlador zera o lastI e lastD
+                if(control != lastControl) {
+                    lastI = 0;
+                    lastD = 0;
+                    lastControl = control;
+                }
                 switch (control) {
                 case SEM:
-                    erro = setPoint - nivelTanque1;
                     break;
                 case P:
-                    erro = kp*(setPoint - nivelTanque1);
+                    erro = kp*erro;
                 case PI:
+                    //I
+                    p = kp*erro;
+                    i = lastI + (ki*period*erro);
+                    lastI = i;
+                    erro = p + i;
                     break;
                 case PD:
+                    p = kp*erro;
+                    d = kd*(erro - lastD)/period;
+                    lastD = erro;
+                    erro = p + d;
                     break;
                 case PID:
+                    p = kp*erro;
+                    d = kd*(erro - lastD)/period;
+                    lastD = erro;
+                    i = lastI + (ki*period*erro);
+                    lastI = i;
+                    erro = p + i + d;
                     break;
                 case PI_D:
+                    p = kp*erro;
+                    d = kd*(nivelTanque1 - lastD)/period;
+                    lastD = nivelTanque1;
+                    i = lastI + (ki*period*erro);
+                    lastI = i;
+                    erro = p + i + d;
                     break;
                 default:
                     qDebug() << "Nenhum sinal de controle selecionado";
                 }
+                sinalCalculado = erro;
                 sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
             }
 
@@ -110,7 +144,7 @@ void commThread::run(){
                 q->writeDA(channel, sinalSaturado);
 
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro);
+            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, setPoint - nivelTanque1);
         }
     }
     if(!simulationMode) {

@@ -28,8 +28,8 @@ private:
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
     double lastLoopTimeStamp;
     int wave;
-    Control control;
-    double kp, ki, kd;
+    Control control, lastControl;
+    double kp, ki, kd, lastI, lastD, period;
     bool malha;
     bool simulationMode;
     bool connected;
