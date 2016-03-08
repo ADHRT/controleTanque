@@ -34,6 +34,7 @@ supervisorio::supervisorio(QWidget *parent) :
     ki = 0.05;
     kd = 0.005;
     windup = true;
+    conditionalIntegration = false;
 
     //Set valores
     //Frequencia
@@ -68,7 +69,9 @@ supervisorio::supervisorio(QWidget *parent) :
      ui->doubleSpinBox_8->setValue(kd);
 
      // Wind Up
-     ui->checkBox_windup->setChecked(windup);
+     index = ui->comboBox_windup->findText("Anti-Windup");
+     ui->comboBox_windup->setCurrentIndex(index);
+
      // Configura canal padrao
      channel = 0;
 
@@ -611,8 +614,17 @@ void supervisorio::on_pushButton_8_clicked()
     wave = nextWave;
     control = nextControl;
     bool malha = ui->radioButton_9->isChecked();
-    windup = ui->checkBox_windup->isChecked();
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup);
+
+    int windupIndex = ui->comboBox_windup->currentIndex();
+    windup = false;
+    conditionalIntegration = false;
+    if(windupIndex == 1) {
+        windup = true;
+    } else if (windupIndex == 2) {
+        conditionalIntegration = true;
+    }
+
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){
