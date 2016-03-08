@@ -11,7 +11,9 @@ supervisorio::supervisorio(QWidget *parent) :
     ui->setupUi(this);
     QMainWindow::showFullScreen();
 
-    plotRange = 8;
+    plotRange = 60;
+    ui->spinBox->setValue(plotRange);
+    ui->scaleValue->setValue(plotRange);
 
     // Setup plots
     setupPlot1(ui->customPlot);
@@ -77,7 +79,7 @@ supervisorio::supervisorio(QWidget *parent) :
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
-     connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double)));
+     connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double,double,double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double,double,double)));
 
 
 }
@@ -95,6 +97,8 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
 
   plot1Enable[0]=true;//Red Enabled
   plot1Enable[1]=true;//Blue Enabled
+  plot1Enable[2]=true;//Green Enabled
+  plot1Enable[3]=true;//Orange Enabled
 
   customPlot->addGraph(); // red line
   customPlot->graph(0)->setPen(QPen(Qt::red));
@@ -110,6 +114,23 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   customPlot->graph(3)->setPen(QPen(Qt::blue));
   customPlot->graph(3)->setLineStyle(QCPGraph::lsNone);
   customPlot->graph(3)->setScatterStyle(QCPScatterStyle::ssDisc);
+
+  //PARTE NOVA
+  customPlot->addGraph(); // green line
+  customPlot->graph(4)->setPen(QPen(Qt::green));
+  customPlot->addGraph(); // orange line
+  customPlot->graph(5)->setPen(QPen(qRgb(255,128,0)));
+
+
+  customPlot->addGraph(); // green dot
+  customPlot->graph(6)->setPen(QPen(Qt::green));
+  customPlot->graph(6)->setLineStyle(QCPGraph::lsNone);
+  customPlot->graph(6)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot->addGraph(); // orange dot
+  customPlot->graph(7)->setPen(QPen(qRgb(255,128,0)));
+  customPlot->graph(7)->setLineStyle(QCPGraph::lsNone);
+  customPlot->graph(7)->setScatterStyle(QCPScatterStyle::ssDisc);
+  //FIM DA PARTE NOVA
 
   customPlot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   customPlot->xAxis->setDateTimeFormat("hh:mm:ss");
@@ -185,7 +206,7 @@ void supervisorio::setupPlot2(QCustomPlot *customPlot2)
 
 }
 
-void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot)
+void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot)
 {
 
     //Red
@@ -204,6 +225,25 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
         ui->customPlot->graph(3)->addData(timeStamp, bluePlot);
         ui->customPlot->graph(1)->removeDataBefore(timeStamp-plotRange);
         ui->customPlot->graph(1)->rescaleValueAxis(true);
+    }
+
+
+    //Green
+    if(plot1Enable[2]) {
+        ui->customPlot->graph(4)->addData(timeStamp, greenPlot);
+        ui->customPlot->graph(6)->clearData();
+        ui->customPlot->graph(6)->addData(timeStamp, greenPlot);
+        ui->customPlot->graph(4)->removeDataBefore(timeStamp-plotRange);
+        ui->customPlot->graph(4)->rescaleValueAxis(true);
+    }
+
+    //Orange
+    if(plot1Enable[3]) {
+        ui->customPlot->graph(5)->addData(timeStamp, orangePlot);
+        ui->customPlot->graph(7)->clearData();
+        ui->customPlot->graph(7)->addData(timeStamp, orangePlot);
+        ui->customPlot->graph(5)->removeDataBefore(timeStamp-plotRange);
+        ui->customPlot->graph(5)->rescaleValueAxis(true);
     }
 
     // make key axis range scroll with the data (at a constant range size of 8):
@@ -627,10 +667,10 @@ void supervisorio::on_pushButton_8_clicked()
     cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration);
 }
 
-void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro){
+void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d){
 
     //Update plots
-    supervisorio::updatePlot1(timeStamp,sinalCalculado,sinalSaturado);
+    supervisorio::updatePlot1(timeStamp,sinalCalculado,sinalSaturado, i, d);//Esses ultimos sao os valores integrativos e derivativos
     supervisorio::updatePlot2(timeStamp,nivelTanque1,nivelTanque2,setPoint,erro);
 
     //Update Water Level
@@ -729,3 +769,27 @@ void supervisorio::on_comboBox_tipoControle_currentIndexChanged(int index)
     }
 }
 
+
+void supervisorio::on_pushButton_10_clicked()
+{
+    if(plot1Enable[2]==true){
+        ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot1Enable[2]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green.png")));
+        plot1Enable[2]=true;
+    }
+}
+
+void supervisorio::on_pushButton_9_clicked()
+{
+    if(plot1Enable[3]==true){
+        ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot1Enable[3]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+        plot1Enable[3]=true;
+    }
+}

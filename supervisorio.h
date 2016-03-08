@@ -22,13 +22,13 @@ public:
     enum Control { P, PI, PD, PID, PI_D, SEM };
     void setupPlot1(QCustomPlot *customPlot);
     void setupPlot2(QCustomPlot *customPlo2);
-    void updatePlot1(double timeStamp, double redPlot, double bluePlot);
+    void updatePlot1(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
     void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
     double lockSignal(double sinalCalculado, double nivelTanque1);
     commThread *cThread;
 
 public slots:
-     void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro);
+     void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d);
 
 private slots:
   void on_doubleSpinBox_valueChanged(double arg1);
@@ -99,17 +99,19 @@ private slots:
 
   void on_comboBox_tipoControle_currentIndexChanged(int index);
 
-  void on_comboBox_windup_currentIndexChanged(int index);
-
   void on_comboBox_3_currentIndexChanged(int index);
 
   void on_comboBox_4_currentIndexChanged(int index);
+
+  void on_pushButton_10_clicked();
+
+  void on_pushButton_9_clicked();
 
 private:
     Ui::supervisorio *ui;
     QString demoName;
     QTimer dataTimer;
-    bool plot1Enable[2], plot2Enable[4];
+    bool plot1Enable[4], plot2Enable[4];
     double lastTimeStamp;
     double sinalCalculado;
     double timeToNextRandomNumber;

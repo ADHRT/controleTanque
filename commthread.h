@@ -26,6 +26,8 @@ private:
     double duracaoMax;
     double duracaoMin;
     double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
+    //variavel aux para anti-windup
+    double diferencaSaida;
     double lastLoopTimeStamp;
     int wave;
     Control control, lastControl;
@@ -39,7 +41,7 @@ private:
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
 signals:
-    void plotValues(double,double,double,double,double,double,double);
+    void plotValues(double,double,double,double,double,double,double,double,double);
 
 
 

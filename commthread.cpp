@@ -20,6 +20,7 @@ commThread::commThread(QObject *parent):
     lastD = 0;
     period = 0.1;
     windup = true;
+    diferencaSaida = 0;
 }
 
 void commThread::run(){
@@ -103,10 +104,19 @@ void commThread::run(){
                 p = kp*erro;
                 //i
                 i = lastI + (ki*period*erro);
-                if(windup) {
-                    i += (sinalSaturado - sinalCalculado)/sqrt(kd/ki);
-                } else if (conditionalIntegration && sinalSaturado != sinalCalculado) {
+                //i = lastI + (ki*period*erro) + (diferencaSaida)/sqrt(kd/ki));
+                //i = lastI + ((ki+(diferencaSaida)/sqrt(kd/ki))*period*erro);
+                //i = lastI + ((ki*erro) + (diferencaSaida)/sqrt(kd/ki))*period;
+
+                if(windup && abs(erro)<2) {
+                    //qDebug() << "SS: " << sinalSaturado << "erro: " << erro << "| difout: " << diferencaSaida;
+                    //qDebug() << "ss = " << (sinalSaturado-erro) << " | kd/ki = " << sqrt(kd/ki) << "| wd = " << (sinalSaturado - sinalCalculado)/sqrt(kd/ki);
+                    i += ((diferencaSaida)/sqrt(kd/ki))*period;
+                    //qDebug() << "i: " << i << "LastI: " << lastI    ;
+                    qDebug() << "antes: " << lastI + (ki*period*erro)  << "depois: " << ((diferencaSaida)/sqrt(kd/ki))*period   ;
+                } else if (conditionalIntegration && sinalSaturado != erro) {
                     i = lastI;
+
                 }
                 lastI = i;
                 //d
@@ -146,8 +156,9 @@ void commThread::run(){
             if(!simulationMode)
                 q->writeDA(channel, sinalSaturado);
 
+            diferencaSaida = sinalSaturado - sinalCalculado;
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, setPoint - nivelTanque1);
+            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, setPoint - nivelTanque1, i, d);
         }
     }
     if(!simulationMode) {
