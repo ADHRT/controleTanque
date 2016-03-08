@@ -99,6 +99,8 @@ private slots:
 
   void on_comboBox_tipoControle_currentIndexChanged(int index);
 
+  void on_comboBox_windup_currentIndexChanged(int index);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -114,7 +116,7 @@ private:
     double duracaoMax;
     double duracaoMin;
     double kp, ki, kd;
-    bool windup;
+    bool windup, conditionalIntegration;
 
     int nextWave;
     int wave;
