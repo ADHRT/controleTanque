@@ -1,5 +1,6 @@
 ﻿#include "commthread.h"
 #include <QtCore>
+#include<cmath>
 
 commThread::commThread(QObject *parent):
     QThread(parent)
@@ -23,7 +24,7 @@ commThread::commThread(QObject *parent):
 
 void commThread::run(){
 
-    double nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
+    double nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado, erro = 0, i, d, p;
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -82,15 +83,15 @@ void commThread::run(){
 
 
             //Calculates other points
-            double sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
-            double setPoint = 0;
-            double erro = 0, i, d, p;
+            sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
+
 
 
             if(malha == false){//malha fechada
                 setPoint = sinalCalculado;
                 enum Control { P, PI, PD, PID, PI_D, SEM };
                 erro = setPoint - nivelTanque1;
+                //p = 0, i = 0, d = 0;
                 //kp=2 ki=0.05 kd=0.005
                 //Se houver mudanca de controlador zera o lastI e lastD
                 if(control != lastControl) {
@@ -98,64 +99,44 @@ void commThread::run(){
                     lastD = 0;
                     lastControl = control;
                 }
+                //p
+                p = kp*erro;
+                //i
+                i = lastI + (ki*period*erro);
+                if(windup) {
+                    i += (sinalSaturado - sinalCalculado)/sqrt(kd/ki);
+                } else if (conditionalIntegration && sinalSaturado != sinalCalculado) {
+                    i = lastI;
+                }
+                lastI = i;
+                //d
+                d = kd*(erro - lastD)/period;
+
                 switch (control) {
                 case SEM:
+                    p = 0, i = 0, d = 0;
                     break;
                 case P:
-                    erro = kp*erro;
+                    i = 0, d = 0;
+                    break;
                 case PI:
-                    //I
-                    p = kp*erro;
-                    if(sinalSaturado != sinalCalculado && windup)
-                    {
-                        i = lastI;
-                    }
-                    else
-                    {
-                        i = lastI + (ki*period*erro);
-                        lastI = i;
-                    }
-                    erro = p + i;
+                    d = 0;
                     break;
                 case PD:
-                    p = kp*erro;
-                    d = kd*(erro - lastD)/period;
                     lastD = erro;
-                    erro = p + d;
+                    i = 0;
                     break;
                 case PID:
-                    p = kp*erro;
-                    d = kd*(erro - lastD)/period;
                     lastD = erro;
-                    if(sinalSaturado != sinalCalculado && windup)
-                    {
-                        i = lastI;
-                    }
-                    else
-                    {
-                        i = lastI + (ki*period*erro);
-                        lastI = i;
-                    }
-                    erro = p + i + d;
                     break;
                 case PI_D:
-                    p = kp*erro;
                     d = kd*(nivelTanque1 - lastD)/period;
                     lastD = nivelTanque1;
-                    if(sinalSaturado != sinalCalculado && windup)
-                    {
-                        i = lastI;
-                    }
-                    else
-                    {
-                        i = lastI + (ki*period*erro);
-                        lastI = i;
-                    }
-                    erro = p + i + d;
                     break;
                 default:
                     qDebug() << "Nenhum sinal de controle selecionado";
                 }
+                erro = p + i + d;
                 sinalCalculado = erro;
                 sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
             }
@@ -203,7 +184,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -223,6 +204,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->ki = ki;
     this->kd = kd;
     this->windup = windup;
+    this->conditionalIntegration = conditionalIntegration;
 }
 
 // Zera todos os valores
