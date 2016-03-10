@@ -35,6 +35,7 @@ supervisorio::supervisorio(QWidget *parent) :
     kp = 2;
     ki = 0.05;
     kd = 0.005;
+    taw = 75;
     windup = true;
     conditionalIntegration = false;
 
@@ -69,6 +70,7 @@ supervisorio::supervisorio(QWidget *parent) :
      ui->doubleSpinBox_6->setValue(kp);
      ui->doubleSpinBox_7->setValue(ki);
      ui->doubleSpinBox_8->setValue(kd);
+     setTaw(taw);
 
      // Wind Up
      index = ui->comboBox_windup->findText("Anti-Windup");
@@ -340,6 +342,12 @@ void supervisorio::setTickStep(void) {
     ui->customPlot->xAxis->setTickStep(plotRange/4);
     ui->customPlot2->xAxis->setTickStep(plotRange/4);
 
+}
+
+void supervisorio::setTaw(double taw)
+{
+    this->taw = taw;
+    ui->doubleSpinBox_9->setValue(taw);
 }
 
 //==================================================================================================
@@ -651,6 +659,10 @@ void supervisorio::on_pushButton_8_clicked()
     kd = ui->doubleSpinBox_8->value();
     if(ui->comboBox_4->currentIndex()==1) kd=kd/kp;
 
+    //taw = ui->doubleSpinBox_9->value();
+    //taw = 237.19*sqrt(kd/ki);
+    taw = 75/sqrt(0.005/0.05)*sqrt(kd/ki);
+    setTaw(taw);
     wave = nextWave;
     control = nextControl;
     bool malha = ui->radioButton_9->isChecked();
@@ -664,7 +676,7 @@ void supervisorio::on_pushButton_8_clicked()
         conditionalIntegration = true;
     }
 
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration);
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration, taw);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d){

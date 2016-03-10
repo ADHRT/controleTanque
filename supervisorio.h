@@ -121,7 +121,7 @@ private:
     double offset;
     double duracaoMax;
     double duracaoMin;
-    double kp, ki, kd;
+    double kp, ki, kd, taw;
     bool windup, conditionalIntegration;
 
     int nextWave;
@@ -138,6 +138,7 @@ private:
     void setControlParams(bool kp, bool ki, bool kd);
 
     void setTickStep();
+    void setTaw(double taw);
 
 //signals:
 

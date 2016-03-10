@@ -13,6 +13,7 @@ commThread::commThread(QObject *parent):
     kp = 2;
     ki = 0.05;
     kd = 0.005;
+    taw = 75;
     control = P;
     lastControl = control;
     q = new Quanser("10.13.99.69", 20081);
@@ -89,38 +90,33 @@ void commThread::run(){
 
 
             if(malha == false){//malha fechada
+                //O setPoint e o sinalCalculado pela logica Malha Aberta
                 setPoint = sinalCalculado;
-                enum Control { P, PI, PD, PID, PI_D, SEM };
                 erro = setPoint - nivelTanque1;
-                //p = 0, i = 0, d = 0;
-                //kp=2 ki=0.05 kd=0.005
+
                 //Se houver mudanca de controlador zera o lastI e lastD
                 if(control != lastControl) {
                     lastI = 0;
                     lastD = 0;
                     lastControl = control;
                 }
-                //p
+
+                //Calculo do p
                 p = kp*erro;
-                //i
+
+                //Calculo do i
                 i = lastI + (ki*period*erro);
+
                 //i = lastI + (ki*period*erro) + (diferencaSaida)/sqrt(kd/ki));
                 //i = lastI + ((ki+(diferencaSaida)/sqrt(kd/ki))*period*erro);
                 //i = lastI + ((ki*erro) + (diferencaSaida)/sqrt(kd/ki))*period;
 
-                if(windup && abs(erro)<2) {
-                    //qDebug() << "SS: " << sinalSaturado << "erro: " << erro << "| difout: " << diferencaSaida;
-                    //qDebug() << "ss = " << (sinalSaturado-erro) << " | kd/ki = " << sqrt(kd/ki) << "| wd = " << (sinalSaturado - sinalCalculado)/sqrt(kd/ki);
-                    i += ((diferencaSaida)/sqrt(kd/ki))*period;
-                    //qDebug() << "i: " << i << "LastI: " << lastI    ;
-                    qDebug() << "antes: " << lastI + (ki*period*erro)  << "depois: " << ((diferencaSaida)/sqrt(kd/ki))*period   ;
-                } else if (conditionalIntegration && sinalSaturado != erro) {
-                    i = lastI;
-
-                }
-                lastI = i;
-                //d
+                //Calculo do d
                 d = kd*(erro - lastD)/period;
+
+
+                //douturado do Daniel
+                //if(windup && abs(erro)<2) {
 
                 switch (control) {
                 case SEM:
@@ -133,32 +129,50 @@ void commThread::run(){
                     d = 0;
                     break;
                 case PD:
-                    lastD = erro;
                     i = 0;
                     break;
                 case PID:
-                    lastD = erro;
                     break;
                 case PI_D:
                     d = kd*(nivelTanque1 - lastD)/period;
-                    lastD = nivelTanque1;
                     break;
                 default:
                     qDebug() << "Nenhum sinal de controle selecionado";
                 }
-                erro = p + i + d;
-                sinalCalculado = erro;
-                sinalSaturado = commThread::lockSignal(erro, nivelTanque1, nivelTanque2);
-            }
 
+                sinalCalculado = (p + i + d);
+                sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
+                diferencaSaida = sinalSaturado - sinalCalculado;
+
+                // WINDUP FIX
+                //qDebug() << diferencaSaida << " | " << ki*erro;
+                if(windup) {
+                    // Anti-windup
+                    i += (kp/taw)*period*diferencaSaida;
+                } else if (conditionalIntegration && sinalSaturado != sinalCalculado) {
+                    // Integral Condicional
+                    i = lastI;
+                }
+
+                if (windup || conditionalIntegration) {
+                    sinalCalculado = (p + i + d);
+                    sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
+                    diferencaSaida = sinalSaturado - sinalCalculado;
+                }
+
+                qDebug() << "(p,i,d) = (" << p << "," << i << "," << d << ")" << " taw:" << taw << " dif: " << diferencaSaida;
+                lastD = d;
+                lastI = i;
+
+                diferencaSaida = sinalSaturado - sinalCalculado;
+            }
 
             // Escreve no canal selecionado
             if(!simulationMode)
                 q->writeDA(channel, sinalSaturado);
 
-            diferencaSaida = sinalSaturado - sinalCalculado;
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, setPoint - nivelTanque1, i, d);
+            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
         }
     }
     if(!simulationMode) {
@@ -195,7 +209,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration, double taw)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -214,6 +228,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->kp = kp;
     this->ki = ki;
     this->kd = kd;
+    this->taw = taw;
     this->windup = windup;
     this->conditionalIntegration = conditionalIntegration;
 }
@@ -227,9 +242,9 @@ void commThread::setNullParameters()
     duracaoMax = 0;
     duracaoMin = 0;
     sinalCalculado = 0;
-    kp = 0;
-    ki = 0;
-    kd = 0;
+    kp = 2;
+    ki = 0.05;
+    kd = 0.005;
 }
 
 void commThread::setSimulationMode(bool on)
