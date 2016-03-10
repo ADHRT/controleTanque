@@ -70,7 +70,7 @@ supervisorio::supervisorio(QWidget *parent) :
      ui->doubleSpinBox_6->setValue(kp);
      ui->doubleSpinBox_7->setValue(ki);
      ui->doubleSpinBox_8->setValue(kd);
-     setTaw(taw);
+     //setTaw(taw);
 
      // Wind Up
      index = ui->comboBox_windup->findText("Anti-Windup");
@@ -347,7 +347,7 @@ void supervisorio::setTickStep(void) {
 void supervisorio::setTaw(double taw)
 {
     this->taw = taw;
-    ui->doubleSpinBox_9->setValue(taw);
+    //ui->doubleSpinBox_9->setValue(taw);
 }
 
 //==================================================================================================
@@ -662,7 +662,7 @@ void supervisorio::on_pushButton_8_clicked()
     //taw = ui->doubleSpinBox_9->value();
     //taw = 237.19*sqrt(kd/ki);
     taw = 75/sqrt(0.005/0.05)*sqrt(kd/ki);
-    setTaw(taw);
+    //setTaw(taw);
     wave = nextWave;
     control = nextControl;
     bool malha = ui->radioButton_9->isChecked();
