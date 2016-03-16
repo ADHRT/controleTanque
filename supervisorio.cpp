@@ -76,8 +76,11 @@ supervisorio::supervisorio(QWidget *parent) :
      index = ui->comboBox_windup->findText("Anti-Windup");
      ui->comboBox_windup->setCurrentIndex(index);
 
-     // Configura canal padrao
+     // Configura canal de escrita padrao (bomba)
      channel = 0;
+
+     // Seleciona controle no tanque 2
+     on_radioButton_tanque2_clicked();
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
@@ -676,7 +679,11 @@ void supervisorio::on_pushButton_8_clicked()
         conditionalIntegration = true;
     }
 
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration, taw);
+    // Se tanque 1 selecionado escreve 1 caso contrario 2 (tanque 2)
+
+    int tank = ui->radioButton_tanque1->isChecked()?1:2;
+
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration, taw, tank);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d){
@@ -804,4 +811,28 @@ void supervisorio::on_pushButton_9_clicked()
         ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
         plot1Enable[3]=true;
     }
+}
+
+void supervisorio::on_radioButton_tanque1_clicked()
+{
+    // habilita tipos de malha
+    ui->groupBox_4->setEnabled(true);
+}
+
+void supervisorio::on_radioButton_tanque2_clicked()
+{
+    // seleciona malha fechada
+    ui->radioButton_10->setEnabled(true);
+    // desabilita tipos de malha
+    ui->groupBox_4->setDisabled(true);
+}
+
+void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
+{
+    cThread->setTs(arg1.toInt());
+}
+
+void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
+{
+    cThread->setTr(arg1.toInt());
 }

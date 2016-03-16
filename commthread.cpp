@@ -22,11 +22,12 @@ commThread::commThread(QObject *parent):
     period = 0.1;
     windup = true;
     diferencaSaida = 0;
+    tank = 2; // tanque2
 }
 
 void commThread::run(){
 
-    double nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado, erro = 0, i, d, p;
+    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado, erro = 0, i, d, p;
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -54,6 +55,9 @@ void commThread::run(){
                 nivelTanque1 = qSin(timeStamp)*5+5;
                 nivelTanque2 = qCos(timeStamp)*5+5;
             }
+
+            // Passa o valor do tanque selecionado para PV
+            nivelTanque = tank == 1?nivelTanque1:nivelTanque2;
 
             switch(wave)
             {
@@ -92,7 +96,7 @@ void commThread::run(){
             if(malha == false){//malha fechada
                 //O setPoint e o sinalCalculado pela logica Malha Aberta
                 setPoint = sinalCalculado;
-                erro = setPoint - nivelTanque1;
+                erro = setPoint - nivelTanque;
 
                 //Se houver mudanca de controlador zera o lastI e lastD
                 if(control != lastControl) {
@@ -134,7 +138,7 @@ void commThread::run(){
                 case PID:
                     break;
                 case PI_D:
-                    d = kd*(nivelTanque1 - lastD)/period;
+                    d = kd*(nivelTanque - lastD)/period;
                     break;
                 default:
                     qDebug() << "Nenhum sinal de controle selecionado";
@@ -209,7 +213,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration, double taw)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration, double taw, int tank)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -231,6 +235,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->taw = taw;
     this->windup = windup;
     this->conditionalIntegration = conditionalIntegration;
+    this->tank = tank;
 }
 
 // Zera todos os valores
