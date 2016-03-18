@@ -22,7 +22,7 @@ commThread::commThread(QObject *parent):
     period = 0.1;
     windup = true;
     diferencaSaida = 0;
-    tank = 2; // tanque2
+    tank = 1; // tanque2
 }
 
 void commThread::run(){
@@ -164,7 +164,7 @@ void commThread::run(){
                     diferencaSaida = sinalSaturado - sinalCalculado;
                 }
 
-                qDebug() << "(p,i,d) = (" << p << "," << i << "," << d << ")" << " taw:" << taw << " dif: " << diferencaSaida;
+                //qDebug() << "(p,i,d) = (" << p << "," << i << "," << d << ")" << " taw:" << taw << " dif: " << diferencaSaida;
                 lastD = d;
                 lastI = i;
 
