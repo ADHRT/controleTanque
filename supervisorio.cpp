@@ -35,7 +35,8 @@ supervisorio::supervisorio(QWidget *parent) :
     control = P;
     nextControl = P;
     kp = 2;
-    ki = 0.05;
+    //ki = 0.05;
+    ki = 2;
     kd = 0.005;
     taw = 75;
     windup = true;
@@ -66,7 +67,7 @@ supervisorio::supervisorio(QWidget *parent) :
      on_comboBox_6_currentIndexChanged(0);//Degrau
 
      // Configura sinal de controle
-     index = ui->comboBox_tipoControle->findText("PID");
+     index = ui->comboBox_tipoControle->findText("PI");
      ui->comboBox_tipoControle->setCurrentIndex(index);
 
      ui->doubleSpinBox_6->setValue(kp);
@@ -75,14 +76,14 @@ supervisorio::supervisorio(QWidget *parent) :
      //setTaw(taw);
 
      // Wind Up
-     index = ui->comboBox_windup->findText("Anti-Windup");
+     index = ui->comboBox_windup->findText("Sem");
      ui->comboBox_windup->setCurrentIndex(index);
 
      // Configura canal de escrita padrao (bomba)
      channel = 0;
 
      // Seleciona controle no tanque 2
-     on_radioButton_tanque2_clicked();
+     on_radioButton_tanque1_clicked();
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
@@ -655,8 +656,6 @@ void supervisorio::on_comboBox_6_currentIndexChanged(int index)
 //Atualiza valores
 void supervisorio::on_pushButton_8_clicked()
 {
-    // Reseta analist
-    analist->reset();
     //Get wave configurations
     frequencia = ui->doubleSpinBox->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
@@ -708,7 +707,10 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
 
     //analist.calc(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
-    //analist.calc(nivelTanque2, setPoint, timeStamp);
+    analist->calc(nivelTanque1, setPoint, timeStamp);
+    //qDebug() << analist->getMp();
+    ui->label_mp_cm->setText(QString::number(analist->getMp(), 'g',2)+" cm");
+
 }
 
 void supervisorio::on_scaleValue_valueChanged(int value)

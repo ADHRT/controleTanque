@@ -2,13 +2,16 @@
 #define ANALIST_H
 
 #include <QTimer>
+#include <QDateTime>
+#include <QDebug>
 
 class Analist
 {
 private:
-    double ts, mp, tp, tr, tsOldTime, trOldTime;
+    double ts, mp, tp, tr, tsOldTime, trOldTime, mpInitialTime, oldSetPoint;
+    bool direction;
     double calcTs(double nivel, double setPoint);
-    double calcMp(double nivel, double setPoint);
+    double calcMpTp(double nivel, double setPoint);
     double calcTp(double nivel, double setPoint);
     double calcTr(double nivel, double setPoint);
 public:
@@ -20,7 +23,7 @@ public:
     double getTr(void);
     void setTsOpt(int);
     void setTrOpt(int);
-    void reset(void);
+    void reset(double setPoint);
 };
 
 #endif // ANALIST_H
