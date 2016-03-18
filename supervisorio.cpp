@@ -831,12 +831,12 @@ void supervisorio::on_radioButton_tanque2_clicked()
     ui->groupBox_4->setDisabled(true);
 }
 
-//void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
-//{
+void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
+{
 //    cThread->setTs(arg1.toInt());
-//}
+}
 
-//void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
-//{
+void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
+{
 //    cThread->setTr(arg1.toInt());
-//}
+}
