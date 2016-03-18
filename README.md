@@ -2,6 +2,6 @@
 
 Backlog | Doing | Testing | Done
 ------------ | ------------- | ------------- | -------------
-Calcular valores da análise[] | - | - |Implementar controle tanque 2[H]
+Calcular valores da análise[] | - | - |-
 -|- |- | Colocar análise na UI[H]
--|- |- |- 
+-|- |- |Implementar controle tanque 2[H] 
