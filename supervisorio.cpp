@@ -700,7 +700,7 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
 
     //analist.calc(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
-    analist.calc(nivelTanque1, nivelTanque2, setPoint);
+    //analist.calc(nivelTanque1, nivelTanque2, setPoint);
 }
 
 void supervisorio::on_scaleValue_valueChanged(int value)
