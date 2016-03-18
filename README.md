@@ -1,4 +1,7 @@
-# Próximos passos 
-- [X] Implementar controle tanque 2
-- [X] Colocar análise na UI
-- [ ] Calcular valores da análise
+##Kanban
+
+Backlog | Doing | Testing | Done
+------------ | ------------- | ------------- | -------------
+Calcular valores da análise[] | - | - |-
+-|- |- | Colocar análise na UI[H]
+-|- |- |Implementar controle tanque 2[H] 
