@@ -1,7 +1,7 @@
 ##Kanban
 
-Backlog | Doing | Done
------------- | ------------- | -------------
-Calcular valores da análise[] | - |Implementar controle tanque 2[Hanoch]
--|- | Colocar análise na UI[Hanoch]
--|- |- 
+Backlog | Doing | Testing | Done
+------------ | ------------- | ------------- | -------------
+Calcular valores da análise[] | - | - |Implementar controle tanque 2[H]
+-|- |- | Colocar análise na UI[H]
+-|- |- |- 
