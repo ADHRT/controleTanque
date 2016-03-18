@@ -5,7 +5,7 @@
 #include <QTimer>
 #include "qcustomplot.h"
 #include "commthread.h"
-
+#include "analist.h"
 
 namespace Ui {
 class supervisorio;
@@ -26,6 +26,7 @@ public:
     void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
     double lockSignal(double sinalCalculado, double nivelTanque1);
     commThread *cThread;
+    Analist analist;
 
 public slots:
      void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d);

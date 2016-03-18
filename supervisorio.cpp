@@ -86,7 +86,8 @@ supervisorio::supervisorio(QWidget *parent) :
      cThread = new commThread(this);
      connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double,double,double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double,double,double)));
 
-
+     //Analist calcula valores para relatorios e analise da dinamica
+     analist = new Analist();
 }
 
 supervisorio::~supervisorio()
@@ -697,6 +698,9 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     ui->label_5->setText(QString::number(nivelTanque1,'g',2)+" cm");
     ui->progressBar_2->setValue(nivelTanque2*100);
     ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
+
+    //analist.calc(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
+    analist.calc(nivelTanque1, nivelTanque2, setPoint);
 }
 
 void supervisorio::on_scaleValue_valueChanged(int value)
