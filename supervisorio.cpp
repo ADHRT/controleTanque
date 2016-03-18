@@ -153,8 +153,6 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   //Coloca o Label dos eixos
   customPlot->xAxis->setLabel("Tempo (s)");
   customPlot->yAxis->setLabel("Tensão (v)");
-
-
 }
 
 void supervisorio::setupPlot2(QCustomPlot *customPlot2)
@@ -649,6 +647,8 @@ void supervisorio::on_comboBox_6_currentIndexChanged(int index)
 //Atualiza valores
 void supervisorio::on_pushButton_8_clicked()
 {
+    // Reseta analist
+    analist->reset();
     //Get wave configurations
     frequencia = ui->doubleSpinBox->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
@@ -700,7 +700,7 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
 
     //analist.calc(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
-    //analist.calc(nivelTanque1, nivelTanque2, setPoint);
+    //analist.calc(nivelTanque2, setPoint, timeStamp);
 }
 
 void supervisorio::on_scaleValue_valueChanged(int value)
@@ -831,12 +831,12 @@ void supervisorio::on_radioButton_tanque2_clicked()
     ui->groupBox_4->setDisabled(true);
 }
 
-//void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
-//{
-//    cThread->setTs(arg1.toInt());
-//}
+void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
+{
+    analist->setTsOpt(arg1.toInt());
+}
 
-//void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
-//{
-//    cThread->setTr(arg1.toInt());
-//}
+void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
+{
+    analist->setTrOpt(arg1.toInt());
+}
