@@ -1,7 +1,9 @@
 #include "supervisorio.h"
 #include "ui_supervisorio.h"
 #include <QtCore/qmath.h>
+#include <QToolTip>
 #include <cmath>
+
 
 
 supervisorio::supervisorio(QWidget *parent) :
@@ -88,6 +90,12 @@ supervisorio::supervisorio(QWidget *parent) :
 
      //Analist calcula valores para relatorios e analise da dinamica
      analist = new Analist();
+
+     //Tool Tips
+     ui->label_tr_0->setToolTip("Tempo de Subida");
+     ui->label_tp_0->setToolTip("Tempo de Pico");
+     ui->label_ts_0->setToolTip("Tempo de Estabilização");
+     ui->label_mp_0->setToolTip("Overshoot");
 }
 
 supervisorio::~supervisorio()
@@ -831,12 +839,12 @@ void supervisorio::on_radioButton_tanque2_clicked()
     ui->groupBox_4->setDisabled(true);
 }
 
-//void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
-//{
+void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
+{
 //    cThread->setTs(arg1.toInt());
-//}
+}
 
-//void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
-//{
+void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
+{
 //    cThread->setTr(arg1.toInt());
-//}
+}
