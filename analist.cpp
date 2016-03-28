@@ -3,6 +3,11 @@
 Analist::Analist()
 {
     oldSetPoint = 0;
+    for (int i = 0; i < 4; i++){
+        porcInital[i] = i*5/100;
+        porcFinal[i] = (100 - i*5)/100;
+    }
+    initialLevel = -1;
 }
 
 void Analist::calc(double nivel, double setPoint, double timeStamp)
@@ -27,9 +32,9 @@ double Analist::getTp()
     return tp;
 }
 
-double Analist::getTr()
+double Analist::getTr(int i)
 {
-    return tr;
+    return tr[i];
 }
 
 void Analist::setTsOpt(int)
@@ -46,11 +51,14 @@ void Analist::reset(double setPoint)
 {
     // detecta mudanca de setPoint para iniciar o calculo das variaveis
     if(setPoint != oldSetPoint) {
-        qDebug() << "Entrou Reset";
+        //qDebug() << "Entrou Reset";
         oldSetPoint = setPoint;
         ts = 0;
-        tr = 0;
-        for(int i = 0; i < 4; i++) trOldTime[i] = 0;
+        for(int i = 0; i < 3; i++) {
+            trOldTime[i] = 0;
+            tr[i] = 0;
+        }
+        initialLevel = -1;
         mp = -100;
         tp = 0;
         tsOldTime = 0;
@@ -87,17 +95,17 @@ double Analist::calcTs(double nivel, double setPoint, double timeStamp)
 
 double Analist::calcMpTp(double nivel, double setPoint)
 {
-    qDebug() << nivel << setPoint << mp;
+    //qDebug() << nivel << setPoint << mp;
     if(mp == -100) {
         if(nivel > setPoint) direction = false; // Esta descendo
         else direction = true;
         mp = 0;
-        qDebug() << "Entrou MP";
+        //qDebug() << "Entrou MP";
         mpInitialTime = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
     }
     if((direction && nivel-setPoint>mp) || (!direction && nivel-setPoint<mp)){
         mp=nivel-setPoint;
-        qDebug() << mp;
+        //qDebug() << mp;
         tp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0 - mpInitialTime;
     }
 
@@ -105,52 +113,38 @@ double Analist::calcMpTp(double nivel, double setPoint)
 
 
 
-double Analist::calcTr(double nivel, double setPoint, double timeStamp)
+void Analist::calcTr(double nivel, double setPoint, double timeStamp)
 {
 
     //if (tr[0] == 0) trOldTime[0] = timeStamp; //botar no reset
-
-    double trAux[4];
-
-    if (tr == 0) {
-        trOldTime[0] = timeStamp;
+    qDebug() << "SP: " << setPoint << " - IL: " << initialLevel <<  " - L: " << nivel <<" - tr: " << tr[0] << " - trOld: " << trOldTime[0];
+    if (initialLevel == -1) {
         initialLevel = nivel;
     }
-
-    if (direction){
-        if (nivel <= setPoint)
-            trAux[0] = timeStamp - trOldTime[0];
-
-        if (nivel <= (setPoint-initialLevel)*0.05)
-            trOldTime[1] = timeStamp;
-        else if (nivel <= setPoint*0.95)
-            trAux[1] = timeStamp - trOldTime[1];
-
-        if (nivel <= (setPoint-initialLevel)*0.1)
-            trOldTime[2] = timeStamp;
-        else if (nivel <= setPoint*0.9)
-            trAux[2] = timeStamp - trOldTime[2];
-    }
     else {
-        if (nivel >= setPoint)
-            trAux[0] = timeStamp - trOldTime[0];
+        for (int i = 0; i < 1; i++){
+            if (direction){
+                if (nivel <= (setPoint - initialLevel)*porcInital[i] + initialLevel){
+                    trOldTime[i] = timeStamp;
+                    qDebug() << i << " - if nivel menor" ;
+                }
+                else if (nivel <= (setPoint - initialLevel)*porcFinal[i] + initialLevel){
+                    tr[i] = timeStamp - trOldTime[i];
+                    qDebug() << i << " - else nivel menor";
+                }
+            }
+            else {
+                if (nivel >= initialLevel - (initialLevel-setPoint)*porcInital[i]){
+                    trOldTime[i] = timeStamp;
+                    qDebug() << i << " - if nivel maior";
+                }
+                if (nivel >= initialLevel - (initialLevel-setPoint)*porcFinal[i]){
+                    tr[i] = timeStamp - trOldTime[i];
+                    qDebug() << i << " - else nivel maior";
+                }
 
-        if (nivel >= (initialLevel-setPoint)*0.05)
-            trOldTime[1] = timeStamp;
-        else if (nivel >= (initialLevel-setPoint)*0.95)
-            trAux[1] = timeStamp - trOldTime[1];
-
-        if (nivel >= (initialLevel-setPoint)*0.1)
-            trOldTime[2] = timeStamp;
-        else if (nivel >= (initialLevel-setPoint)*0.9)
-            trAux[2] = timeStamp - trOldTime[2];
-
+            }
+        }
     }
-
-    if (trOpt == 0) tr = trAux[0];
-    else if (trOpt == 5) tr = trAux[1];
-    else tr = trAux[2];
-
-    return tr;
 }
 

@@ -27,7 +27,7 @@ supervisorio::supervisorio(QWidget *parent) :
     //Inicializa valores
     frequencia = 5;
     amplitude = 3;
-    offset = 20;
+    offset = 10;
     duracaoMax = 3;
     duracaoMin = 1;
     wave = 0;
@@ -36,7 +36,7 @@ supervisorio::supervisorio(QWidget *parent) :
     nextControl = P;
     kp = 2;
     //ki = 0.05;
-    ki = 2;
+    ki = 1;
     kd = 0.005;
     taw = 75;
     windup = true;
@@ -82,8 +82,9 @@ supervisorio::supervisorio(QWidget *parent) :
      // Configura canal de escrita padrao (bomba)
      channel = 0;
 
-     // Seleciona controle no tanque 2
+     // Seleciona controle no tanque
      on_radioButton_tanque1_clicked();
+     ui->radioButton_tanque1->setChecked(true);
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
@@ -656,6 +657,7 @@ void supervisorio::on_comboBox_6_currentIndexChanged(int index)
 //Atualiza valores
 void supervisorio::on_pushButton_8_clicked()
 {
+    qDebug() << "Atualizar";
     //Get wave configurations
     frequencia = ui->doubleSpinBox->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
@@ -710,7 +712,7 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     analist->calc(nivelTanque1, setPoint, timeStamp);
     //qDebug() << analist->getMp();
     ui->label_mp_cm->setText(QString::number(analist->getMp(), 'g',2)+" cm");
-    //ui->label_tr->setText(QString::number(analist->getTr(), 'g',2)+" s");
+    ui->label_tr->setText(QString::number(analist->getTr(0), 'g',2)+" s");
     //ui->label_ts->setText(QString::number(analist->getTs(), 'g',2)+" s");
 
 }

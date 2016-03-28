@@ -8,19 +8,19 @@
 class Analist
 {
 private:
-    double ts, mp, tp, tr, tsOldTime, trOldTime[3], tsOpt, trOpt, mpInitialTime, oldSetPoint, initialLevel;
+    double ts, mp, tp, tr[3], tsOldTime, trOldTime[3], tsOpt, trOpt, mpInitialTime, oldSetPoint, initialLevel, porcInital[3], porcFinal[3];
     bool direction;
     double calcTs(double nivel, double setPoint, double timeStamp);
     double calcMpTp(double nivel, double setPoint);
     double calcTp(double nivel, double setPoint);
-    double calcTr(double nivel, double setPoint, double timeStamp);
+    void calcTr(double nivel, double setPoint, double timeStamp);
 public:
     Analist();
     void calc(double nivel, double setPoint, double timeStamp);
     double getTs(void);
     double getMp(void);
     double getTp(void);
-    double getTr(void);
+    double getTr(int);
     void setTsOpt(int);
     void setTrOpt(int);
     void reset(double setPoint);
