@@ -9,6 +9,7 @@ void Analist::calc(double nivel, double setPoint, double timeStamp)
 {
     reset(setPoint);
     calcMpTp(nivel, setPoint);
+    calcTr(nivel, setPoint, timeStamp);
 }
 
 double Analist::getTs()
@@ -48,41 +49,40 @@ void Analist::reset(double setPoint)
         qDebug() << "Entrou Reset";
         oldSetPoint = setPoint;
         ts = 0;
+        tr = 0;
+        for(int i = 0; i < 4; i++) trOldTime[i] = 0;
         mp = -100;
         tp = 0;
-        tr = 0;
         tsOldTime = 0;
-        trOldTime = 0;
     }
 }
 
 double Analist::calcTs(double nivel, double setPoint, double timeStamp)
 {
+    double tsAux[4];
 
-    if (ts[0] == 0) tsOldTime = timeStamp; //botar no reset
+    if (ts == 0) tsOldTime = timeStamp; //botar no reset
 
-    if (direct){
+    if (direction){
         if (nivel < abs(setPoint - initialLevel)*0.02 || nivel > abs(setPoint - initialLevel)*0.02)
-            ts[0] = timeStamp - tsOldTime;
+            tsAux[0] = timeStamp - tsOldTime;
 
         if (nivel < abs(setPoint - initialLevel)*0.05 || nivel > abs(setPoint - initialLevel)*0.05)
-            ts[1] = timeStamp - tsOldTime;
+            tsAux[1] = timeStamp - tsOldTime;
 
         if (nivel < abs(setPoint - initialLevel)*0.07 || nivel > abs(setPoint - initialLevel)*0.07)
-            ts[2] = timeStamp - tsOldTime;
+            tsAux[2] = timeStamp - tsOldTime;
 
         if (nivel < abs(setPoint - initialLevel)*0.1 || nivel > abs(setPoint - initialLevel)*0.1)
-            ts[3] = timeStamp - tsOldTime;
+            tsAux[3] = timeStamp - tsOldTime;
     }
 
-    double time;
+    if (tsOpt == 2) ts = tsAux[0];
+    else if (tsOpt == 5) ts = tsAux[1];
+    else if (tsOpt == 7) ts = tsAux[2];
+    else ts = tsAux[3];
 
-    if (tsOpt == 2) time = ts[0];
-    else if (tsOpt == 5) time = ts[1];
-    else if (tsOpt == 7) time = ts[2];
-    else time = ts[3];
-
-    return time;
+    return ts;
 }
 
 double Analist::calcMpTp(double nivel, double setPoint)
@@ -108,44 +108,49 @@ double Analist::calcMpTp(double nivel, double setPoint)
 double Analist::calcTr(double nivel, double setPoint, double timeStamp)
 {
 
-    if (tr[0] == 0) trOldTime[0] = timeStamp; //botar no reset
+    //if (tr[0] == 0) trOldTime[0] = timeStamp; //botar no reset
 
-    if (direct){
+    double trAux[4];
+
+    if (tr == 0) {
+        trOldTime[0] = timeStamp;
+        initialLevel = nivel;
+    }
+
+    if (direction){
         if (nivel <= setPoint)
-            tr[0] = timeStamp - trOldTime[0];
+            trAux[0] = timeStamp - trOldTime[0];
 
         if (nivel <= (setPoint-initialLevel)*0.05)
             trOldTime[1] = timeStamp;
         else if (nivel <= setPoint*0.95)
-            tr[1] = timeStamp - trOldTime[1];
+            trAux[1] = timeStamp - trOldTime[1];
 
         if (nivel <= (setPoint-initialLevel)*0.1)
             trOldTime[2] = timeStamp;
         else if (nivel <= setPoint*0.9)
-            tr[2] = timeStamp - trOldTime[2];
+            trAux[2] = timeStamp - trOldTime[2];
     }
     else {
         if (nivel >= setPoint)
-            tr[0] = timeStamp - trOldTime[0];
+            trAux[0] = timeStamp - trOldTime[0];
 
         if (nivel >= (initialLevel-setPoint)*0.05)
             trOldTime[1] = timeStamp;
         else if (nivel >= (initialLevel-setPoint)*0.95)
-            tr[1] = timeStamp - trOldTime[1];
+            trAux[1] = timeStamp - trOldTime[1];
 
         if (nivel >= (initialLevel-setPoint)*0.1)
             trOldTime[2] = timeStamp;
         else if (nivel >= (initialLevel-setPoint)*0.9)
-            tr[2] = timeStamp - trOldTime[2];
+            trAux[2] = timeStamp - trOldTime[2];
 
     }
 
-    double time;
+    if (trOpt == 0) tr = trAux[0];
+    else if (trOpt == 5) tr = trAux[1];
+    else tr = trAux[2];
 
-    if (trOpt == 0) time = tr[0];
-    else if (trOpt == 5) time = tr[1];
-    else time = tr[2];
-
-    return time;
+    return tr;
 }
 

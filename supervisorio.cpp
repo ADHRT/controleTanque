@@ -710,6 +710,8 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     analist->calc(nivelTanque1, setPoint, timeStamp);
     //qDebug() << analist->getMp();
     ui->label_mp_cm->setText(QString::number(analist->getMp(), 'g',2)+" cm");
+    //ui->label_tr->setText(QString::number(analist->getTr(), 'g',2)+" s");
+    //ui->label_ts->setText(QString::number(analist->getTs(), 'g',2)+" s");
 
 }
 
