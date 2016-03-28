@@ -3,10 +3,10 @@
 Analist::Analist()
 {
     oldSetPoint = 0;
-    reachedTr = false;
     for (int i = 0; i < 3; i++){
         porcInital[i] = i*5/100.0;
         porcFinal[i] = (100 - i*5)/100.0;
+        reachedTr[i] = false;
         qDebug() << "P[" << i << "]: " << porcFinal[i];
     }
     initialLevel = -1;
@@ -55,18 +55,18 @@ void Analist::reset(double setPoint)
     // detecta mudanca de setPoint para iniciar o calculo das variaveis
     if(setPoint != oldSetPoint) {
         //qDebug() << "reset";
-        //qDebug() << "Entrou Reset";
+        qDebug() << "Entrou Reset";
         oldSetPoint = setPoint;
         ts = 0;
         for(int i = 0; i < 3; i++) {
             trOldTime[i] = 0;
             tr[i] = 0;
+            reachedTr[i] = false;
         }
         initialLevel = -1;
         mp = -100;
         tp = 0;
         tsOldTime = 0;
-        reachedTr = false;
     }
 }
 
@@ -122,42 +122,40 @@ void Analist::calcTr(double nivel, double setPoint)
 {
     double timeStampTr = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
     //if (tr[0] == 0) trOldTime[0] = timeStamp; //botar no reset
-    //qDebug() <<  "SP: " << setPoint << " - IL: " << initialLevel <<  " - L: " << nivel <<" - tr: " << tr[0] << " - trOld: " << trOldTime[0] << " - TS: " << timeStampTr << "- Flag: " << reachedTr;
-    //qDebug() << "condInic: " << (nivel <= (setPoint - initialLevel)*porcInital[0] + initialLevel) << "condFim: " << (nivel <= (setPoint - initialLevel)*porcFinal[0] + initialLevel);
+    qDebug() <<  "SP: " << setPoint << " - IL: " << initialLevel <<  " - L: " << nivel <<" - tr: " << tr[0] << " - trOld: " << trOldTime[0] << " - TS: " << timeStampTr << "- Flag: " << reachedTr;
+    qDebug() << "condInic: " << (nivel <= (setPoint - initialLevel)*porcInital[0] + initialLevel) << "condFim: " << (nivel <= (setPoint - initialLevel)*porcFinal[0] + initialLevel);
     if (initialLevel == -1) {
         initialLevel = nivel;
         //qDebug() << "PI: " << porcInital[0] << " - PF: " << porcFinal[0];
     }
-    else {
-        for (int i = 0; i < 1; i++){
-            if (reachedTr);
-                //reachedTr = true;
-                //qDebug() << "Entrou" << reachedTr;
-            else if (direction){
-                if (nivel <= (setPoint - initialLevel)*porcInital[i] + initialLevel){
-                    trOldTime[i] = timeStampTr;
-                    //qDebug() << i << " - if nivel menor" ;
-                }
-                else if (nivel <= (setPoint - initialLevel)*porcFinal[i] + initialLevel){
-                    tr[i] = timeStampTr - trOldTime[i];
-                    //qDebug() << i << " - else nivel menor";
-                }
-                else {
-                    reachedTr = true;
-                    //qDebug() << "Entrou uma vez so" << reachedTr;
-                }
+    for (int i = 0; i < 3; i++){
+        if (reachedTr[i]);
+            //reachedTr = true;
+            //qDebug() << "Entrou" << reachedTr;
+        else if (direction){
+            if (nivel <= (setPoint - initialLevel)*porcInital[i] + initialLevel){
+                trOldTime[i] = timeStampTr;
+                //qDebug() << i << " - if nivel menor" ;
             }
-            else {
-                if (nivel >= initialLevel - (initialLevel-setPoint)*porcInital[i]){
-                    trOldTime[i] = timeStampTr;
-                    //qDebug() << i << " - if nivel maior";
-                }
-                else if (nivel >= initialLevel - (initialLevel-setPoint)*porcFinal[i]){
-                    tr[i] = timeStampTr - trOldTime[i];
-                    //qDebug() << i << " - else nivel maior";
-                }
-                else reachedTr = true;
+            else if (nivel <= (setPoint - initialLevel)*porcFinal[i] + initialLevel){
+                tr[i] = timeStampTr - trOldTime[i];
+                //qDebug() << i << " - else nivel menor";
             }
+            else
+                reachedTr[i] = true;
+                //qDebug() << "Entrou uma vez so" << reachedTr;
+        }
+        else {
+            if (nivel >= initialLevel - (initialLevel-setPoint)*porcInital[i]){
+                trOldTime[i] = timeStampTr;
+                //qDebug() << i << " - if nivel maior";
+            }
+            else if (nivel >= initialLevel - (initialLevel-setPoint)*porcFinal[i]){
+                tr[i] = timeStampTr - trOldTime[i];
+                //qDebug() << i << " - else nivel maior";
+            }
+            else
+                reachedTr[i] = true;
         }
     }
 }

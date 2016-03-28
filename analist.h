@@ -9,7 +9,7 @@ class Analist
 {
 private:
     double ts, mp, tp, tr[3], tsOldTime, trOldTime[3], tsOpt, trOpt, mpInitialTime, oldSetPoint, initialLevel, porcInital[3], porcFinal[3];
-    bool direction, reachedTr;
+    bool direction, reachedTr[3];
     double calcTs(double nivel, double setPoint, double timeStamp);
     double calcMpTp(double nivel, double setPoint);
     double calcTp(double nivel, double setPoint);
