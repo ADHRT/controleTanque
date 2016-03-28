@@ -1,4 +1,5 @@
 #include "analist.h"
+#include <qmath.h>
 
 Analist::Analist()
 {
@@ -12,12 +13,13 @@ Analist::Analist()
     initialLevel = -1;
 }
 
-void Analist::calc(double nivel, double setPoint, double timeStamp)
+void Analist::calc(double nivel, double setPoint, double timeStamp, int tsOpt)
 {
     //qDebug() << "SP: " << setPoint << "OSP: " << oldSetPoint;
     reset(setPoint);
     calcMpTp(nivel, setPoint);
     calcTr(nivel, setPoint);
+    calcTs( nivel,  setPoint,  timeStamp, tsOpt);
 }
 
 double Analist::getTs()
@@ -55,9 +57,9 @@ void Analist::reset(double setPoint)
     // detecta mudanca de setPoint para iniciar o calculo das variaveis
     if(setPoint != oldSetPoint) {
         //qDebug() << "reset";
-        //qDebug() << "Entrou Reset";
+        qDebug() << "Entrou Reset";
         oldSetPoint = setPoint;
-        ts = 0;
+        ts = -100;
         for(int i = 0; i < 3; i++) {
             trOldTime[i] = 0;
             tr[i] = 0;
@@ -70,25 +72,32 @@ void Analist::reset(double setPoint)
     }
 }
 
-double Analist::calcTs(double nivel, double setPoint, double timeStamp)
+double Analist::calcTs(double nivel, double setPoint, double timeStamp, int tsOpt)
 {
-    double tsAux[4];
 
-    if (ts == 0) tsOldTime = timeStamp; //botar no reset
-
-    if (direction){
-        if (nivel < abs(setPoint - initialLevel)*0.02 || nivel > abs(setPoint - initialLevel)*0.02)
-            tsAux[0] = timeStamp - tsOldTime;
-
-        if (nivel < abs(setPoint - initialLevel)*0.05 || nivel > abs(setPoint - initialLevel)*0.05)
-            tsAux[1] = timeStamp - tsOldTime;
-
-        if (nivel < abs(setPoint - initialLevel)*0.07 || nivel > abs(setPoint - initialLevel)*0.07)
-            tsAux[2] = timeStamp - tsOldTime;
-
-        if (nivel < abs(setPoint - initialLevel)*0.1 || nivel > abs(setPoint - initialLevel)*0.1)
-            tsAux[3] = timeStamp - tsOldTime;
+    if(ts == -100) {
+        ts=0;
+        InitialLevelTs=nivel;
+        tsInitialTime=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
     }
+
+    double currentTimeTs=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
+    double nivelDiff=qFabs(setPoint-InitialLevelTs);
+
+    //qDebug() << currentTimeTs << tsInitialTime << currentTimeTs-tsInitialTime;
+    if (qFabs((setPoint-InitialLevelTs)*0.02)<qFabs(nivel-setPoint))
+        tsAux[0] = currentTimeTs - tsInitialTime;
+
+    if (qFabs((setPoint-InitialLevelTs)*0.05)<qFabs(nivel-setPoint))
+        tsAux[1] = currentTimeTs - tsInitialTime;
+
+    if (qFabs((setPoint-InitialLevelTs)*0.07)<qFabs(nivel-setPoint))
+        tsAux[2] = currentTimeTs - tsInitialTime;
+
+    if (qFabs((setPoint-InitialLevelTs)*0.1)<qFabs(nivel-setPoint))
+        tsAux[3] = currentTimeTs - tsInitialTime;
+
+    //qDebug() << qFabs(setPoint-InitialLevelTs)*0.1 << qFabs(nivel-setPoint);
 
     if (tsOpt == 2) ts = tsAux[0];
     else if (tsOpt == 5) ts = tsAux[1];

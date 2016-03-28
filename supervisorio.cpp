@@ -708,12 +708,15 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
     ui->progressBar_2->setValue(nivelTanque2*100);
     ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
 
+
     //analist.calc(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
-    analist->calc(nivelTanque1, setPoint, timeStamp);
+    int tsOpt=(ui->comboBox_ts->currentText()).toInt();
+    analist->calc(nivelTanque1, setPoint, timeStamp, tsOpt);
     //qDebug() << analist->getMp();
     ui->label_mp_cm->setText(QString::number(analist->getMp(), 'g',2)+" cm");
     ui->label_tr->setText(QString::number(analist->getTr(0), 'g',2)+" s");
-    //ui->label_ts->setText(QString::number(analist->getTs(), 'g',2)+" s");
+    ui->label_ts->setText(QString::number(analist->getTs(), 'g',2)+" s");
+    ui->label_tp->setText(QString::number(analist->getTp(), 'g',2)+" s");
 
 }
 
