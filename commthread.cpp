@@ -40,7 +40,6 @@ void commThread::run(){
         //Reads Time
         waveTime = timeStamp - waveTimeStamp;
         timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
-
         if(timeStamp-lastLoopTimeStamp > period || !connected){
             lastLoopTimeStamp=timeStamp;
 
