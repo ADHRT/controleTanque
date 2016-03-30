@@ -90,6 +90,7 @@ supervisorio::supervisorio(QWidget *parent) :
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
      connect(cThread,SIGNAL(plotValues(double,double,double,double,double,double, double,double,double)),this,SLOT(onPlotValues(double, double,double,double,double,double,double,double,double)));
+     supervisorio::on_pushButton_8_clicked();//Atualiza valores (evita bug no demo)
 
      //Analist calcula valores para relatorios e analise da dinamica
      analist = new Analist();
