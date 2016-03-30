@@ -173,9 +173,6 @@ void commThread::run(){
                 q->writeDA(channel, sinalSaturado);
             else { //Simulacao
 
-               // Evita glitch inicial
-                if(sinalSaturado>30 || sinalSaturado<-30){sinalSaturado=0;}
-                if(nivelTanque1>40){nivelTanque1=0;}
 
                 //Nivel Tanque 1
                 nivelTanque1 = nivelTanque1+sinalSaturado/100;
