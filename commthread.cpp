@@ -23,6 +23,7 @@ commThread::commThread(QObject *parent):
     windup = true;
     diferencaSaida = 0;
     tank = 1; // tanque2
+
 }
 
 void commThread::run(){
@@ -170,10 +171,24 @@ void commThread::run(){
             // Escreve no canal selecionado
             if(!simulationMode)
                 q->writeDA(channel, sinalSaturado);
-            else { //Simulacao louca
-               // Calculates new points
-               //nivelTanque1 = qSin(timeStamp)*5+5;
-               nivelTanque2 = qCos(timeStamp)*5+5;
+            else { //Simulacao
+
+               // Evita glitch inicial
+                if(sinalSaturado>30 || sinalSaturado<-30){sinalSaturado=0;}
+                if(nivelTanque1>40){nivelTanque1=0;}
+
+                //Nivel Tanque 1
+                nivelTanque1 = nivelTanque1+sinalSaturado/100;
+                if(nivelTanque1>30){nivelTanque1=30;}
+                else if(nivelTanque1<0){nivelTanque1=0;}
+
+                //Nivel Tanque 2
+                nivelTanque2 = nivelTanque2+(nivelTanque1-nivelTanque2)/100;
+                if(nivelTanque2>30){nivelTanque2=30;}
+                else if(nivelTanque2<0){nivelTanque2=0;}
+
+                //nivelTanque2 = qCos(timeStamp)*5+5;
+
                if (nivelTanque1 != setPoint){
                    nivelTanque1 += setPoint/100.00*(setPoint - nivelTanque1)/abs(setPoint - nivelTanque1);
                }
