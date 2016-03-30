@@ -112,9 +112,9 @@ private slots:
 
   void on_radioButton_tanque2_clicked();
 
-  void on_comboBox_ts_currentIndexChanged(const QString &arg1);
+  void on_comboBox_tr_currentIndexChanged(int index);
 
-  void on_comboBox_tr_currentIndexChanged(const QString &arg1);
+  void on_comboBox_ts_currentIndexChanged(int index);
 
 private:
     Ui::supervisorio *ui;

@@ -25,21 +25,21 @@ supervisorio::supervisorio(QWidget *parent) :
     timeToNextRandomNumber=0;
 
     //Inicializa valores
-    frequencia = 5;
-    amplitude = 3;
-    offset = 10;
+    frequencia = 20;
+    amplitude = 5;
+    offset = 18;
     duracaoMax = 3;
     duracaoMin = 1;
-    wave = 0;
-    nextWave = 0;
-    control = P;
-    nextControl = P;
+    wave = 2;
+    nextWave = wave;
+    control = PI;
+    nextControl = control;
     kp = 2;
     //ki = 0.05;
-    ki = 1;
+    ki = 0.1;
     kd = 0.005;
     taw = 75;
-    windup = true;
+    windup = false;
     conditionalIntegration = false;
 
     //Set valores
@@ -64,7 +64,8 @@ supervisorio::supervisorio(QWidget *parent) :
 
      // Configura wave padrao
      //ui->radioButton_11->setChecked(true);
-     on_comboBox_6_currentIndexChanged(0);//Degrau
+     ui->comboBox_6->setCurrentIndex(wave);
+     on_comboBox_6_currentIndexChanged(wave);//Degrau
 
      // Configura sinal de controle
      index = ui->comboBox_tipoControle->findText("PI");
@@ -602,6 +603,9 @@ void supervisorio::on_radioButton_9_clicked()
 
     //Desativa a combo box dos parâmetros de controle
     ui->groupBox_10->setEnabled(false);
+
+    //Desativa o group box da analise
+    ui->groupBox_analise->setEnabled(false);
 }
 
 //Malha fechada
@@ -621,6 +625,9 @@ void supervisorio::on_radioButton_10_clicked()
 
     //Ativa a combo box dos parâmetros de controle
     ui->groupBox_10->setEnabled(true);
+
+    //Ativa o group box da analise
+    ui->groupBox_analise->setEnabled(true);
 }
 
 
@@ -704,19 +711,20 @@ void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double 
 
     //Update Water Level
     ui->progressBar->setValue(nivelTanque1*100);
-    ui->label_5->setText(QString::number(nivelTanque1,'g',2)+" cm");
+    ui->label_5->setText(QString::number(nivelTanque1,'g',3)+" cm");
     ui->progressBar_2->setValue(nivelTanque2*100);
-    ui->label_7->setText(QString::number(nivelTanque2,'g',2)+" cm");
+    ui->label_7->setText(QString::number(nivelTanque2,'g',3)+" cm");
 
 
     //analist.calc(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
-    int tsOpt=(ui->comboBox_ts->currentText()).toInt();
-    analist->calc(nivelTanque1, setPoint, timeStamp, tsOpt);
+    //int tsOpt=(ui->comboBox_ts->currentText()).toInt();
+    analist->calc(nivelTanque2, setPoint, timeStamp);
     //qDebug() << analist->getMp();
     ui->label_mp_cm->setText(QString::number(analist->getMp(), 'g',2)+" cm");
-    ui->label_tr->setText(QString::number(analist->getTr(0), 'g',2)+" s");
-    ui->label_ts->setText(QString::number(analist->getTs(), 'g',2)+" s");
-    ui->label_tp->setText(QString::number(analist->getTp(), 'g',2)+" s");
+    ui->label_mp_percent->setText(QString::number(analist->getMpPerc(), 'g',2)+" %");
+    ui->label_tr->setText(QString::number(analist->getTr(ui->comboBox_tr->currentIndex()), 'g',3)+" s");
+    ui->label_ts->setText(QString::number(analist->getTs(ui->comboBox_ts->currentIndex()), 'g',3)+" s");
+    ui->label_tp->setText(QString::number(analist->getTp(), 'g',3)+" s");
 
 }
 
@@ -848,12 +856,12 @@ void supervisorio::on_radioButton_tanque2_clicked()
     ui->groupBox_4->setDisabled(true);
 }
 
-void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
+void supervisorio::on_comboBox_tr_currentIndexChanged(int index)
 {
-    analist->setTsOpt(arg1.toInt());
+    ui->label_tr->setText(QString::number(analist->getTr(index), 'g', 3));
 }
 
-void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
+void supervisorio::on_comboBox_ts_currentIndexChanged(int index)
 {
-    ui->label_tr->setText(QString::number(analist->getTr(arg1.toInt()), 'g', 3));
+    ui->label_ts->setText(QString::number(analist->getTs(index), 'g', 3));
 }

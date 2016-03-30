@@ -8,22 +8,22 @@
 class Analist
 {
 private:
-    double ts, mp, tp, tr[3], tsOldTime, trOldTime[3], tsOpt, trOpt, mpInitialTime, oldSetPoint, initialLevel, porcInital[3], porcFinal[3],InitialLevelTs,tsInitialTime;
+    const double porcTs[4] = {0.02, 0.05, 0.07, 0.1};
+    double ts[4], mp, mpPerc, tp, tr[3], tsOldTime, trOldTime[3], mpInitialTime, oldSetPoint, initialLevel, porcInital[3], porcFinal[3], InitialLevelTs, tsInitialTime;
     bool direction, reachedTr[3];
-    double calcTs(double nivel, double setPoint, double timeStamp, int tsOpt);
-    double calcMpTp(double nivel, double setPoint);
+    void calcTs(double nivel, double setPoint, double timeStamp);
+    void calcMpTp(double nivel, double setPoint, double timeStamp);
     double calcTp(double nivel, double setPoint);
-    void calcTr(double nivel, double setPoint);
+    void calcTr(double nivel, double setPoint, double timeStamp);
 public:
     Analist();
     //bool reachedTr;
-    void calc(double nivel, double setPoint, double timeStamp, int tsOpt);
-    double getTs(void);
+    void calc(double nivel, double setPoint, double timeStamp);
     double getMp(void);
+    double getMpPerc(void);
     double getTp(void);
+    double getTs(int);
     double getTr(int);
-    void setTsOpt(int);
-    void setTrOpt(int);
     void reset(double setPoint);
 };
 
