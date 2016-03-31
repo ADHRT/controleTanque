@@ -28,7 +28,7 @@ commThread::commThread(QObject *parent):
 
 void commThread::run(){
 
-    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado, erro = 0, i, d, p;
+    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado, erro = 0, i, d, p,lastSinalCalculado=0;
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -59,22 +59,29 @@ void commThread::run(){
             switch(wave)
             {
             case 0://degrau:
+                //qDebug() << "Degrau";
                 sinalCalculado = offset;
                 break;
             case 1://senoidal:
+                //qDebug() << "Senoidal";
                 sinalCalculado = qSin((waveTime)*3.14159265359*frequencia)*amplitude+offset;
                 break;
             case 2://quadrada:
+                //qDebug() << "Quadrada";
                 sinalCalculado = qSin(waveTime*3.14159265359*frequencia)*amplitude;
                 if(sinalCalculado>0)sinalCalculado = amplitude+offset;
                 else sinalCalculado = -amplitude+offset;
                 break;
             case 3://serra:
+                //qDebug() << "Serra";
                 sinalCalculado = (fmod((waveTime*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
                 break;
             case 4://aleatorio:
+                sinalCalculado =lastSinalCalculado;
                 if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
                     sinalCalculado = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
+                    lastSinalCalculado=sinalCalculado;
+                    //qDebug() << "Aleatorio";
                     lastTimeStamp=timeStamp;
                     timeToNextRandomNumber= ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
                     if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
@@ -173,7 +180,7 @@ void commThread::run(){
                 q->writeDA(channel, sinalSaturado);
             else { //Simulacao
 
-                qDebug() << sinalSaturado;
+
 
                 //Nivel Tanque 1
                 nivelTanque1 = nivelTanque1+(sinalSaturado)/10-0.01*nivelTanque1;
