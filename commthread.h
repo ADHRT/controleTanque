@@ -25,7 +25,7 @@ private:
     double offset;
     double duracaoMax;
     double duracaoMin;
-    double sinalCalculado, lastTimeStamp, timeToNextRandomNumber;
+    double sinalCalculado, lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
     //variavel aux para anti-windup
     double diferencaSaida;
     double lastLoopTimeStamp;
