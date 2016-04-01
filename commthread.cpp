@@ -49,11 +49,8 @@ void commThread::run(){
                 if (nivelTanque1 < 0) nivelTanque1 = 0;
                 nivelTanque2 = q->readAD(1) * 6.25;
                 if (nivelTanque2 < 0) nivelTanque2 = 0;
-            } else {
-                //Calculates new points
-                nivelTanque1 = qSin(timeStamp)*5+5;
-                nivelTanque2 = qCos(timeStamp)*5+5;
             }
+
 
             // Passa o valor do tanque selecionado para PV
             nivelTanque = tank == 1?nivelTanque1:nivelTanque2;
@@ -173,6 +170,14 @@ void commThread::run(){
             // Escreve no canal selecionado
             if(!simulationMode)
                 q->writeDA(channel, sinalSaturado);
+            else { //Simulacao louca
+               // Calculates new points
+               //nivelTanque1 = qSin(timeStamp)*5+5;
+               nivelTanque2 = qCos(timeStamp)*5+5;
+               if (nivelTanque1 != setPoint){
+                   nivelTanque1 += setPoint/100.00*(setPoint - nivelTanque1)/abs(setPoint - nivelTanque1);
+               }
+           }
 
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);

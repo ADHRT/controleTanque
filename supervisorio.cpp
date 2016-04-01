@@ -852,5 +852,5 @@ void supervisorio::on_comboBox_ts_currentIndexChanged(const QString &arg1)
 
 void supervisorio::on_comboBox_tr_currentIndexChanged(const QString &arg1)
 {
-    analist->setTrOpt(arg1.toInt());
+    ui->label_tr->setText(QString::number(analist->getTr(arg1.toInt()), 'g', 3));
 }
