@@ -116,6 +116,8 @@ private slots:
 
   void on_comboBox_ts_currentIndexChanged(int index);
 
+  void on_button_limpar_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
