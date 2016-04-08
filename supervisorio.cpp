@@ -865,3 +865,13 @@ void supervisorio::on_comboBox_ts_currentIndexChanged(int index)
 {
     ui->label_ts->setText(QString::number(analist->getTs(index), 'g', 3));
 }
+
+void supervisorio::on_button_limpar_clicked()
+{//Limpar gráficos
+
+    for (int i=0;i<8;i++){
+        ui->customPlot->graph(i)->clearData();
+        ui->customPlot2->graph(i)->clearData();
+    }
+
+}
