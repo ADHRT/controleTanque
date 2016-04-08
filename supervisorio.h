@@ -32,18 +32,6 @@ public slots:
      void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d);
 
 private slots:
-  void on_doubleSpinBox_valueChanged(double arg1);
-  void on_doubleSpinBox_2_valueChanged(double arg1);
-
-
-  void on_horizontalSlider_sliderReleased();
-
-  void on_horizontalSlider_2_sliderReleased();
-
-  void on_doubleSpinBox_3_valueChanged(double arg1);
-
-  void on_horizontalSlider_3_sliderReleased();
-
   void on_comboBox_currentIndexChanged(int index);
 
   void on_pushButton_2_clicked();
@@ -59,14 +47,6 @@ private slots:
   void on_pushButton_7_clicked();
 
   void on_radioButton_9_clicked();
-
-  void on_doubleSpinBox_4_valueChanged(double arg1);
-
-  void on_horizontalSlider_5_sliderReleased();
-
-  void on_doubleSpinBox_5_valueChanged(double arg1);
-
-  void on_horizontalSlider_6_sliderReleased();
 
   void on_radioButton_10_clicked();
 
