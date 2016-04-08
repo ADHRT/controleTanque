@@ -1825,6 +1825,25 @@
      <string>Integrativo</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="button_limpar">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>700</y>
+      <width>131</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Limpar Gráficos</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -1832,7 +1851,7 @@
      <x>0</x>
      <y>0</y>
      <width>1436</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
