@@ -5,7 +5,6 @@
 #include <cmath>
 
 
-
 supervisorio::supervisorio(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::supervisorio)

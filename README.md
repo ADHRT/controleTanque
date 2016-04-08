@@ -2,6 +2,9 @@
 
 Backlog | Doing | Testing | Done
 ------------ | ------------- | ------------- | -------------
-Calcular valores da análise[] | - | - |-
--|- |- | Colocar análise na UI[H]
+Derivativo não desativa[] | - | - |-
+Botão Parar [] | - | - |-
+"Ele disse que o ts tá uma bosta"[] | - | - |-
+- | Botão Limpar gráficos [D] | - |-
 -|- |- |Implementar controle tanque 2[H] 
+
