@@ -47,19 +47,14 @@ supervisorio::supervisorio(QWidget *parent) :
     int index = ui->comboBox->findText("Período (s)");
     ui->comboBox->setCurrentIndex(index);
     ui->doubleSpinBox->setValue(frequencia);
-    ui->horizontalSlider->setValue(frequencia*100);
     //Amplitude
     ui->doubleSpinBox_2->setValue(amplitude);
-    ui->horizontalSlider_2->setValue(amplitude*100);
     //Offset
     ui->doubleSpinBox_3->setValue(offset);
-    ui->horizontalSlider_3->setValue(offset*100);
     //Max
     ui->doubleSpinBox_4->setValue(duracaoMax);
-    ui->horizontalSlider_5->setValue(duracaoMax*100);
     //Min
     ui->doubleSpinBox_5->setValue(duracaoMin);
-    ui->horizontalSlider_6->setValue(duracaoMin*100);
 
      // Configura wave padrao
      //ui->radioButton_11->setChecked(true);
@@ -318,23 +313,18 @@ void supervisorio::setLayout(bool frequencia, bool amplitude, bool offset, bool 
     //Frequencia
     ui->comboBox->setEnabled(frequencia);
     ui->doubleSpinBox->setEnabled(frequencia);
-    ui->horizontalSlider->setEnabled(frequencia);
     //Amplitude
     ui->label_2->setEnabled(amplitude);
     ui->doubleSpinBox_2->setEnabled(amplitude);
-    ui->horizontalSlider_2->setEnabled(amplitude);
     //Offset
     ui->label_3->setEnabled(offset);
     ui->doubleSpinBox_3->setEnabled(offset);
-    ui->horizontalSlider_3->setEnabled(offset);
     //Duracao Max Min
     ui->label_12->setEnabled(duracao);
     //Max
     ui->doubleSpinBox_4->setEnabled(duracao);
-    ui->horizontalSlider_5->setEnabled(duracao);
     //Min
     ui->doubleSpinBox_5->setEnabled(duracao);
-    ui->horizontalSlider_6->setEnabled(duracao);
 }
 
 void supervisorio::setControlParams(bool kp, bool ki, bool kd)
@@ -370,73 +360,6 @@ void supervisorio::setTaw(double taw)
 //==================================================================================================
 
 
-//Relações entre objetos do box "Demais conexões"
-void supervisorio::on_doubleSpinBox_valueChanged(double arg1)
-{
-    ui->horizontalSlider->setValue(arg1*100);
-}
-void supervisorio::on_doubleSpinBox_2_valueChanged(double arg1)
-{
-    ui->horizontalSlider_2->setValue(arg1*100);
-}
-void supervisorio::on_doubleSpinBox_3_valueChanged(double arg1)
-{
-    if(ui->radioButton_9->isChecked()){//malha aberta
-        ui->horizontalSlider_3->setValue((arg1+15)*100);
-    }
-    else{//malha fechada
-        ui->horizontalSlider_3->setValue((arg1)*100);
-    }
-}
-
-void supervisorio::on_doubleSpinBox_4_valueChanged(double arg1)
-{//Primeiro doubleSpinBox do aleatório(max)
-    if(arg1<(ui->doubleSpinBox_5->value())){
-        ui->doubleSpinBox_4->setValue(ui->doubleSpinBox_5->value());
-    }
-
-    ui->horizontalSlider_5->setValue(arg1*100);
-}
-void supervisorio::on_doubleSpinBox_5_valueChanged(double arg1)
-{//Segundo doubleSpinBox do aleatório(min)
-    ui->horizontalSlider_6->setValue(arg1*100);
-    if(arg1>(ui->doubleSpinBox_4->value())){
-        ui->doubleSpinBox_5->setValue(ui->doubleSpinBox_4->value());
-    }
-}
-void supervisorio::on_horizontalSlider_sliderReleased()
-{
-    ui->doubleSpinBox->setValue((double)ui->horizontalSlider->value()/100);
-}
-void supervisorio::on_horizontalSlider_2_sliderReleased()
-{
-    ui->doubleSpinBox_2->setValue((double)ui->horizontalSlider_2->value()/100);
-}
-void supervisorio::on_horizontalSlider_3_sliderReleased()
-{
-    if(ui->radioButton_9->isChecked()){//malha aberta
-        ui->doubleSpinBox_3->setValue(((double)ui->horizontalSlider_3->value()-1500)/100);
-    }
-    else{//malha fechada
-        ui->doubleSpinBox_3->setValue(((double)ui->horizontalSlider_3->value())/100);
-    }
-}
-
-void supervisorio::on_horizontalSlider_5_sliderReleased()
-{//Primeiro slider do aleatório(max)
-    if((ui->horizontalSlider_5->value())<(ui->horizontalSlider_6->value())){
-        ui->horizontalSlider_5->setValue(ui->horizontalSlider_6->value());
-    }
-
-    ui->doubleSpinBox_4->setValue((double)ui->horizontalSlider_5->value()/100);
-
-}
-void supervisorio::on_horizontalSlider_6_sliderReleased()
-{//Segundo slider do aleatório(min)
-    if((ui->horizontalSlider_5->value())<(ui->horizontalSlider_6->value())){
-        ui->horizontalSlider_6->setValue(ui->horizontalSlider_5->value());
-    }
-    ui->doubleSpinBox_5->setValue((double)ui->horizontalSlider_6->value()/100);}
 
 void supervisorio::on_comboBox_currentIndexChanged(int index)
 {
@@ -446,10 +369,6 @@ void supervisorio::on_comboBox_currentIndexChanged(int index)
     ui->doubleSpinBox->setMinimum(1/ui->doubleSpinBox->maximum());
     ui->doubleSpinBox->setMaximum(1/aux);
     ui->doubleSpinBox->setValue(1/aux2);
-
-    ui->horizontalSlider->setMinimum(ui->doubleSpinBox->minimum()*100);
-    ui->horizontalSlider->setMaximum(ui->doubleSpinBox->maximum()*100);
-    ui->horizontalSlider->setValue(ui->doubleSpinBox->value()*100);
     index++;//Só para não dar warning
 
 }
@@ -596,7 +515,6 @@ void supervisorio::on_radioButton_9_clicked()
     ui->label_3->setText("Offset (V)");
 
 
-    ui->horizontalSlider_3->setValue(1500);
     ui->doubleSpinBox_3->setValue(0);
     ui->doubleSpinBox_3->setMaximum(15);
     ui->doubleSpinBox_3->setMinimum(-15);
@@ -618,7 +536,6 @@ void supervisorio::on_radioButton_10_clicked()
     ui->label_2->setText("Amplitude (cm)");
     ui->label_3->setText("Offset (cm)");
 
-    ui->horizontalSlider_3->setValue(0);
     ui->doubleSpinBox_3->setValue(0);
     ui->doubleSpinBox_3->setMaximum(30);
     ui->doubleSpinBox_3->setMinimum(0);
