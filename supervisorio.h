@@ -98,6 +98,8 @@ private slots:
 
   void on_button_limpar_clicked();
 
+  void on_pushButton_zerar_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;

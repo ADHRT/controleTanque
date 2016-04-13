@@ -792,3 +792,8 @@ void supervisorio::on_button_limpar_clicked()
     }
 
 }
+
+void supervisorio::on_pushButton_zerar_clicked()
+{
+    cThread->setNullParameters();
+}
