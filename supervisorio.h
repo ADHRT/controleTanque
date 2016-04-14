@@ -100,6 +100,8 @@ private slots:
 
   void on_pushButton_zerar_clicked();
 
+  void on_checkBox_9_clicked(bool checked);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;

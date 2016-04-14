@@ -29,7 +29,7 @@ supervisorio::supervisorio(QWidget *parent) :
     offset = 18;
     duracaoMax = 3;
     duracaoMin = 1;
-    wave = 2;
+    wave = 0;
     nextWave = wave;
     control = PI;
     nextControl = control;
@@ -796,4 +796,9 @@ void supervisorio::on_button_limpar_clicked()
 void supervisorio::on_pushButton_zerar_clicked()
 {
     cThread->setNullParameters();
+}
+
+void supervisorio::on_checkBox_9_clicked(bool checked)
+{
+    if (checked);
 }

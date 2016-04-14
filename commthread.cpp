@@ -176,9 +176,10 @@ void commThread::run(){
             }
 
             // Escreve no canal selecionado
-            if(!simulationMode)
+            if(!simulationMode) {
+//                qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
                 q->writeDA(channel, sinalSaturado);
-            else { //Simulacao
+            } else { //Simulacao
 
 
 
@@ -205,7 +206,7 @@ void commThread::run(){
     }
     if(!simulationMode) {
         q->writeDA(channel, 0);
-        delete q;
+        //delete q;
     }
 }
 
@@ -265,7 +266,9 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
 // Zera todos os valores
 void commThread::setNullParameters()
 {
-    frequencia = 0;
+    //frequencia = 0;
+    //control = P;
+    //tank = 1;
     amplitude = 0;
     offset = 0;
     duracaoMax = 0;
@@ -274,6 +277,11 @@ void commThread::setNullParameters()
     kp = 2;
     ki = 0.05;
     kd = 0.005;
+    lastI = 0;
+    lastD = 0;
+    diferencaSaida = 0;
+
+    qDebug() << "setNullParametres()\n";
 }
 
 void commThread::setSimulationMode(bool on)

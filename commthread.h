@@ -20,25 +20,25 @@ public:
 
 private:
     typedef QThread super;
-    double frequencia;
-    double amplitude;
-    double offset;
-    double duracaoMax;
-    double duracaoMin;
-    double sinalCalculado, lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
+    volatile double frequencia;
+    volatile double amplitude;
+    volatile double offset;
+    volatile double duracaoMax;
+    volatile double duracaoMin;
+    volatile double sinalCalculado, lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
     //variavel aux para anti-windup
-    double diferencaSaida;
-    double lastLoopTimeStamp;
-    int wave;
+    volatile double diferencaSaida;
+    volatile double lastLoopTimeStamp;
+    volatile int wave;
     Control control, lastControl;
-    double kp, ki, kd, taw, lastI, lastD, period;
-    bool malha, windup, conditionalIntegration;
-    bool simulationMode;
-    bool levelSimulationFinished;
-    bool connected;
-    int channel, tank;
-    int simulationNivelTanque1;
-    double waveTime, waveTimeStamp;
+    volatile double kp, ki, kd, taw, lastI, lastD, period;
+    volatile bool malha, windup, conditionalIntegration;
+    volatile bool simulationMode;
+    volatile bool levelSimulationFinished;
+    volatile bool connected;
+    volatile int channel, tank;
+    volatile int simulationNivelTanque1;
+    volatile double waveTime, waveTimeStamp;
     Quanser* q;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
