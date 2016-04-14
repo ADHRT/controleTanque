@@ -29,7 +29,7 @@ public:
     Analist *analist;
 
 public slots:
-     void onPlotValues(double timeStamp, double *sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double *erro, double *i, double *d);
+     void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d);
 
 private slots:
   void on_comboBox_currentIndexChanged(int index);

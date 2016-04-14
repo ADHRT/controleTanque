@@ -11,7 +11,7 @@ public:
     explicit commThread(QObject *parent =0);
     enum Control { P, PI, PD, PID, PI_D, SEM };
     void run();
-    void setParameters(double, double, double, double, double, int, bool, int, int, double, double, double, bool, bool, double, int tank, bool cascade);
+    void setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade);
     void setNullParameters(void);
     void setSimulationMode(bool on);
     void disconnect(void);
@@ -25,14 +25,14 @@ private:
     volatile double offset;
     volatile double duracaoMax;
     volatile double duracaoMin;
-    volatile double sinalCalculado, lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
+    volatile double sinalCalculado[2], lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
     //variavel aux para anti-windup
-    volatile double diferencaSaida;
+    volatile double diferencaSaida[2];
     volatile double lastLoopTimeStamp;
     volatile int wave;
-    Control control, lastControl;
-    volatile double kp, ki, kd, taw, lastI, lastD, period;
-    volatile bool malha, windup, conditionalIntegration, cascade;
+    Control control[2], lastControl[2];
+    volatile double kp[2], ki[2], kd[2], taw[2], lastI[2], lastD[2], period;
+    volatile bool malha, windup[2], conditionalIntegration[2], cascade;
     volatile bool simulationMode;
     volatile bool levelSimulationFinished;
     volatile bool connected;

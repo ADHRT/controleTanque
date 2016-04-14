@@ -10,25 +10,22 @@ commThread::commThread(QObject *parent):
     simulationMode = false;
     channel = 0;
     waveTime = 0;
-    kp = 2;
-    ki = 0.05;
-    kd = 0.005;
-    taw = 75;
-    control = P;
-    lastControl = control;
+    control[0] = P; control[1] = P;
+    lastControl[0] = control[0]; lastControl[1] = control[1];
     q = new Quanser("10.13.99.69", 20081);
-    lastI = 0;
-    lastD = 0;
     period = 0.1;
-    windup = true;
-    diferencaSaida = 0;
     tank = 1; // tanque2
+    for (int i = 0; i < 2; i++){
+        diferencaSaida[i] = 0;
+        lastI[i] = 0;
+        lastD[i] = 0;
+    }
 
 }
 
 void commThread::run(){
 
-    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado, erro = 0, i, d, p,lastSinalCalculado=0;
+    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado[2], erro = 0, i[2], d[2], p[2],lastSinalCalculado=0;
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -60,30 +57,30 @@ void commThread::run(){
             {
             case 0://degrau:
                 //qDebug() << "Degrau";
-                sinalCalculado = offset;
+                sinalCalculado[0] = offset;
                 break;
             case 1://senoidal:
                 //qDebug() << "Senoidal";
-                sinalCalculado = qSin((waveTime)*3.14159265359*frequencia)*amplitude+offset;
+                sinalCalculado[0] = qSin((waveTime)*3.14159265359*frequencia)*amplitude+offset;
                 break;
             case 2://quadrada:
                 //qDebug() << "Quadrada";
-                sinalCalculado = qSin(waveTime*3.14159265359*frequencia)*amplitude;
-                if(sinalCalculado>0)sinalCalculado = amplitude+offset;
-                else sinalCalculado = -amplitude+offset;
+                sinalCalculado[0] = qSin(waveTime*3.14159265359*frequencia)*amplitude;
+                if(sinalCalculado[0]>0)sinalCalculado[0] = amplitude+offset;
+                else sinalCalculado[0] = -amplitude+offset;
                 break;
             case 3://serra:
                 //qDebug() << "Serra";
-                sinalCalculado = (fmod((waveTime*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
+                sinalCalculado[0] = (fmod((waveTime*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
                 break;
             case 4://aleatorio:
-                sinalCalculado =lastSinalCalculado;
+                sinalCalculado[0] = lastSinalCalculado;
                 if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
-                    sinalCalculado = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
-                    lastSinalCalculado=sinalCalculado;
+                    sinalCalculado[0] = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
+                    lastSinalCalculado=sinalCalculado[0];
                     //qDebug() << "Aleatorio";
-                    lastTimeStamp=timeStamp;
-                    timeToNextRandomNumber= ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
+                    lastTimeStamp = timeStamp;
+                    timeToNextRandomNumber = ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
                     if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
                 }
                 break;
@@ -93,7 +90,7 @@ void commThread::run(){
 
 
             //Calculates other points
-            sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
+            sinalSaturado[0] = commThread::lockSignal(sinalCalculado[0], nivelTanque1, nivelTanque2);
 
 
 
@@ -201,7 +198,7 @@ void commThread::run(){
            }
 
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, sinalCalculado, sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
+            emit plotValues(timeStamp, sinalCalculado[0], sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
         }
     }
     if(!simulationMode) {
@@ -238,7 +235,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration, double taw, int tank, bool cascade)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -253,13 +250,16 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->wave = wave;
     this->malha = malha;
     this->channel = channel;
-    this->control = static_cast<Control>(control);
-    this->kp = kp;
-    this->ki = ki;
-    this->kd = kd;
-    this->taw = taw;
-    this->windup = windup;
-    this->conditionalIntegration = conditionalIntegration;
+    for (int i = 0; i < 2; i++){
+        this->control[i] = static_cast<Control>(control[i]);
+        this->kp[i] = kp[i];
+        this->ki[i] = ki[i];
+        this->kd[i] = kd[i];
+        this->taw[i] = taw[i];
+        this->windup[i] = windup[i];
+        this->conditionalIntegration[i] = conditionalIntegration[i];
+    }
+
     this->tank = tank;
     this->cascade = cascade;
 }
@@ -274,13 +274,15 @@ void commThread::setNullParameters()
     offset = 0;
     duracaoMax = 0;
     duracaoMin = 0;
-    sinalCalculado = 0;
-    kp = 2;
-    ki = 0.05;
-    kd = 0.005;
-    lastI = 0;
-    lastD = 0;
-    diferencaSaida = 0;
+    for (int i = 0; i < 2; i++){
+        kp[i] = 2;
+        ki[i] = 0.05;
+        kd[i] = 0.005;
+        lastI[i] = 0;
+        lastD[i] = 0;
+        diferencaSaida[i] = 0;
+        sinalCalculado[i] = 0;
+    }
 
     qDebug() << "setNullParametres()\n";
 }
