@@ -11,7 +11,7 @@ public:
     explicit commThread(QObject *parent =0);
     enum Control { P, PI, PD, PID, PI_D, SEM };
     void run();
-    void setParameters(double, double, double, double, double, int, bool, int, int, double, double, double, bool, bool, double, int tank);
+    void setParameters(double, double, double, double, double, int, bool, int, int, double, double, double, bool, bool, double, int tank, bool cascade);
     void setNullParameters(void);
     void setSimulationMode(bool on);
     void disconnect(void);
@@ -32,7 +32,7 @@ private:
     volatile int wave;
     Control control, lastControl;
     volatile double kp, ki, kd, taw, lastI, lastD, period;
-    volatile bool malha, windup, conditionalIntegration;
+    volatile bool malha, windup, conditionalIntegration, cascade;
     volatile bool simulationMode;
     volatile bool levelSimulationFinished;
     volatile bool connected;

@@ -238,7 +238,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration, double taw, int tank)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int control, double kp, double ki, double kd, bool windup, bool conditionalIntegration, double taw, int tank, bool cascade)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -261,6 +261,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->windup = windup;
     this->conditionalIntegration = conditionalIntegration;
     this->tank = tank;
+    this->cascade = cascade;
 }
 
 // Zera todos os valores

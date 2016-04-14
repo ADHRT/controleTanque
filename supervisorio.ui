@@ -592,7 +592,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>Parâmetros - Control. Mestre</string>
+        <string>Parâmetros - Mestre</string>
        </property>
        <widget class="QComboBox" name="comboBox_tipoControle">
         <property name="geometry">
@@ -1327,7 +1327,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>Parâmetros - Control. Escravo</string>
+        <string>Parâmetros - Escravo</string>
        </property>
        <widget class="QComboBox" name="comboBox_tipoControle_2">
         <property name="geometry">

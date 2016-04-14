@@ -31,15 +31,28 @@ supervisorio::supervisorio(QWidget *parent) :
     duracaoMin = 1;
     wave = 0;
     nextWave = wave;
-    control = PI;
-    nextControl = control;
-    kp = 2;
-    //ki = 0.05;
-    ki = 0.1;
-    kd = 0.005;
-    taw = 75;
-    windup = false;
-    conditionalIntegration = false;
+
+    //controladores
+    taw[0] = 75;
+    taw[1] = 75;
+
+    cascade = true;
+        //mestre
+        control[0] = PI;
+        nextControl[0] = control[0];
+        kp[0] = 2;
+        ki[0] = 0.05;
+        kd[0] = 0.005;
+        windup[0] = false;
+        conditionalIntegration[0] = false;
+        //escravo
+        control[1] = PI;
+        nextControl[1] = control[1];
+        kp[1] = 2;
+        ki[1] = 0.05;
+        kd[1] = 0.005;
+        windup[1] = false;
+        conditionalIntegration[1] = false;
 
     //Set valores
     //Frequencia
@@ -64,22 +77,32 @@ supervisorio::supervisorio(QWidget *parent) :
      // Configura sinal de controle
      index = ui->comboBox_tipoControle->findText("PI");
      ui->comboBox_tipoControle->setCurrentIndex(index);
+     index = ui->comboBox_tipoControle_2->findText("PI");
+     ui->comboBox_tipoControle_2->setCurrentIndex(index);
 
-     ui->doubleSpinBox_6->setValue(kp);
-     ui->doubleSpinBox_7->setValue(ki);
-     ui->doubleSpinBox_8->setValue(kd);
-     //setTaw(taw);
+     ui->doubleSpinBox_6->setValue(kp[0]);
+     ui->doubleSpinBox_7->setValue(ki[0]);
+     ui->doubleSpinBox_8->setValue(kd[0]);
+
+     ui->doubleSpinBox_9->setValue(kp[1]);
+     ui->doubleSpinBox_10->setValue(ki[1]);
+     ui->doubleSpinBox_11->setValue(kd[1]);
 
      // Wind Up
      index = ui->comboBox_windup->findText("Sem");
      ui->comboBox_windup->setCurrentIndex(index);
+     index = ui->comboBox_windup_2->findText("Sem");
+     ui->comboBox_windup_2->setCurrentIndex(index);
 
      // Configura canal de escrita padrao (bomba)
      channel = 0;
 
+     // Seta cascata
+     on_checkBox_9_clicked(cascade);
+
      // Seleciona controle no tanque
-     on_radioButton_tanque1_clicked();
-     ui->radioButton_tanque1->setChecked(true);
+     on_radioButton_tanque2_clicked();
+     ui->radioButton_tanque2->setChecked(true);
 
      //Cria Threads e conecta signals com slots
      cThread = new commThread(this);
@@ -340,17 +363,25 @@ void supervisorio::setControlParams(bool kp, bool ki, bool kd)
     ui->doubleSpinBox_8->setEnabled(kd);
 }
 
+void supervisorio::setControlParamsSlave(bool kp, bool ki, bool kd)
+{
+    //ecravo
+    //kp
+    ui->comboBox_9->setEnabled(kp);
+    ui->doubleSpinBox_9->setEnabled(kp);
+    //ki
+    ui->comboBox_8->setEnabled(ki);
+    ui->doubleSpinBox_10->setEnabled(ki);
+    //kd
+    ui->comboBox_7->setEnabled(kd);
+    ui->doubleSpinBox_11->setEnabled(kd);
+}
+
 void supervisorio::setTickStep(void) {
     //Valores no eixo X por segundo, proporcao utilizada no exemplo 8/4=2s
     ui->customPlot->xAxis->setTickStep(plotRange/4);
     ui->customPlot2->xAxis->setTickStep(plotRange/4);
 
-}
-
-void supervisorio::setTaw(double taw)
-{
-    this->taw = taw;
-    //ui->doubleSpinBox_9->setValue(taw);
 }
 
 //==================================================================================================
@@ -376,7 +407,7 @@ void supervisorio::on_comboBox_currentIndexChanged(int index)
 void supervisorio::on_comboBox_3_currentIndexChanged(int index)
 {
     double aux = ui->doubleSpinBox_7->value();
-    ui->doubleSpinBox_7->setValue(kp/aux);
+    ui->doubleSpinBox_7->setValue(kp[0]/aux);
     index++;
 }
 
@@ -385,13 +416,31 @@ void supervisorio::on_comboBox_4_currentIndexChanged(int index)
     double aux = ui->doubleSpinBox_8->value();
 
     if (index == 0){
-        ui->doubleSpinBox_8->setValue(kp*aux);
+        ui->doubleSpinBox_8->setValue(kp[0]*aux);
     }
     else {
-        ui->doubleSpinBox_8->setValue(aux/kp);
+        ui->doubleSpinBox_8->setValue(aux/kp[0]);
     }
 }
 
+void supervisorio::on_comboBox_8_currentIndexChanged(int index)
+{
+    double aux = ui->doubleSpinBox_10->value();
+    ui->doubleSpinBox_10->setValue(kp[1]/aux);
+    index++;
+}
+
+void supervisorio::on_comboBox_7_currentIndexChanged(int index)
+{
+    double aux = ui->doubleSpinBox_11->value();
+
+    if (index == 0){
+        ui->doubleSpinBox_11->setValue(kp[1]*aux);
+    }
+    else {
+        ui->doubleSpinBox_11->setValue(aux/kp[1]);
+    }
+}
 // Channel
 
 void supervisorio::on_canal0_clicked()
@@ -590,34 +639,55 @@ void supervisorio::on_pushButton_8_clicked()
     duracaoMax = ui->doubleSpinBox_4->value();
     duracaoMin= ui->doubleSpinBox_5->value();
 
-    kp = ui->doubleSpinBox_6->value();
-    ki = ui->doubleSpinBox_7->value();
-    if(ui->comboBox_3->currentIndex()==1) ki=kp/ki;
-    kd = ui->doubleSpinBox_8->value();
-    if(ui->comboBox_4->currentIndex()==1) kd=kd/kp;
+    kp[0] = ui->doubleSpinBox_6->value();
+    ki[0] = ui->doubleSpinBox_7->value();
+    if(ui->comboBox_3->currentIndex()==1) ki[0]=kp[0]/ki[0];
+    kd[0] = ui->doubleSpinBox_8->value();
+    if(ui->comboBox_4->currentIndex()==1) kd[0]=kd[0]/kp[0];
+
+    kp[1] = ui->doubleSpinBox_9->value();
+    ki[1] = ui->doubleSpinBox_10->value();
+    if(ui->comboBox_8->currentIndex()==1) ki[1]=kp[1]/ki[1];
+    kd[1] = ui->doubleSpinBox_11->value();
+    if(ui->comboBox_7->currentIndex()==1) kd[1]=kd[1]/kp[1];
 
     //taw = ui->doubleSpinBox_9->value();
     //taw = 237.19*sqrt(kd/ki);
-    taw = 75/sqrt(0.005/0.05)*sqrt(kd/ki);
+    taw[0] = 75/sqrt(0.005/0.05)*sqrt(kd[0]/ki[0]);
+    taw[1] = 75/sqrt(0.005/0.05)*sqrt(kd[1]/ki[1]);
+
     //setTaw(taw);
     wave = nextWave;
-    control = nextControl;
+    control[0] = nextControl[0];
+    control[1] = nextControl[1];
     bool malha = ui->radioButton_9->isChecked();
 
     int windupIndex = ui->comboBox_windup->currentIndex();
-    windup = false;
-    conditionalIntegration = false;
+    int windupIndex2 = ui->comboBox_windup_2->currentIndex();
+    windup[0] = false;
+    conditionalIntegration[0] = false;
+    windup[1] = false;
+    conditionalIntegration[1] = false;
     if(windupIndex == 1) {
-        windup = true;
+        windup[0] = true;
     } else if (windupIndex == 2) {
-        conditionalIntegration = true;
+        conditionalIntegration[0] = true;
+    }
+    if(windupIndex2 == 1) {
+        windup[1] = true;
+    } else if (windupIndex2 == 2) {
+        conditionalIntegration[1] = true;
     }
 
     // Se tanque 1 selecionado escreve 1 caso contrario 2 (tanque 2)
 
     int tank = ui->radioButton_tanque1->isChecked()?1:2;
+    cascade = ui->checkBox_9->isChecked();
 
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, static_cast<int>(control), kp, ki, kd, windup, conditionalIntegration, taw, tank);
+    int castControl[2];
+    castControl[0] = static_cast<int>(control[0]);
+    castControl[1] = static_cast<int>(control[1]);
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d){
@@ -710,27 +780,56 @@ void supervisorio::on_comboBox_tipoControle_currentIndexChanged(int index)
 {
     if(index==0){//P
         setControlParams(true,false,false);
-        nextControl = P;
+        nextControl[0] = P;
     }
     else if(index==1){//PI
         setControlParams(true,true,false);
-        nextControl = PI;
+        nextControl[0] = PI;
     }
     else if(index==2){//PD
         setControlParams(true,false,true);
-        nextControl = PD;
+        nextControl[0] = PD;
     }
     else if(index==3){//PID
         setControlParams(true,true,true);
-        nextControl = PID;
+        nextControl[0] = PID;
     }
     else if(index==4){//PI-D
         setControlParams(true,true,true);
-        nextControl = PI_D;
+        nextControl[0] = PI_D;
     }
     else if(index==5){//Sem
         setControlParams(false,false,false);
-        nextControl = SEM;
+        nextControl[0] = SEM;
+    }
+}
+
+
+void supervisorio::on_comboBox_tipoControle_2_currentIndexChanged(int index)
+{
+    if(index==0){//P
+        setControlParamsSlave(true,false,false);
+        nextControl[1] = P;
+    }
+    else if(index==1){//PI
+        setControlParamsSlave(true,true,false);
+        nextControl[1] = PI;
+    }
+    else if(index==2){//PD
+        setControlParamsSlave(true,false,true);
+        nextControl[1] = PD;
+    }
+    else if(index==3){//PID
+        setControlParamsSlave(true,true,true);
+        nextControl[1] = PID;
+    }
+    else if(index==4){//PI-D
+        setControlParamsSlave(true,true,true);
+        nextControl[1] = PI_D;
+    }
+    else if(index==5){//Sem
+        setControlParamsSlave(false,false,false);
+        nextControl[1] = SEM;
     }
 }
 
@@ -761,16 +860,22 @@ void supervisorio::on_pushButton_9_clicked()
 
 void supervisorio::on_radioButton_tanque1_clicked()
 {
-    // habilita tipos de malha
-    ui->groupBox_4->setEnabled(true);
+    // habilita malha aberta
+    ui->radioButton_9->setEnabled(true);
+    // desabilita cascata
+    ui->checkBox_9->setEnabled(false);
+    on_checkBox_9_clicked(false);
 }
 
 void supervisorio::on_radioButton_tanque2_clicked()
 {
     // seleciona malha fechada
-    ui->radioButton_10->setEnabled(true);
-    // desabilita tipos de malha
-    ui->groupBox_4->setDisabled(true);
+    ui->radioButton_10->setChecked(true);
+    // desabilita malha aberta
+    ui->radioButton_9->setEnabled(false);
+    // habilita cascata
+    on_checkBox_9_clicked(true);
+    ui->groupBox_10->setEnabled(true);
 }
 
 void supervisorio::on_comboBox_tr_currentIndexChanged(int index)
@@ -800,5 +905,7 @@ void supervisorio::on_pushButton_zerar_clicked()
 
 void supervisorio::on_checkBox_9_clicked(bool checked)
 {
-    if (checked);
+    ui->groupBox_11->setEnabled(checked);
+    ui->checkBox_9->setEnabled(checked);
+    ui->checkBox_9->setChecked(checked);
 }

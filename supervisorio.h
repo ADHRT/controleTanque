@@ -29,7 +29,7 @@ public:
     Analist *analist;
 
 public slots:
-     void onPlotValues(double timeStamp, double sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double i, double d);
+     void onPlotValues(double timeStamp, double *sinalCalculado, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double *erro, double *i, double *d);
 
 private slots:
   void on_comboBox_currentIndexChanged(int index);
@@ -102,13 +102,19 @@ private slots:
 
   void on_checkBox_9_clicked(bool checked);
 
+  void on_comboBox_tipoControle_2_currentIndexChanged(int index);
+
+  void on_comboBox_8_currentIndexChanged(int index);
+
+  void on_comboBox_7_currentIndexChanged(int index);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
     QTimer dataTimer;
     bool plot1Enable[4], plot2Enable[4];
     double lastTimeStamp;
-    double sinalCalculado;
+    double sinalCalculado[2];
     double timeToNextRandomNumber;
 
     double frequencia;
@@ -116,14 +122,15 @@ private:
     double offset;
     double duracaoMax;
     double duracaoMin;
-    double kp, ki, kd, taw;
-    bool windup, conditionalIntegration;
+    double kp[2], ki[2], kd[2], taw[2];
+    bool windup[2], conditionalIntegration[2];
+    bool cascade;
 
     int nextWave;
     int wave;
 
-    Control nextControl;
-    Control control;
+    Control nextControl[2];
+    Control control[2];
 
     int plotRange;
 
@@ -131,12 +138,11 @@ private:
 
     void setLayout(bool frequencia, bool amplitude, bool offset, bool duracao);
     void setControlParams(bool kp, bool ki, bool kd);
+    void setControlParamsSlave(bool kp, bool ki, bool kd);
 
     void setTickStep();
-    void setTaw(double taw);
 
 //signals:
-
 };
 
 #endif // SUPERVISORIO_H
