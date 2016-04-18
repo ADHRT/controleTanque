@@ -909,3 +909,8 @@ void supervisorio::on_checkBox_9_clicked(bool checked)
     ui->checkBox_9->setEnabled(checked);
     ui->checkBox_9->setChecked(checked);
 }
+
+void supervisorio::on_demo_clicked()
+{
+
+}

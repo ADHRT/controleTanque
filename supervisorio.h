@@ -108,6 +108,8 @@ private slots:
 
   void on_comboBox_7_currentIndexChanged(int index);
 
+  void on_demo_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;

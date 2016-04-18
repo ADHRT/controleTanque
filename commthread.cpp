@@ -15,17 +15,20 @@ commThread::commThread(QObject *parent):
     q = new Quanser("10.13.99.69", 20081);
     period = 0.1;
     tank = 1; // tanque2
-    for (int i = 0; i < 2; i++){
-        diferencaSaida[i] = 0;
-        lastI[i] = 0;
-        lastD[i] = 0;
-    }
+
+    contMestre.diferencaSaida = 0;
+    contMestre.lastI = 0;
+    contMestre.lastD = 0;
+    contEscravo.diferencaSaida = 0;
+    contEscravo.lastI = 0;
+    contEscravo.lastD = 0;
+
 
 }
 
 void commThread::run(){
 
-    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp, setPoint = 0, sinalSaturado[2], erro = 0, i[2], d[2], p[2],lastSinalCalculado=0;
+    double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
 
     //Inicia a contagem de tempo
     lastLoopTimeStamp=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
@@ -57,27 +60,27 @@ void commThread::run(){
             {
             case 0://degrau:
                 //qDebug() << "Degrau";
-                sinalCalculado[0] = offset;
+                sinalDaOndaGerada = offset;
                 break;
             case 1://senoidal:
                 //qDebug() << "Senoidal";
-                sinalCalculado[0] = qSin((waveTime)*3.14159265359*frequencia)*amplitude+offset;
+                sinalDaOndaGerada = qSin((waveTime)*3.14159265359*frequencia)*amplitude+offset;
                 break;
             case 2://quadrada:
                 //qDebug() << "Quadrada";
-                sinalCalculado[0] = qSin(waveTime*3.14159265359*frequencia)*amplitude;
-                if(sinalCalculado[0]>0)sinalCalculado[0] = amplitude+offset;
-                else sinalCalculado[0] = -amplitude+offset;
+                sinalDaOndaGerada = qSin(waveTime*3.14159265359*frequencia)*amplitude;
+                if(sinalDaOndaGerada>0)sinalDaOndaGerada = amplitude+offset;
+                else sinalDaOndaGerada = -amplitude+offset;
                 break;
             case 3://serra:
                 //qDebug() << "Serra";
-                sinalCalculado[0] = (fmod((waveTime*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
+                sinalDaOndaGerada = (fmod((waveTime*3.14159265359*frequencia), (2*3.14159265359))/(2*3.14159265359))*amplitude*2-amplitude+offset;
                 break;
             case 4://aleatorio:
-                sinalCalculado[0] = lastSinalCalculado;
+                sinalDaOndaGerada = lastSinalCalculado;
                 if((timeStamp-lastTimeStamp)>timeToNextRandomNumber){
-                    sinalCalculado[0] = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
-                    lastSinalCalculado=sinalCalculado[0];
+                    sinalDaOndaGerada = (double)rand()/RAND_MAX * amplitude * 2 - amplitude + offset;
+                    lastSinalCalculado=sinalDaOndaGerada;
                     //qDebug() << "Aleatorio";
                     lastTimeStamp = timeStamp;
                     timeToNextRandomNumber = ((double)rand()/RAND_MAX) * (duracaoMax-duracaoMin) + duracaoMin;
@@ -88,100 +91,107 @@ void commThread::run(){
                 qDebug() << "ERRO: Nenhuma onda selecionada!";
             }
 
-
+            //qDebug() <<sinalDaOndaGerada;
             //Calculates other points
-            sinalSaturado[0] = commThread::lockSignal(sinalCalculado[0], nivelTanque1, nivelTanque2);
+            //sinalSaturadoDaOndaGerada = commThread::lockSignal(sinalDaOndaGerada, nivelTanque1, nivelTanque2);
 
 
 
             if(malha == false){//malha fechada
                 //O setPoint e o sinalCalculado pela logica Malha Aberta
-                setPoint = sinalCalculado;
-                erro = setPoint - nivelTanque;
+                contMestre.setPoint = sinalDaOndaGerada;
+                contMestre.erro = contMestre.setPoint - nivelTanque;
 
                 //Se houver mudanca de controlador zera o lastI e lastD
-                if(control != lastControl) {
-                    lastI = 0;
-                    lastD = 0;
-                    lastControl = control;
+                if(control[0] != lastControl[0]) {
+                    contMestre.lastI = 0;
+                    contMestre.lastD = 0;
+                    lastControl[0] = control[0];
                 }
 
+                //Se houver mudanca de controlador zera o lastI e lastD
+                if(control[1] != lastControl[1]) {
+                    contEscravo.lastI = 0;
+                    contEscravo.lastD = 0;
+                    lastControl[1] = control[1];
+                }
+
+
                 //Calculo do p
-                p = kp*erro;
+                contMestre.p = contMestre.kp*contMestre.erro;
 
                 //Calculo do i
-                i = lastI + (ki*period*erro);
+                contMestre.i = contMestre.lastI + (contMestre.ki*period*contMestre.erro);
 
                 //i = lastI + (ki*period*erro) + (diferencaSaida)/sqrt(kd/ki));
                 //i = lastI + ((ki+(diferencaSaida)/sqrt(kd/ki))*period*erro);
                 //i = lastI + ((ki*erro) + (diferencaSaida)/sqrt(kd/ki))*period;
 
                 //Calculo do d
-                d = kd*(erro - lastD)/period;
+                contMestre.d = contMestre.kd*(contMestre.erro - contMestre.lastD)/period;
 
 
                 //douturado do Daniel
                 //if(windup && abs(erro)<2) {
 
-                switch (control) {
+                switch (control[0]) {
                 case SEM:
-                    p = 0, i = 0, d = 0;
+                    contMestre.p = 0, contMestre.i = 0, contMestre.d = 0;
                     break;
                 case P:
-                    i = 0, d = 0;
+                    contMestre.i = 0, contMestre.d = 0;
                     break;
                 case PI:
-                    d = 0;
+                    contMestre.d = 0;
                     break;
                 case PD:
-                    i = 0;
+                    contMestre.i = 0;
                     break;
                 case PID:
                     break;
                 case PI_D:
-                    d = kd*(nivelTanque - lastD)/period;
+                    contMestre.d = contMestre.kd*(nivelTanque - contMestre.lastD)/period;
                     break;
                 default:
                     qDebug() << "Nenhum sinal de controle selecionado";
                 }
 
-                sinalCalculado = (p + i + d);
-                sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
-                diferencaSaida = sinalSaturado - sinalCalculado;
+
+                contMestre.sinalCalculado = (contMestre.p + contMestre.i + contMestre.d);
+                contMestre.sinalSaturado = commThread::lockSignal(contMestre.sinalCalculado, nivelTanque1, nivelTanque2);
+                contMestre.diferencaSaida = contMestre.sinalSaturado - contMestre.sinalCalculado;
 
                 // WINDUP FIX
                 //qDebug() << diferencaSaida << " | " << ki*erro;
-                if(windup) {
+                if(contMestre.windup) {
                     // Anti-windup
-                    i += (kp/taw)*period*diferencaSaida;
-                } else if (conditionalIntegration && sinalSaturado != sinalCalculado) {
+                    contMestre.i += (contMestre.kp/contMestre.taw)*period*contMestre.diferencaSaida;
+                } else if (contMestre.conditionalIntegration && contMestre.sinalSaturado != contMestre.sinalCalculado) {
                     // Integral Condicional
-                    i = lastI;
+                    contMestre.i = contMestre.lastI;
                 }
 
-                if (windup || conditionalIntegration) {
-                    sinalCalculado = (p + i + d);
-                    sinalSaturado = commThread::lockSignal(sinalCalculado, nivelTanque1, nivelTanque2);
-                    diferencaSaida = sinalSaturado - sinalCalculado;
+                if (contMestre.windup || contMestre.conditionalIntegration) {
+                    contMestre.sinalCalculado = (contMestre.p + contMestre.i + contMestre.d);
+                    contMestre.sinalSaturado = commThread::lockSignal(contMestre.sinalCalculado, nivelTanque1, nivelTanque2);
+                    contMestre.diferencaSaida = contMestre.sinalSaturado - contMestre.sinalCalculado;
                 }
 
                 //qDebug() << "(p,i,d) = (" << p << "," << i << "," << d << ")" << " taw:" << taw << " dif: " << diferencaSaida;
-                lastD = d;
-                lastI = i;
+                contMestre.lastD = contMestre.d;
+                contMestre.lastI = contMestre.i;
 
-                diferencaSaida = sinalSaturado - sinalCalculado;
+                contMestre.diferencaSaida = contMestre.sinalSaturado - contMestre.sinalCalculado;
             }
 
             // Escreve no canal selecionado
             if(!simulationMode) {
 //                qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
-                q->writeDA(channel, sinalSaturado);
+                q->writeDA(channel, contMestre.sinalSaturado);
             } else { //Simulacao
 
-
-
                 //Nivel Tanque 1
-                nivelTanque1 = nivelTanque1+(sinalSaturado)/10-0.01*nivelTanque1;
+                nivelTanque1 = nivelTanque1+(contMestre.sinalSaturado)/10-0.01*nivelTanque1;
                 if(nivelTanque1>30){nivelTanque1=30;}
                 else if(nivelTanque1<0){nivelTanque1=0;}
 
@@ -198,7 +208,8 @@ void commThread::run(){
            }
 
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, sinalCalculado[0], sinalSaturado, nivelTanque1, nivelTanque2, setPoint, erro, i, d);
+            emit plotValues(timeStamp, contMestre.sinalCalculado, contMestre.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contMestre.d);
+
         }
     }
     if(!simulationMode) {
@@ -252,13 +263,20 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->channel = channel;
     for (int i = 0; i < 2; i++){
         this->control[i] = static_cast<Control>(control[i]);
-        this->kp[i] = kp[i];
-        this->ki[i] = ki[i];
-        this->kd[i] = kd[i];
-        this->taw[i] = taw[i];
-        this->windup[i] = windup[i];
-        this->conditionalIntegration[i] = conditionalIntegration[i];
     }
+    this->contMestre.kp = kp[0];
+    this->contMestre.ki = ki[0];
+    this->contMestre.kd = kd[0];
+    this->contMestre.taw = taw[0];
+    this->contMestre.windup = windup[0];
+    this->contMestre.conditionalIntegration = conditionalIntegration[0];
+
+    this->contEscravo.kp = kp[1];
+    this->contEscravo.ki = ki[1];
+    this->contEscravo.kd = kd[1];
+    this->contEscravo.taw = taw[1];
+    this->contEscravo.windup = windup[1];
+    this->contEscravo.conditionalIntegration = conditionalIntegration[1];
 
     this->tank = tank;
     this->cascade = cascade;
@@ -274,15 +292,22 @@ void commThread::setNullParameters()
     offset = 0;
     duracaoMax = 0;
     duracaoMin = 0;
-    for (int i = 0; i < 2; i++){
-        kp[i] = 2;
-        ki[i] = 0.05;
-        kd[i] = 0.005;
-        lastI[i] = 0;
-        lastD[i] = 0;
-        diferencaSaida[i] = 0;
-        sinalCalculado[i] = 0;
-    }
+
+    contMestre.kp = 2;
+    contMestre.ki = 0.05;
+    contMestre.kd = 0.005;
+    contMestre.lastI = 0;
+    contMestre.lastD = 0;
+    contMestre.diferencaSaida = 0;
+    contMestre.sinalCalculado = 0;
+
+    contEscravo.kp = 2;
+    contEscravo.ki = 0.05;
+    contEscravo.kd = 0.005;
+    contEscravo.lastI = 0;
+    contEscravo.lastD = 0;
+    contEscravo.diferencaSaida = 0;
+    contEscravo.sinalCalculado = 0;
 
     qDebug() << "setNullParametres()\n";
 }
