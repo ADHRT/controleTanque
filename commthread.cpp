@@ -98,7 +98,7 @@ void commThread::run(){
 
 
             if(malha == false){//malha fechada
-                //O setPoint e o sinalCalculado pela logica Malha Aberta
+
                 contMestre.setPoint = sinalDaOndaGerada;
                 contMestre.erro = contMestre.setPoint - nivelTanque;
 
@@ -116,72 +116,7 @@ void commThread::run(){
                     lastControl[1] = control[1];
                 }
 
-
-                //Calculo do p
-                contMestre.p = contMestre.kp*contMestre.erro;
-
-                //Calculo do i
-                contMestre.i = contMestre.lastI + (contMestre.ki*period*contMestre.erro);
-
-                //i = lastI + (ki*period*erro) + (diferencaSaida)/sqrt(kd/ki));
-                //i = lastI + ((ki+(diferencaSaida)/sqrt(kd/ki))*period*erro);
-                //i = lastI + ((ki*erro) + (diferencaSaida)/sqrt(kd/ki))*period;
-
-                //Calculo do d
-                contMestre.d = contMestre.kd*(contMestre.erro - contMestre.lastD)/period;
-
-
-                //douturado do Daniel
-                //if(windup && abs(erro)<2) {
-
-                switch (control[0]) {
-                case SEM:
-                    contMestre.p = 0, contMestre.i = 0, contMestre.d = 0;
-                    break;
-                case P:
-                    contMestre.i = 0, contMestre.d = 0;
-                    break;
-                case PI:
-                    contMestre.d = 0;
-                    break;
-                case PD:
-                    contMestre.i = 0;
-                    break;
-                case PID:
-                    break;
-                case PI_D:
-                    contMestre.d = contMestre.kd*(nivelTanque - contMestre.lastD)/period;
-                    break;
-                default:
-                    qDebug() << "Nenhum sinal de controle selecionado";
-                }
-
-
-                contMestre.sinalCalculado = (contMestre.p + contMestre.i + contMestre.d);
-                contMestre.sinalSaturado = commThread::lockSignal(contMestre.sinalCalculado, nivelTanque1, nivelTanque2);
-                contMestre.diferencaSaida = contMestre.sinalSaturado - contMestre.sinalCalculado;
-
-                // WINDUP FIX
-                //qDebug() << diferencaSaida << " | " << ki*erro;
-                if(contMestre.windup) {
-                    // Anti-windup
-                    contMestre.i += (contMestre.kp/contMestre.taw)*period*contMestre.diferencaSaida;
-                } else if (contMestre.conditionalIntegration && contMestre.sinalSaturado != contMestre.sinalCalculado) {
-                    // Integral Condicional
-                    contMestre.i = contMestre.lastI;
-                }
-
-                if (contMestre.windup || contMestre.conditionalIntegration) {
-                    contMestre.sinalCalculado = (contMestre.p + contMestre.i + contMestre.d);
-                    contMestre.sinalSaturado = commThread::lockSignal(contMestre.sinalCalculado, nivelTanque1, nivelTanque2);
-                    contMestre.diferencaSaida = contMestre.sinalSaturado - contMestre.sinalCalculado;
-                }
-
-                //qDebug() << "(p,i,d) = (" << p << "," << i << "," << d << ")" << " taw:" << taw << " dif: " << diferencaSaida;
-                contMestre.lastD = contMestre.d;
-                contMestre.lastI = contMestre.i;
-
-                contMestre.diferencaSaida = contMestre.sinalSaturado - contMestre.sinalCalculado;
+                calculoDeControle(&contMestre, nivelTanque,nivelTanque1,nivelTanque2);
             }
 
             // Escreve no canal selecionado
@@ -199,12 +134,6 @@ void commThread::run(){
                 nivelTanque2 = nivelTanque2+(nivelTanque1-nivelTanque2)/50-0.1;
                 if(nivelTanque2>30){nivelTanque2=30;}
                 else if(nivelTanque2<0){nivelTanque2=0;}
-
-                //nivelTanque2 = qCos(timeStamp)*5+5;
-
-               //if (nivelTanque1 != setPoint){
-                 //  nivelTanque1 += setPoint/100.00*(setPoint - nivelTanque1)/abs(setPoint - nivelTanque1);
-               //}
            }
 
             // Envia valores para o supervisorio
@@ -329,6 +258,69 @@ void commThread::terminate(void)
     QThread::msleep(100);
     super::terminate();
     //while(!super::isFinished());
+}
+
+void commThread::calculoDeControle(Controlador *c, double nivelTanque, double nivelTanque1, double nivelTanque2)
+{
+    //Calculo do p
+    c->p = c->kp*c->erro;
+
+    //Calculo do i
+    c->i = c->lastI + (c->ki*period*c->erro);
+
+    //Calculo do d
+    c->d = c->kd*(c->erro - c->lastD)/period;
+
+
+    switch (control[0]) {
+    case SEM:
+        c->p = 0, c->i = 0, c->d = 0;
+        break;
+    case P:
+        c->i = 0, c->d = 0;
+        break;
+    case PI:
+        c->d = 0;
+        break;
+    case PD:
+        c->i = 0;
+        break;
+    case PID:
+        break;
+    case PI_D:
+        c->d = c->kd*(nivelTanque - c->lastD)/period;
+        break;
+    default:
+        qDebug() << "Nenhum sinal de controle selecionado";
+    }
+
+
+    c->sinalCalculado = (c->p + c->i + c->d);
+    c->sinalSaturado = commThread::lockSignal(c->sinalCalculado, nivelTanque1, nivelTanque2);
+    c->diferencaSaida = c->sinalSaturado - c->sinalCalculado;
+
+    // WINDUP FIX
+    if(c->windup) {
+        // Anti-windup
+        c->i += (c->kp/c->taw)*period*c->diferencaSaida;
+    } else if (c->conditionalIntegration && c->sinalSaturado != c->sinalCalculado) {
+        // Integral Condicional
+        c->i = c->lastI;
+    }
+
+    if (c->windup || c->conditionalIntegration) {
+        c->sinalCalculado = (c->p + c->i + c->d);
+        c->sinalSaturado = commThread::lockSignal(c->sinalCalculado, nivelTanque1, nivelTanque2);
+        c->diferencaSaida = c->sinalSaturado - c->sinalCalculado;
+    }
+
+    //qDebug() << "(p,i,d) = (" << p << "," << i << "," << d << ")" << " taw:" << taw << " dif: " << diferencaSaida;
+    c->lastD = c->d;
+    c->lastI = c->i;
+
+    c->diferencaSaida = c->sinalSaturado - c->sinalCalculado;
+
+
 }
 
 int commThread::start(void)

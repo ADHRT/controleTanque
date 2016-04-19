@@ -24,6 +24,7 @@ public:
     void setSimulationMode(bool on);
     void disconnect(void);
     void terminate(void);
+    void calculoDeControle(Controlador*, double,double,double);
     int start();
 
 private:
