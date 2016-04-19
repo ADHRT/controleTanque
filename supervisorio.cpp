@@ -546,7 +546,7 @@ void supervisorio::on_pushButton_2_clicked()
         plot1Enable[0]=false;
     }
     else{
-        ui->pushButton_2->setIcon(QIcon(QString::fromUtf8(":/img/Colors/red.png")));
+        ui->pushButton_2->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue.png")));
         plot1Enable[0]=true;
     }
 }
@@ -557,7 +557,7 @@ void supervisorio::on_pushButton_3_clicked()
         plot1Enable[1]=false;
     }
     else{
-        ui->pushButton_3->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue.png")));
+        ui->pushButton_3->setIcon(QIcon(QString::fromUtf8(":/img/Colors/red.png")));
         plot1Enable[1]=true;
     }
 }
@@ -568,7 +568,7 @@ void supervisorio::on_pushButton_4_clicked()
         plot2Enable[0]=false;
     }
     else{
-        ui->pushButton_4->setIcon(QIcon(QString::fromUtf8(":/img/Colors/red.png")));
+        ui->pushButton_4->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue.png")));
         plot2Enable[0]=true;
     }
 }
@@ -579,7 +579,7 @@ void supervisorio::on_pushButton_5_clicked()
         plot2Enable[1]=false;
     }
     else{
-        ui->pushButton_5->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue.png")));
+        ui->pushButton_5->setIcon(QIcon(QString::fromUtf8(":/img/Colors/red.png")));
         plot2Enable[1]=true;
     }
 }

@@ -280,7 +280,7 @@
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
-      <normaloff>:/img/Colors/red.png</normaloff>:/img/Colors/red.png</iconset>
+      <normaloff>:/img/Colors/blue.png</normaloff>:/img/Colors/blue.png</iconset>
     </property>
     <property name="shortcut">
      <string/>
@@ -305,7 +305,7 @@
     </property>
     <property name="icon">
      <iconset resource="images.qrc">
-      <normaloff>:/img/Colors/blue.png</normaloff>:/img/Colors/blue.png</iconset>
+      <normaloff>:/img/Colors/red.png</normaloff>:/img/Colors/red.png</iconset>
     </property>
     <property name="shortcut">
      <string/>
