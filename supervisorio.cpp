@@ -598,8 +598,6 @@ void supervisorio::on_radioButton_10_clicked()
 
 
 
-
-
 void supervisorio::on_comboBox_6_currentIndexChanged(int index)
 {
     if(index==0){//Degrau
@@ -862,9 +860,10 @@ void supervisorio::on_radioButton_tanque1_clicked()
 {
     // habilita malha aberta
     ui->radioButton_9->setEnabled(true);
+
     // desabilita cascata
     ui->checkBox_9->setEnabled(false);
-    on_checkBox_9_clicked(false);
+//    on_checkBox_9_clicked(false);
 }
 
 void supervisorio::on_radioButton_tanque2_clicked()
@@ -874,7 +873,9 @@ void supervisorio::on_radioButton_tanque2_clicked()
     // desabilita malha aberta
     ui->radioButton_9->setEnabled(false);
     // habilita cascata
-    on_checkBox_9_clicked(true);
+    on_radioButton_10_clicked();
+    ui->checkBox_9->setEnabled(true);
+//    on_checkBox_9_clicked(true);
     ui->groupBox_10->setEnabled(true);
 }
 
@@ -906,7 +907,7 @@ void supervisorio::on_pushButton_zerar_clicked()
 void supervisorio::on_checkBox_9_clicked(bool checked)
 {
     ui->groupBox_11->setEnabled(checked);
-    ui->checkBox_9->setEnabled(checked);
+//    ui->checkBox_9->setEnabled(checked);
     ui->checkBox_9->setChecked(checked);
 }
 
