@@ -99,9 +99,6 @@ void commThread::run(){
 
             if(malha == false){//malha fechada
 
-                contMestre.setPoint = sinalDaOndaGerada;
-                contMestre.erro = contMestre.setPoint - nivelTanque;
-
                 //Se houver mudanca de controlador zera o lastI e lastD
                 if(control[0] != lastControl[0]) {
                     contMestre.lastI = 0;
@@ -116,17 +113,25 @@ void commThread::run(){
                     lastControl[1] = control[1];
                 }
 
+                contMestre.setPoint = sinalDaOndaGerada;
+                contMestre.erro = contMestre.setPoint - nivelTanque;
+
                 calculoDeControle(&contMestre, nivelTanque,nivelTanque1,nivelTanque2);
+
+                contEscravo.setPoint = contMestre.sinalCalculado;
+                contEscravo.erro = contEscravo.setPoint - nivelTanque;
+
+                calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
             }
 
             // Escreve no canal selecionado
             if(!simulationMode) {
 //                qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
-                q->writeDA(channel, contMestre.sinalSaturado);
+                q->writeDA(channel, contEscravo.sinalSaturado);
             } else { //Simulacao
 
                 //Nivel Tanque 1
-                nivelTanque1 = nivelTanque1+(contMestre.sinalSaturado)/10-0.01*nivelTanque1;
+                nivelTanque1 = nivelTanque1+(contEscravo.sinalSaturado)/10-0.01*nivelTanque1;
                 if(nivelTanque1>30){nivelTanque1=30;}
                 else if(nivelTanque1<0){nivelTanque1=0;}
 
