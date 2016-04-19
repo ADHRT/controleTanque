@@ -142,8 +142,7 @@ void commThread::run(){
            }
 
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, contMestre.sinalCalculado, contMestre.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contMestre.d);
-
+            emit plotValues(timeStamp, contMestre.sinalCalculado, contEscravo.sinalCalculado, contEscravo.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contEscravo.i, contMestre.d, contEscravo.d);
         }
     }
     if(!simulationMode) {

@@ -52,7 +52,7 @@ private:
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
 signals:
-    void plotValues(double,double,double,double,double,double,double,double,double);
+    void plotValues(double, double, double, double, double, double, double, double, double, double, double, double);
 
 
 
