@@ -13,5 +13,7 @@
         <file>Colors/purple.png</file>
         <file>Colors/red.png</file>
         <file>Colors/yellow.png</file>
+        <file>Colors/blue2.png</file>
+        <file>Colors/orange2.png</file>
     </qresource>
 </RCC>

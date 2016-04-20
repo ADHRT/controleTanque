@@ -191,6 +191,7 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   customPlot->graph(13)->setPen(QPen(qRgb(127,64,0)));
   customPlot->graph(13)->setLineStyle(QCPGraph::lsNone);
   customPlot->graph(13)->setScatterStyle(QCPScatterStyle::ssDisc);
+  ui->
   //FIM DA PARTE NOVA NOVA
 
   customPlot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
