@@ -611,6 +611,58 @@ void supervisorio::on_pushButton_7_clicked()
     }
 }
 
+void supervisorio::on_pushButton_10_clicked()
+{
+    if(plot1Enable[2]==true){
+        ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot1Enable[2]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green.png")));
+        plot1Enable[2]=true;
+    }
+}
+
+
+void supervisorio::on_pushButton_9_clicked()
+{
+    if(plot1Enable[3]==true){
+        ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot1Enable[3]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+        plot1Enable[3]=true;
+    }
+}
+
+void supervisorio::on_pushButton_11_clicked(bool checked)
+{
+    if(checked)
+        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    else if (ui->radioButton_10->isChecked())//Malha está fechada
+        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
+    plot1Enable[4] = !checked;
+}
+
+void supervisorio::on_pushButton_12_clicked(bool checked)
+{
+    if(checked)
+        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    else if (ui->radioButton_10->isChecked())//Malha está fechada
+        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
+    plot1Enable[5] = !checked;
+}
+
+void supervisorio::on_pushButton_13_clicked(bool checked)
+{
+    if(checked)
+        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    else if (ui->radioButton_10->isChecked())//Malha está fechada
+        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
+    plot1Enable[6] = !checked;
+}
+
 //Malha aberta
 void supervisorio::on_radioButton_9_clicked()
 {
@@ -618,6 +670,23 @@ void supervisorio::on_radioButton_9_clicked()
     plot2Enable[2]=false;
     ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
     plot2Enable[3]=false;
+
+    ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    plot2Enable[2]=false;
+    ui->pushButton_9->setChecked(true);
+    ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    plot2Enable[3]=false;
+    ui->pushButton_10->setChecked(true);
+    ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    plot2Enable[4]=false;
+    ui->pushButton_11->setChecked(true);
+    ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    plot2Enable[5]=false;
+    ui->pushButton_12->setChecked(true);
+    ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    plot2Enable[6]=false;
+    ui->pushButton_13->setChecked(true);
+
     ui->label_2->setText("Amplitude (V)");
     ui->label_3->setText("Offset (V)");
 
@@ -640,6 +709,23 @@ void supervisorio::on_radioButton_10_clicked()
     plot2Enable[2]=true;
     ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
     plot2Enable[3]=true;
+
+    ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+    plot1Enable[2]=true;
+    ui->pushButton_9->setChecked(false);
+    ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green.png")));
+    plot1Enable[3]=true;
+    ui->pushButton_10->setChecked(false);
+    ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
+    plot1Enable[4]=true;
+    ui->pushButton_11->setChecked(false);
+    ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
+    plot1Enable[5]=true;
+    ui->pushButton_12->setChecked(false);
+    ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
+    plot1Enable[6]=true;
+    ui->pushButton_13->setChecked(false);
+
     ui->label_2->setText("Amplitude (cm)");
     ui->label_3->setText("Offset (cm)");
 
@@ -890,57 +976,6 @@ void supervisorio::on_comboBox_tipoControle_2_currentIndexChanged(int index)
 }
 
 
-void supervisorio::on_pushButton_10_clicked()
-{
-    if(plot1Enable[2]==true){
-        ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-        plot1Enable[2]=false;
-    }
-    else if (ui->radioButton_10->isChecked()){//Malha está fechada
-        ui->pushButton_10->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green.png")));
-        plot1Enable[2]=true;
-    }
-}
-
-
-void supervisorio::on_pushButton_9_clicked()
-{
-    if(plot1Enable[3]==true){
-        ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-        plot1Enable[3]=false;
-    }
-    else if (ui->radioButton_10->isChecked()){//Malha está fechada
-        ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
-        plot1Enable[3]=true;
-    }
-}
-
-void supervisorio::on_pushButton_11_clicked(bool checked)
-{
-    if(checked)
-        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-    else
-        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
-    plot1Enable[4] = !checked;
-}
-
-void supervisorio::on_pushButton_12_clicked(bool checked)
-{
-    if(checked)
-        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-    else
-        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
-    plot1Enable[5] = !checked;
-}
-
-void supervisorio::on_pushButton_13_clicked(bool checked)
-{
-    if(checked)
-        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-    else
-        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
-    plot1Enable[6] = !checked;
-}
 
 void supervisorio::on_radioButton_tanque1_clicked()
 {
