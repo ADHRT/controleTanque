@@ -110,11 +110,17 @@ private slots:
 
   void on_demo_clicked();
 
+  void on_pushButton_11_clicked(bool checked);
+
+  void on_pushButton_12_clicked(bool checked);
+
+  void on_pushButton_13_clicked(bool checked);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
     QTimer dataTimer;
-    bool plot1Enable[4], plot2Enable[4];
+    bool plot1Enable[7], plot2Enable[4];
     double lastTimeStamp;
     double sinalCalculado[2];
     double timeToNextRandomNumber;

@@ -138,6 +138,11 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   plot1Enable[5]=true;//Green2 Enabled
   plot1Enable[6]=true;//Orange2 Enabled
 
+  ui->pushButton_11->setCheckable(true);//Red2 Enabled
+  ui->pushButton_12->setCheckable(true);//Green2 Enabled
+  ui->pushButton_13->setCheckable(true);//Orange2 Enabled
+
+
   customPlot->addGraph(); // blue line
   customPlot->graph(0)->setPen(QPen(Qt::blue));
   customPlot->graph(0)->setAntialiasedFill(false);
@@ -191,7 +196,6 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   customPlot->graph(13)->setPen(QPen(qRgb(127,64,0)));
   customPlot->graph(13)->setLineStyle(QCPGraph::lsNone);
   customPlot->graph(13)->setScatterStyle(QCPScatterStyle::ssDisc);
-  ui->
   //FIM DA PARTE NOVA NOVA
 
   customPlot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
@@ -275,7 +279,7 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
         ui->customPlot->graph(2)->clearData();
         ui->customPlot->graph(2)->addData(timeStamp, redPlot);
         ui->customPlot->graph(0)->removeDataBefore(timeStamp-plotRange);
-        ui->customPlot->graph(0)->rescaleValueAxis();
+        ui->customPlot->graph(0)->rescaleValueAxis(true);
     }
 
     //Blue
@@ -309,8 +313,8 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
     //Blue2
     if(plot1Enable[4]) {
         ui->customPlot->graph(8)->addData(timeStamp, blue2Plot);
-        ui->customPlot->graph(10)->clearData();
-        ui->customPlot->graph(10)->addData(timeStamp, blue2Plot);
+        ui->customPlot->graph(11)->clearData();
+        ui->customPlot->graph(11)->addData(timeStamp, blue2Plot);
         ui->customPlot->graph(8)->removeDataBefore(timeStamp-plotRange);
         ui->customPlot->graph(8)->rescaleValueAxis(true);
     }
@@ -318,19 +322,19 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
     //Green2
     if(plot1Enable[5]) {
         ui->customPlot->graph(9)->addData(timeStamp, green2Plot);
-        ui->customPlot->graph(11)->clearData();
-        ui->customPlot->graph(11)->addData(timeStamp, green2Plot);
+        ui->customPlot->graph(12)->clearData();
+        ui->customPlot->graph(12)->addData(timeStamp, green2Plot);
         ui->customPlot->graph(9)->removeDataBefore(timeStamp-plotRange);
         ui->customPlot->graph(9)->rescaleValueAxis(true);
     }
 
     //Orange2
     if(plot1Enable[6]) {
-        ui->customPlot->graph(5)->addData(timeStamp, orange2Plot);
-        ui->customPlot->graph(7)->clearData();
-        ui->customPlot->graph(7)->addData(timeStamp, orange2Plot);
-        ui->customPlot->graph(5)->removeDataBefore(timeStamp-plotRange);
-        ui->customPlot->graph(5)->rescaleValueAxis(true);
+        ui->customPlot->graph(10)->addData(timeStamp, orange2Plot);
+        ui->customPlot->graph(13)->clearData();
+        ui->customPlot->graph(13)->addData(timeStamp, orange2Plot);
+        ui->customPlot->graph(10)->removeDataBefore(timeStamp-plotRange);
+        ui->customPlot->graph(10)->rescaleValueAxis(true);
     }
 
     // make key axis range scroll with the data (at a constant range size of 8):
@@ -898,6 +902,7 @@ void supervisorio::on_pushButton_10_clicked()
     }
 }
 
+
 void supervisorio::on_pushButton_9_clicked()
 {
     if(plot1Enable[3]==true){
@@ -908,6 +913,33 @@ void supervisorio::on_pushButton_9_clicked()
         ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
         plot1Enable[3]=true;
     }
+}
+
+void supervisorio::on_pushButton_11_clicked(bool checked)
+{
+    if(checked)
+        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    else
+        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
+    plot1Enable[4] = !checked;
+}
+
+void supervisorio::on_pushButton_12_clicked(bool checked)
+{
+    if(checked)
+        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    else
+        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
+    plot1Enable[5] = !checked;
+}
+
+void supervisorio::on_pushButton_13_clicked(bool checked)
+{
+    if(checked)
+        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    else
+        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
+    plot1Enable[6] = !checked;
 }
 
 void supervisorio::on_radioButton_tanque1_clicked()
@@ -969,3 +1001,4 @@ void supervisorio::on_demo_clicked()
 {
 
 }
+
