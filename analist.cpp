@@ -80,7 +80,7 @@ void Analist::calcMpTp(double nivel, double setPoint, double timeStamp)
         mpInitialTime = timeStamp;
     }
     if((direction && nivel-setPoint > mp) || (!direction && nivel-setPoint < mp)){
-        mp = nivel-setPoint;
+        mp = abs(nivel-setPoint);
         mpPerc = mp/(setPoint - initialLevel)*100;
         //qDebug() << mp;
         //tp = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0 - mpInitialTime;

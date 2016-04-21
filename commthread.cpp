@@ -113,15 +113,22 @@ void commThread::run(){
                     lastControl[1] = control[1];
                 }
 
+
+
                 contMestre.setPoint = sinalDaOndaGerada;
                 contMestre.erro = contMestre.setPoint - nivelTanque;
 
-                calculoDeControle(&contMestre, nivelTanque,nivelTanque1,nivelTanque2);
+                calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
 
-                contEscravo.setPoint = contMestre.sinalCalculado;
-                contEscravo.erro = contEscravo.setPoint - nivelTanque;
+                if(cascade){
+                    contEscravo.setPoint = contMestre.sinalCalculado;
+                    contEscravo.erro = contEscravo.setPoint - nivelTanque1;
 
-                calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
+                    calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
+                }
+                else{
+                    contEscravo.sinalSaturado=contMestre.sinalSaturado;
+                }
             }
 
             // Escreve no canal selecionado
@@ -229,6 +236,9 @@ void commThread::setNullParameters()
     contMestre.kp = 2;
     contMestre.ki = 0.05;
     contMestre.kd = 0.005;
+    contMestre.p = 0;
+    contMestre.i = 0;
+    contMestre.d = 0;
     contMestre.lastI = 0;
     contMestre.lastD = 0;
     contMestre.diferencaSaida = 0;
@@ -237,6 +247,9 @@ void commThread::setNullParameters()
     contEscravo.kp = 2;
     contEscravo.ki = 0.05;
     contEscravo.kd = 0.005;
+    contEscravo.p = 0;
+    contEscravo.i = 0;
+    contEscravo.d = 0;
     contEscravo.lastI = 0;
     contEscravo.lastD = 0;
     contEscravo.diferencaSaida = 0;

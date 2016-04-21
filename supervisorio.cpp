@@ -1013,9 +1013,11 @@ void supervisorio::on_comboBox_ts_currentIndexChanged(int index)
 void supervisorio::on_button_limpar_clicked()
 {//Limpar gráficos
 
-    for (int i=0;i<8;i++){
+    for (int i=0;i<14;i++){
         ui->customPlot->graph(i)->clearData();
-        ui->customPlot2->graph(i)->clearData();
+    }
+    for (int i=0;i<8;i++){
+            ui->customPlot2->graph(i)->clearData();
     }
 
 }
