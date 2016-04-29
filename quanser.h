@@ -15,6 +15,8 @@
 #include <string.h>
 #include <sstream>
 
+#include <QString>
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -33,45 +35,41 @@ private:
    struct sockaddr_in address;
 
    
-
-   
    /**
     *Converte de inteiro para std::string
     */
-   std::string itoa(int _toConvert){
-        std::stringstream ss;
-        std::string str;
-        ss << _toConvert;
-        ss >> str;
+   QString itoa(int _toConvert){
+        QString str = QString::number(_toConvert);
         return str;
    }
    /**
     *Converte de float para std::string
     */
-   std::string ftoa(float _toConvert){
-       std::stringstream ss;
-       std::string str;
-       ss << _toConvert;
-       ss >> str;
+   QString ftoa(float _toConvert){
+       QString str = QString::number(_toConvert);
        return str;
    }
    
-   std::string receiveData() {
-      char  ch = ' ';
-      std::string _received = "";
-      int _count = 0;
-      do {
-        read(this->sockfd,&ch,1);
-        _received.append(1,ch);
-        _count++;
-      } while (ch != '\n' || _count < 3); //Assumo que nao receberei mensagens menores que 3
+   QString receiveData() {
+     char  ch = ' ';
+     std::string _received = "";
+     int _count = 0;
+     do {
+       read(this->sockfd,&ch,1);
+       _received.append(1,ch);
+       _count++;
+     } while (ch != '\n' || _count < 3); //Assumo que nao receberei mensagens menores que 3
 
-      return _received;
-   }
+     QString recv = QString::fromStdString(_received);
 
-   int sendData(std::string _toSend) {
+     return recv;
+  }
+
+   int sendData(QString _toSend) {
         int _tamanho = _toSend.length();
-        write(this->sockfd,_toSend.c_str(),_tamanho);
+        QByteArray ba = _toSend.toLatin1();
+        const char *cstr = ba.constData();
+        write(this->sockfd,cstr,_tamanho);
         return 0;
    }
 ///////////////////////////////////////////////////////////////////////
@@ -119,15 +117,15 @@ public:
     *Grava a tensao especificada no parametro no canal DA 
     */
    int writeDA(int _channel, float _volts) {
-        std::string _toSend = "WRITE ";
+        QString _toSend = "WRITE ";
         _toSend.append(itoa(_channel));
         _toSend.append(" ");
         _toSend.append(ftoa(_volts));
         _toSend.append("\n");
         this->sendData(_toSend);
-        std::string _rec = this->receiveData();
+        QString _rec = this->receiveData();
 
-        if (_rec.find("ACK",0) > _rec.length() )
+        if (_rec.contains("ACK", Qt::CaseInsensitive) > _rec.length() )
             return -1 ; //erro
         else 
             return 0;
@@ -138,12 +136,12 @@ public:
     *Le o valor de tensao que esta no canal AD especificado
     */
     double readAD(int _channel) {
-        std::string _toSend = "READ ";
+        QString _toSend = "READ ";
         _toSend.append(itoa(_channel));
         _toSend.append("\n");
         this->sendData(_toSend);
-        std::string _rec = this->receiveData();
-        return atof(_rec.c_str());
+        QString rec = this->receiveData();
+        return rec.toDouble();
     }
 
 

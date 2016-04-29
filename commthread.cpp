@@ -115,20 +115,20 @@ void commThread::run(){
 
 
 
-                contMestre.setPoint = sinalDaOndaGerada;
-                contMestre.erro = contMestre.setPoint - nivelTanque;
+contMestre.setPoint = sinalDaOndaGerada;
+contMestre.erro = contMestre.setPoint - nivelTanque;
 
-                calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
+calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
 
-                if(cascade){
-                    contEscravo.setPoint = contMestre.sinalCalculado;
-                    contEscravo.erro = contEscravo.setPoint - nivelTanque1;
+if(cascade){
+    contEscravo.setPoint = contMestre.sinalCalculado;
+    contEscravo.erro = contEscravo.setPoint - nivelTanque1;
 
-                    calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
-                }
-                else{
-                    contEscravo.sinalSaturado=contMestre.sinalSaturado;
-                }
+    calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
+}
+else{
+    contEscravo.sinalSaturado=contMestre.sinalSaturado;
+}
             }
 
             // Escreve no canal selecionado
