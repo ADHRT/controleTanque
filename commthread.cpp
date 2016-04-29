@@ -23,6 +23,19 @@ commThread::commThread(QObject *parent):
     contEscravo.lastI = 0;
     contEscravo.lastD = 0;
 
+    //Inicializando variáveis do observador de estados;
+    double A1=15.5179;//A2=A1
+    double L10=15;//L2=L1
+    double a1=0.17813919765;//a2=a1
+    double Km=3.3;
+    double g=9.8066;
+    //Note que L1_dot=L1_dot_const1*L1+L1_dot_const1*Vp
+    L1_dot_const1=-a1/A1*sqrt(g/(2*L10));
+    L1_dot_const2=Km/A1;
+    //Note que L2_dot=L2_dot_const1*L2+L2_dot_const2*L1
+    L2_dot_const1=L1_dot_const1;
+    L2_dot_const2=-L2_dot_const1;
+
 
 }
 
