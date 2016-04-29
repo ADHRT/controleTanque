@@ -51,6 +51,9 @@ private:
     Quanser* q;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
+    //Variáveis para observador de estados
+    double L1_dot_const1, L1_dot_const2, L2_dot_const1, L2_dot_const2;
+
 signals:
     void plotValues(double, double, double, double, double, double, double, double, double, double, double, double);
 
