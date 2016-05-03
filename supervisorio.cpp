@@ -1039,3 +1039,24 @@ void supervisorio::on_demo_clicked()
 
 }
 
+
+void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
+{
+    if(checked) {
+        int index = ui->comboBox_tipoControle->findText("Sem");
+        ui->comboBox_tipoControle->setCurrentIndex(index);
+        ui->doubleSpinBox_6->setValue(1.0);
+        ui->doubleSpinBox_7->setValue(0.0);
+        ui->doubleSpinBox_8->setValue(0.0);
+        index = ui->comboBox_windup->findText("P");
+        ui->comboBox_windup->setCurrentIndex(index);
+        ui->radioButton_10->setChecked(checked);
+        ui->checkBox_9->setChecked(!checked);
+        ui->radioButton_tanque2->setChecked(checked);
+    }
+    ui->groupBox_10->setEnabled(!checked);
+    ui->groupBox_11->setEnabled(!checked);
+    ui->groupBox_4->setEnabled(!checked);
+    ui->groupBox_select_tanque->setEnabled(!checked);
+    ui->checkBox_9->setChecked(!checked);
+}
