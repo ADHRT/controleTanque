@@ -3,13 +3,19 @@
 
 #include <QThread>
 #include "quanser.h"
+#include <complex>
+#include <QtCore>
+#include <cmath>
+#include <armadillo>
+
+using std::complex;
 
 struct Controlador {
   double p, i, d;
   double sinalCalculado, sinalSaturado;
   double setPoint, erro ,lastSinalCalculado;
-  volatile double kp, ki, kd, taw, lastI, lastD, diferencaSaida;
-  volatile bool windup, conditionalIntegration;
+  double kp, ki, kd, taw, lastI, lastD, diferencaSaida;
+  bool windup, conditionalIntegration;
 };
 
 class commThread : public QThread
@@ -30,25 +36,26 @@ public:
 private:
     Controlador contMestre, contEscravo;
     typedef QThread super;
-    volatile double frequencia;
-    volatile double amplitude;
-    volatile double offset;
-    volatile double duracaoMax;
-    volatile double duracaoMin;
-    volatile double sinalDaOndaGerada, sinalSaturadoDaOndaGerada, lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
+    double frequencia;
+    double amplitude;
+    double offset;
+    double duracaoMax;
+    double duracaoMin;
+    double sinalDaOndaGerada, sinalSaturadoDaOndaGerada, lastTimeStamp, timeToNextRandomNumber, lastSinalCalculado;
     //variavel aux para anti-windup
-    volatile double lastLoopTimeStamp;
-    volatile int wave;
+    double lastLoopTimeStamp;
+    int wave;
     Control control[2], lastControl[2];
-    volatile double period;
-    volatile bool malha, cascade;
-    volatile bool simulationMode;
-    volatile bool levelSimulationFinished;
-    volatile bool connected;
-    volatile int channel, tank;
-    volatile int simulationNivelTanque1;
-    volatile double waveTime, waveTimeStamp;
+    double period;
+    bool malha, cascade;
+    bool simulationMode;
+    bool levelSimulationFinished;
+    bool connected;
+    int channel, tank;
+    int simulationNivelTanque1;
+    double waveTime, waveTimeStamp;
     Quanser* q;
+    complex<double> polesOb[2];
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
     //Variáveis para observador de estados

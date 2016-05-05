@@ -1,6 +1,5 @@
 ﻿#include "commthread.h"
-#include <QtCore>
-#include<cmath>
+
 
 commThread::commThread(QObject *parent):
     QThread(parent)
@@ -23,6 +22,11 @@ commThread::commThread(QObject *parent):
     contEscravo.lastI = 0;
     contEscravo.lastD = 0;
 
+    polesOb[0] = complex<double>(10.0,1.0);
+    polesOb[1] = complex<double>(10.0,1.0);
+
+    arma::mat A(5, 5, arma::fill::randu);
+
     //Inicializando variáveis do observador de estados;
     double A1=15.5179;//A2=A1
     double L10=15;//L2=L1
@@ -35,6 +39,7 @@ commThread::commThread(QObject *parent):
     //Note que L2_dot=L2_dot_const1*L2+L2_dot_const2*L1
     L2_dot_const1=L1_dot_const1;
     L2_dot_const2=-L2_dot_const1;
+
 
 
 }
