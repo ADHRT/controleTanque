@@ -1173,13 +1173,6 @@
           <string>i</string>
          </property>
         </widget>
-        <zorder>doubleSpinBox_polo1Re_ob</zorder>
-        <zorder>doubleSpinBox_polo2Re_ob</zorder>
-        <zorder>doubleSpinBox_polo1Im_ob</zorder>
-        <zorder>doubleSpinBox_polo2Im_ob</zorder>
-        <zorder>label_p1i_ob</zorder>
-        <zorder>label_p2i_ob</zorder>
-        <zorder>groupBox_l</zorder>
        </widget>
        <widget class="QGroupBox" name="groupBox_l">
         <property name="geometry">
@@ -1594,20 +1587,7 @@
           <double>1.000000000000000</double>
          </property>
         </widget>
-        <zorder>doubleSpinBox_polo1Re_seg</zorder>
-        <zorder>doubleSpinBox_polo2Re_seg</zorder>
-        <zorder>doubleSpinBox_polo1Im_seg</zorder>
-        <zorder>doubleSpinBox_polo2Im_seg</zorder>
-        <zorder>label_p1i_seg</zorder>
-        <zorder>label_p2i_seg</zorder>
-        <zorder>groupBox_seguidorDeRef</zorder>
-        <zorder>doubleSpinBox_polo3Re_seg</zorder>
        </widget>
-       <zorder>doubleSpinBox_polo1Re_6</zorder>
-       <zorder>doubleSpinBox_polo1Re_5</zorder>
-       <zorder>groupBox_k1</zorder>
-       <zorder>groupBox_k2</zorder>
-       <zorder>groupBox_polos_seg</zorder>
       </widget>
      </widget>
     </widget>

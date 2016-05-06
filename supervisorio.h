@@ -7,6 +7,7 @@
 #include "commthread.h"
 #include "analist.h"
 
+using std::complex;
 namespace Ui {
 class supervisorio;
 }
@@ -118,6 +119,8 @@ private slots:
 
   void on_checkBox_observador_ativar_clicked(bool checked);
 
+  void on_doubleSpinBox_polo1Re_ob_valueChanged(double arg1);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -142,6 +145,8 @@ private:
     Control nextControl[2];
     Control control[2];
 
+    complex<double> polesOb[2];
+    double lOb[2];
     int plotRange;
 
     int channel;
@@ -151,8 +156,13 @@ private:
     void setControlParamsSlave(bool kp, bool ki, bool kd);
 
     void setTickStep();
-
-//signals:
+    void getPolesOb();
+    void calcLOb();
+    void getLOb();
+    void setLOb();
+    void setPolesOb();
+    bool isStableOb();
+    double moduleOfPole(complex<double> pole);
 };
 
 #endif // SUPERVISORIO_H

@@ -23,6 +23,10 @@ supervisorio::supervisorio(QWidget *parent) :
     //Inicialização para o plot randômico
     timeToNextRandomNumber=0;
 
+    /* +++++++++++++++++++++++++++++++++++++++++++++++++
+     * BEGIN - Valores para popular a interface grafica
+     * +++++++++++++++++++++++++++++++++++++++++++++++++
+     */
     //Inicializa valores
     frequencia = 20;
     amplitude = 5;
@@ -37,24 +41,41 @@ supervisorio::supervisorio(QWidget *parent) :
     taw[1] = 75;
 
     cascade = true;
-        //mestre
-        control[0] = PI;
-        nextControl[0] = control[0];
-        kp[0] = 2;
-        ki[0] = 0.05;
-        kd[0] = 0.005;
-        windup[0] = false;
-        conditionalIntegration[0] = false;
-        //escravo
-        control[1] = PI;
-        nextControl[1] = control[1];
-        kp[1] = 2;
-        ki[1] = 0.05;
-        kd[1] = 0.005;
-        windup[1] = false;
-        conditionalIntegration[1] = false;
 
-    //Set valores
+    //mestre
+    control[0] = PI;
+    nextControl[0] = control[0];
+    kp[0] = 2;
+    ki[0] = 0.05;
+    kd[0] = 0.005;
+    windup[0] = false;
+    conditionalIntegration[0] = false;
+
+    //escravo
+    control[1] = PI;
+    nextControl[1] = control[1];
+    kp[1] = 2;
+    ki[1] = 0.05;
+    kd[1] = 0.005;
+    windup[1] = false;
+    conditionalIntegration[1] = false;
+
+    //observador
+    lOb[0] = 10;
+    lOb[1] = 15;
+    polesOb[0] = complex <double>(0.5, 0.5);
+    polesOb[1] = complex <double>(0.5, 0.5);
+    qDebug() << "p1="<< polesOb[0].real() << " " << polesOb[0].imag();
+    qDebug() << "p2="<< polesOb[1].real() << " " << polesOb[1].imag();
+    /* -----------------------------------------------
+     * END - Valores para popular a interface grafica
+     * -----------------------------------------------
+     */
+
+    /* +++++++++++++++++++++++++++++++++++++++++++++++++
+     * BEGIN - Set valores na interface grafica
+     * +++++++++++++++++++++++++++++++++++++++++++++++++
+     */
     //Frequencia
     // Configura sinal de controle
     int index = ui->comboBox->findText("Período (s)");
@@ -69,54 +90,67 @@ supervisorio::supervisorio(QWidget *parent) :
     //Min
     ui->doubleSpinBox_5->setValue(duracaoMin);
 
-     // Configura wave padrao
-     //ui->radioButton_11->setChecked(true);
-     ui->comboBox_6->setCurrentIndex(wave);
-     on_comboBox_6_currentIndexChanged(wave);//Degrau
+    // Configura wave padrao
+    //ui->radioButton_11->setChecked(true);
+    ui->comboBox_6->setCurrentIndex(wave);
+    on_comboBox_6_currentIndexChanged(wave);//Degrau
 
-     // Configura sinal de controle
-     index = ui->comboBox_tipoControle->findText("PI");
-     ui->comboBox_tipoControle->setCurrentIndex(index);
-     index = ui->comboBox_tipoControle_2->findText("PI");
-     ui->comboBox_tipoControle_2->setCurrentIndex(index);
+    // Configura sinal de controle
+    index = ui->comboBox_tipoControle->findText("PI");
+    ui->comboBox_tipoControle->setCurrentIndex(index);
+    index = ui->comboBox_tipoControle_2->findText("PI");
+    ui->comboBox_tipoControle_2->setCurrentIndex(index);
 
-     ui->doubleSpinBox_6->setValue(kp[0]);
-     ui->doubleSpinBox_7->setValue(ki[0]);
-     ui->doubleSpinBox_8->setValue(kd[0]);
+    ui->doubleSpinBox_6->setValue(kp[0]);
+    ui->doubleSpinBox_7->setValue(ki[0]);
+    ui->doubleSpinBox_8->setValue(kd[0]);
 
-     ui->doubleSpinBox_9->setValue(kp[1]);
-     ui->doubleSpinBox_10->setValue(ki[1]);
-     ui->doubleSpinBox_11->setValue(kd[1]);
+    ui->doubleSpinBox_9->setValue(kp[1]);
+    ui->doubleSpinBox_10->setValue(ki[1]);
+    ui->doubleSpinBox_11->setValue(kd[1]);
 
-     // Wind Up
-     index = ui->comboBox_windup->findText("Sem");
-     ui->comboBox_windup->setCurrentIndex(index);
-     index = ui->comboBox_windup_2->findText("Sem");
-     ui->comboBox_windup_2->setCurrentIndex(index);
+    // Wind Up
+    index = ui->comboBox_windup->findText("Sem");
+    ui->comboBox_windup->setCurrentIndex(index);
+    index = ui->comboBox_windup_2->findText("Sem");
+    ui->comboBox_windup_2->setCurrentIndex(index);
 
-     // Configura canal de escrita padrao (bomba)
-     channel = 0;
+    // Configura canal de escrita padrao (bomba)
+    channel = 0;
 
-     // Seta cascata
-     on_checkBox_9_clicked(cascade);
+    // Seta cascata
+    on_checkBox_9_clicked(cascade);
 
-     // Seleciona controle no tanque
-     on_radioButton_tanque2_clicked();
-     ui->radioButton_tanque2->setChecked(true);
+    // Seleciona controle no tanque
+    on_radioButton_tanque2_clicked();
+    ui->radioButton_tanque2->setChecked(true);
 
-     //Cria Threads e conecta signals com slots
-     cThread = new commThread(this);
-     connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
-     supervisorio::on_pushButton_8_clicked();//Atualiza valores (evita bug no demo)
+    //Observador
+    //L
+    setLOb();
 
-     //Analist calcula valores para relatorios e analise da dinamica
-     analist = new Analist();
+    //Polos
+    setPolesOb();
 
-     //Tool Tips
-     ui->label_tr_0->setToolTip("Tempo de Subida");
-     ui->label_tp_0->setToolTip("Tempo de Pico");
-     ui->label_ts_0->setToolTip("Tempo de Estabilização");
-     ui->label_mp_0->setToolTip("Overshoot");
+    /* -----------------------------------------------
+     * END - Set valores na interface grafica
+     * -----------------------------------------------
+     */
+
+
+    //Cria Threads e conecta signals com slots
+    cThread = new commThread(this);
+    connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
+    supervisorio::on_pushButton_8_clicked();//Atualiza valores (evita bug no demo)
+
+    //Analist calcula valores para relatorios e analise da dinamica
+    analist = new Analist();
+
+    //Tool Tips
+    ui->label_tr_0->setToolTip("Tempo de Subida");
+    ui->label_tp_0->setToolTip("Tempo de Pico");
+    ui->label_ts_0->setToolTip("Tempo de Estabilização");
+    ui->label_mp_0->setToolTip("Overshoot");
 }
 
 supervisorio::~supervisorio()
@@ -1059,4 +1093,80 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
     ui->groupBox_4->setEnabled(!checked);
     ui->groupBox_select_tanque->setEnabled(!checked);
     ui->checkBox_9->setChecked(!checked);
+}
+
+
+
+void supervisorio::getPolesOb()
+{
+    polesOb[0] = complex <double>(ui->doubleSpinBox_polo1Re_ob->value(), ui->doubleSpinBox_polo1Im_ob->value());
+    polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
+    isStableOb();
+}
+
+void supervisorio::setPolesOb()
+{
+    ui->doubleSpinBox_polo1Re_ob->setValue(polesOb[0].real());
+    ui->doubleSpinBox_polo1Im_ob->setValue(polesOb[0].imag());
+    ui->doubleSpinBox_polo2Re_ob->setValue(polesOb[1].real());
+    ui->doubleSpinBox_polo2Im_ob->setValue(polesOb[1].imag());
+    qDebug() << "p1="<< polesOb[0].real() << " " << polesOb[0].imag();
+    qDebug() << "p2="<< polesOb[1].real() << " " << polesOb[1].imag();
+}
+
+void supervisorio::getLOb()
+{
+    lOb[0] = ui->doubleSpinBox_l1->value();
+    lOb[1] = ui->doubleSpinBox_l2->value();
+}
+
+void supervisorio::setLOb()
+{
+    ui->doubleSpinBox_l1->setValue(lOb[0]);
+    ui->doubleSpinBox_l2->setValue(lOb[1]);
+}
+
+void supervisorio::calcLOb()
+{
+
+}
+
+bool supervisorio::isStableOb()
+{
+    int erro;
+    double mod0 = moduleOfPole(polesOb[0]);
+    double mod1 = moduleOfPole(polesOb[1]);
+    if(mod0 > 1 || mod1 > 1)
+        erro = 0;
+    else if(mod0 == 1 && polesOb[0] == polesOb[1])
+        erro = 0;
+    erro = 1;
+
+    qDebug()<<"MODs: "<<mod0<<mod1;
+    // caso sistema nao seja estavel nao pode enviar valores, e notifica o usuario
+    if(erro){
+        //grpControls is a QGroupBox which is parented to another widget
+        //palette.setColor(grpControls->backgroundRole(), QColor(0,255,255));
+        QPalette p = ui->groupBox_polos_ob->palette();
+        p.setColor(QPalette::Window, Qt::red);
+        p.setColor(QPalette::Highlight, Qt::red);
+        ui->groupBox_polos_ob->setPalette(p);
+
+    } else {
+        ui->groupBox_polos_ob->setPalette( ui->groupBox_polos_ob->style()->standardPalette() );
+    }
+
+    ui->pushButton_8->setEnabled(erro);
+    return erro;
+}
+
+double supervisorio::moduleOfPole(complex<double> pole)
+{
+    return sqrt(pow(pole.real(),2) + pow(pole.imag(),2));
+}
+
+void supervisorio::on_doubleSpinBox_polo1Re_ob_valueChanged(double arg1)
+{
+    getPolesOb();
+    //calcLOb();
 }
