@@ -1,6 +1,7 @@
 ﻿#include "commthread.h"
 
-
+using std::complex;
+using arma::mat;
 commThread::commThread(QObject *parent):
     QThread(parent)
 {
@@ -32,19 +33,37 @@ commThread::commThread(QObject *parent):
     double a1=0.17813919765;//a2=a1
     double Km=3.3;
     double g=9.8066;
+
     //Note que L1_dot=L1_dot_const1*L1+L1_dot_const1*Vp
     L1_dot_const1=-a1/A1*sqrt(g/(2*L10));
     L1_dot_const2=Km/A1;
+
     //Note que L2_dot=L2_dot_const1*L2+L2_dot_const2*L1
     L2_dot_const1=L1_dot_const1;
     L2_dot_const2=-L2_dot_const1;
 
-    double a_temp[4] = {L1_dot_const1, L2_dot_const1, 0, L2_dot_const2};
+    //carregando valores de G no vetor temp para uso posterior no armadilo
+    g_temp[0] = L1_dot_const1;
+    g_temp[1] = L2_dot_const2;
+    g_temp[2] = 0;
+    g_temp[3] = L2_dot_const1;
 
-    arma::mat A(a_temp, 2, 2);
+    h_temp[0] = Km/A1;
+    h_temp[1] = 0;
+
+    c_temp[0] = 0;
+    c_temp[1] = 1;
+
+    wo_temp[0] = 0;
+    wo_temp[1] = L1_dot_const2;
+    wo_temp[2] = 1;
+    wo_temp[3] = L2_dot_const1;
+
 }
 
 void commThread::run(){
+
+    calcObs();
 
     double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
 
@@ -174,6 +193,30 @@ else{
         q->writeDA(channel, 0);
         //delete q;
     }
+}
+
+void commThread::calcObs(void){
+    polesOb[0] = complex <double>(2, 3);
+    polesOb[1] = complex <double>(2, -3);
+    double coef1 =  -polesOb[0].real() - polesOb[1].real();
+    complex <double>coef2 = polesOb[0] * polesOb[1];
+
+    mat G(g_temp, 2, 2);
+    mat Wo(wo_temp, 2, 2);
+    mat A = arma::eye<mat> (2,2);
+    double l_aux[2] = {0, 1};
+    mat l_array(l_aux, 2, 1);
+
+    mat q = pow(G,2) + coef1*G + coef2.real()*A;
+
+    mat L = q*inv(Wo)*l_array;
+
+    qDebug() << "q: " << L[0] << L[1];
+}
+
+void commThread::calcPoles()
+{
+
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
