@@ -25,7 +25,6 @@ commThread::commThread(QObject *parent):
     polesOb[0] = complex<double>(10.0,1.0);
     polesOb[1] = complex<double>(10.0,1.0);
 
-    arma::mat A(5, 5, arma::fill::randu);
 
     //Inicializando variáveis do observador de estados;
     double A1=15.5179;//A2=A1
@@ -40,8 +39,9 @@ commThread::commThread(QObject *parent):
     L2_dot_const1=L1_dot_const1;
     L2_dot_const2=-L2_dot_const1;
 
+    double a_temp[4] = {L1_dot_const1, L2_dot_const1, 0, L2_dot_const2};
 
-
+    arma::mat A(a_temp, 2, 2);
 }
 
 void commThread::run(){
