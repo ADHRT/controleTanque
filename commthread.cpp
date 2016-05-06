@@ -28,42 +28,41 @@ commThread::commThread(QObject *parent):
 
 
     //Inicializando variáveis do observador de estados;
-    double A1=15.5179;//A2=A1
-    double L10=15;//L2=L1
-    double a1=0.17813919765;//a2=a1
-    double Km=3.3;
-    double g=9.8066;
+    //double A1 = 15.5179;//A2=A1
+    //double L10 = 15;//L2=L1
+    //double a1 = 0.17813919765;//a2=a1
+    //double Km = 3.3;
+    //double g = 9.8066;
 
     //Note que L1_dot=L1_dot_const1*L1+L1_dot_const1*Vp
-    L1_dot_const1=-a1/A1*sqrt(g/(2*L10));
-    L1_dot_const2=Km/A1;
+    //L1_dot_const1 = -a1/A1*sqrt(g/(2*L10));
+    //L1_dot_const2 = Km/A1;
 
     //Note que L2_dot=L2_dot_const1*L2+L2_dot_const2*L1
-    L2_dot_const1=L1_dot_const1;
-    L2_dot_const2=-L2_dot_const1;
+    //L2_dot_const1 = L1_dot_const1;
+    //L2_dot_const2 = -L2_dot_const1;
 
     //carregando valores de G no vetor temp para uso posterior no armadilo
-    g_temp[0] = L1_dot_const1;
-    g_temp[1] = L2_dot_const2;
-    g_temp[2] = 0;
-    g_temp[3] = L2_dot_const1;
+    double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
+    G = mat (g_temp, 2, 2);
 
-    h_temp[0] = Km/A1;
-    h_temp[1] = 0;
+    double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    H = mat(h_temp, 2, 1);
 
-    c_temp[0] = 0;
-    c_temp[1] = 1;
+    double c_temp[2] = {0, 1};
+    C = mat(c_temp, 1, 2);
 
-    wo_temp[0] = 0;
-    wo_temp[1] = L1_dot_const2;
-    wo_temp[2] = 1;
-    wo_temp[3] = L2_dot_const1;
+    double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
+    Wo = mat(wo_temp, 2, 2);
 
+    double l_temp[2] = {1, 2};
+    L = mat(l_temp, 2, 1);
 }
 
 void commThread::run(){
 
-    calcObs();
+    //calcObs();
+    calcPoles();
 
     double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
 
@@ -201,20 +200,36 @@ void commThread::calcObs(void){
     double coef1 =  -polesOb[0].real() - polesOb[1].real();
     complex <double>coef2 = polesOb[0] * polesOb[1];
 
-    mat G(g_temp, 2, 2);
-    mat Wo(wo_temp, 2, 2);
     mat A = arma::eye<mat> (2,2);
     double l_aux[2] = {0, 1};
     mat l_array(l_aux, 2, 1);
 
     mat q = pow(G,2) + coef1*G + coef2.real()*A;
 
-    mat L = q*inv(Wo)*l_array;
+    //L = q*inv(Wo)*l_array;
 
-    qDebug() << "q: " << L[0] << L[1];
+    //qDebug() << "q: " << L[0] << L[1];
 }
 
 void commThread::calcPoles()
+{
+    double a_temp[4] = {1, 2, 3, 4};
+    mat A(a_temp, 2, 2);
+
+
+    //qDebug() << "Size L" << L.n_elem;
+    mat temp = A - L*C;
+    arma::cx_vec eigVal = eig_gen(temp);
+
+    //eigs_gen()
+
+    qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
+
+    qDebug() << "temp" << temp[0] << temp[1] << temp[2] << temp[3];
+    //qDebug() << "C" << C[0] << C[1];
+}
+
+void commThread::calcEstimated(double nivelTanque2, double sinalSaturado)
 {
 
 }

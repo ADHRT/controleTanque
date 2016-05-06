@@ -60,10 +60,17 @@ private:
     complex<double> polesOb[2];
 
     // Vetores para construcao da matriz para o calculo do observador
-    double g_temp[4];
-    double h_temp[2];
-    double c_temp[2];
-    double wo_temp[4];
+//    double g_temp[4];
+//    double h_temp[2];
+//    double c_temp[2];
+//    double wo_temp[4];
+//    double l_temp[2];
+
+    mat G;
+    mat H;
+    mat C;
+    mat Wo;
+    mat L;
 
     // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
@@ -74,6 +81,7 @@ private:
     void calcObs();
     void calcPoles();
     void calcEstimated(double nivelTanque2, double sinalSaturado);
+
 signals:
     void plotValues(double, double, double, double, double, double, double, double, double, double, double, double);
 
