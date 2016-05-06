@@ -9,7 +9,7 @@
 #include <armadillo>
 
 using std::complex;
-
+using arma::mat;
 struct Controlador {
   double p, i, d;
   double sinalCalculado, sinalSaturado;
@@ -55,12 +55,25 @@ private:
     int simulationNivelTanque1;
     double waveTime, waveTimeStamp;
     Quanser* q;
+
+    // Entrada do usuario ou calculado pelo auto-valores
     complex<double> polesOb[2];
+
+    // Vetores para construcao da matriz para o calculo do observador
+    double g_temp[4];
+    double h_temp[2];
+    double c_temp[2];
+    double wo_temp[4];
+
+    // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
     //Variáveis para observador de estados
     double L1_dot_const1, L1_dot_const2, L2_dot_const1, L2_dot_const2;
 
+    void calcObs();
+    void calcPoles();
+    void calcEstimated(double nivelTanque2, double sinalSaturado);
 signals:
     void plotValues(double, double, double, double, double, double, double, double, double, double, double, double);
 
