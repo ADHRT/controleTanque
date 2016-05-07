@@ -34,4 +34,6 @@ FORMS += \
 RESOURCES += \
     images.qrc
 
-LIBS += -llapack -lblas -larmadillo
+LIBS += -llapack -lblas -L"/usr/local/Cellar/armadillo/6.700.4/lib/" -larmadillo
+
+INCLUDEPATH += /usr/local/Cellar/armadillo/6.700.4/include/
