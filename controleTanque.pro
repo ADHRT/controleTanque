@@ -33,3 +33,5 @@ FORMS += \
 
 RESOURCES += \
     images.qrc
+
+LIBS += -llapack -lblas -larmadillo
