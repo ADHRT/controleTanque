@@ -30,7 +30,7 @@ supervisorio::supervisorio(QWidget *parent) :
     //Inicializa valores
     frequencia = 20;
     amplitude = 5;
-    offset = 18;
+    offset = 10;
     duracaoMax = 3;
     duracaoMin = 1;
     wave = 0;
@@ -1133,6 +1133,8 @@ void supervisorio::setLOb()
 
 void supervisorio::calcLOb()
 {
+    //commThread::getPoles(double *l, complex<double> *pole);
+    commThread::getL(polesOb, lOb);
 
 }
 
