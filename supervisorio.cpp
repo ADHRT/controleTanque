@@ -61,6 +61,7 @@ supervisorio::supervisorio(QWidget *parent) :
     conditionalIntegration[1] = false;
 
     //observador
+    bool observador = true;
     lOb[0] = 10;
     lOb[1] = 15;
     //Parece inutil mas nao e, os valores seram setados mais a baixo e precisam estar em variaveis auxiliares
@@ -70,6 +71,9 @@ supervisorio::supervisorio(QWidget *parent) :
     double auxPoleOb1Im = 0.5;
     double auxPoleOb2Re = 0.5;
     double auxPoleOb2Im = 0.5;
+
+    //seguidor
+    bool seguidor = false;
     /* -----------------------------------------------
      * END - Valores para popular a interface grafica
      * -----------------------------------------------
@@ -131,7 +135,8 @@ supervisorio::supervisorio(QWidget *parent) :
     //Observador
     //L
     setLOb();
-
+    ui->checkBox_observador_ativar->setChecked(observador);
+    on_checkBox_observador_ativar_clicked(observador);
     //Polos
     //nao pode usar pois nao usa variavel auxiliar setPolesOb();
     ui->doubleSpinBox_polo1Re_ob->setValue(auxPoleOb1Re);
@@ -139,6 +144,8 @@ supervisorio::supervisorio(QWidget *parent) :
     ui->doubleSpinBox_polo2Re_ob->setValue(auxPoleOb2Re);
     ui->doubleSpinBox_polo2Im_ob->setValue(auxPoleOb2Im);
 
+    //seguidor
+    ui->groupBox_seguidorDeRef->setEnabled(seguidor);
     /* -----------------------------------------------
      * END - Set valores na interface grafica
      * -----------------------------------------------
@@ -1100,6 +1107,7 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
     ui->groupBox_4->setEnabled(!checked);
     ui->groupBox_select_tanque->setEnabled(!checked);
     ui->checkBox_9->setChecked(!checked);
+    ui->groupBox_Observador->setEnabled(checked);
 }
 
 
@@ -1178,43 +1186,56 @@ double supervisorio::moduleOfPole(complex<double> pole)
 
 void supervisorio::on_doubleSpinBox_polo1Re_ob_valueChanged(double)
 {
+    polesOb[0].real(ui->doubleSpinBox_polo1Re_ob->value());
+    //complex <double>(ui->doubleSpinBox_polo1Re_ob->value(), ui->doubleSpinBox_polo1Im_ob->value());
+    //polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
+    isStableOb();
     on_poles_valueChange();
 }
 
 void supervisorio::on_doubleSpinBox_polo1Im_ob_valueChanged(double)
 {
+    polesOb[0].imag(ui->doubleSpinBox_polo1Im_ob->value());
+    //polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
+    isStableOb();
     on_poles_valueChange();
 }
 
 void supervisorio::on_doubleSpinBox_polo2Re_ob_valueChanged(double)
 {
+    polesOb[1].real(ui->doubleSpinBox_polo2Re_ob->value());
+    isStableOb();
     on_poles_valueChange();
 }
 
 void supervisorio::on_doubleSpinBox_polo2Im_ob_valueChanged(double)
 {
+    polesOb[1].imag(ui->doubleSpinBox_polo2Im_ob->value());
+    isStableOb();
     on_poles_valueChange();
 }
 
 void supervisorio::on_poles_valueChange(void)
 {
-    getPolesOb();
+    //getPolesOb();
     calcLOb();
     setLOb();
 }
 
 void supervisorio::on_doubleSpinBox_l1_valueChanged(double)
 {
+    lOb[0] = ui->doubleSpinBox_l1->value();
     on_l_valueChange();
 }
 
 void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
 {
+    lOb[1] = ui->doubleSpinBox_l2->value();
     on_l_valueChange();
 }
 
 void supervisorio::on_l_valueChange(void){
-    getLOb();
+    //getLOb();
     //calcPoles();
     setPolesOb();
 }
