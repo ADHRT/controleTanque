@@ -67,7 +67,9 @@ commThread::commThread(QObject *parent):
     yEst = mat(1, 1, arma::fill::zeros);
 
     calcPoles();
+    double l[2];
     //calcObs();
+    //getL(polesOb, l);
 }
 
 void commThread::run(){
@@ -450,33 +452,34 @@ int commThread::start(void)
 
 void commThread::getPoles(double *l, complex<double> *pole)
 {
-    double l_temp[2] = {l[0], l[1]};
-    mat L_temp(l_temp, 2, 1);
+//    double l_temp[2] = {l[0], l[1]};
+//    mat L_temp(l_temp, 2, 1);
 
-    mat temp = G - L_temp*C;
+//    mat temp = G - L_temp*C;
 
-    arma::cx_vec eigVal = eig_gen(temp);
-    //qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
+//    arma::cx_vec eigVal = eig_gen(temp);
+//    //qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
 
-    pole[0] = eigVal[0];
-    pole[1] = eigVal[1];
+//    pole[0] = eigVal[0];
+//    pole[1] = eigVal[1];
 }
 
 void commThread::getL(complex<double> *pole, double *l)
 {
-    double coef1 =  -pole[0].real() - pole[1].real();
-    complex <double>coef2 = pole[0] * pole[1];
+//    double coef1 = -pole[0].real() - pole[1].real();
+//    qDebug() << "Polos getL: " << pole[0].real() << pole[1].real();
+//    complex <double>coef2 = pole[0] * pole[1];
 
-    mat A = arma::eye<mat> (2,2);
-    double l_aux[2] = {0, 1};
-    mat l_array(l_aux, 2, 1);
+//    mat A = arma::eye<mat> (2,2);
+//    double l_aux[2] = {0, 1};
+//    mat l_array(l_aux, 2, 1);
 
-    mat q = G*G + coef1*G + coef2.real()*A;
+//    mat q = G*G + coef1*G + coef2.real()*A;
 
-    mat l_mat = q*inv(Wo)*l_array;
+//    mat l_mat = q*inv(Wo)*l_array;
 
-    l[0] = l_mat[0];
-    l[1] = l_mat[1];
+//    l[0] = l_mat[0];
+//    l[1] = l_mat[1];
 }
 
 
