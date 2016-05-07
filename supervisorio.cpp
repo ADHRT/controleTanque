@@ -40,19 +40,19 @@ supervisorio::supervisorio(QWidget *parent) :
     taw[0] = 75;
     taw[1] = 75;
 
-    cascade = true;
+    cascade = false;
 
     //mestre
-    control[0] = PI;
+    control[0] = P;
     nextControl[0] = control[0];
-    kp[0] = 2;
-    ki[0] = 0.05;
-    kd[0] = 0.005;
+    kp[0] = 1;
+    ki[0] = 0;
+    kd[0] = 0;
     windup[0] = false;
     conditionalIntegration[0] = false;
 
     //escravo
-    control[1] = PI;
+    control[1] = P;
     nextControl[1] = control[1];
     kp[1] = 2;
     ki[1] = 0.05;
@@ -63,10 +63,15 @@ supervisorio::supervisorio(QWidget *parent) :
     //observador
     lOb[0] = 10;
     lOb[1] = 15;
-    polesOb[0] = complex <double>(0.5, 0.5);
-    polesOb[1] = complex <double>(0.5, 0.5);
-    qDebug() << "p1="<< polesOb[0].real() << " " << polesOb[0].imag();
-    qDebug() << "p2="<< polesOb[1].real() << " " << polesOb[1].imag();
+    //Parece inutil mas nao e, os valores seram setados mais a baixo e precisam estar em variaveis auxiliares
+    // pois ao mudar um valor na interface todos os outros sao sobre-escritos com valores que ja estao na inter-
+    // face. Apos setar eles seram automaticamente carregados em polesOb[]
+    double auxPoleOb1Re = 0.5;
+    double auxPoleOb1Im = 0.5;
+    double auxPoleOb2Re = 0.5;
+    double auxPoleOb2Im = 0.5;
+//    qDebug() << "p1="<< polesOb[0].real() << " " << polesOb[0].imag();
+//    qDebug() << "p2="<< polesOb[1].real() << " " << polesOb[1].imag();
     /* -----------------------------------------------
      * END - Valores para popular a interface grafica
      * -----------------------------------------------
@@ -96,9 +101,9 @@ supervisorio::supervisorio(QWidget *parent) :
     on_comboBox_6_currentIndexChanged(wave);//Degrau
 
     // Configura sinal de controle
-    index = ui->comboBox_tipoControle->findText("PI");
+    index = ui->comboBox_tipoControle->findText("P");
     ui->comboBox_tipoControle->setCurrentIndex(index);
-    index = ui->comboBox_tipoControle_2->findText("PI");
+    index = ui->comboBox_tipoControle_2->findText("P");
     ui->comboBox_tipoControle_2->setCurrentIndex(index);
 
     ui->doubleSpinBox_6->setValue(kp[0]);
@@ -130,7 +135,11 @@ supervisorio::supervisorio(QWidget *parent) :
     setLOb();
 
     //Polos
-    setPolesOb();
+    //setPolesOb();
+    ui->doubleSpinBox_polo1Re_ob->setValue(auxPoleOb1Re);
+    ui->doubleSpinBox_polo1Im_ob->setValue(auxPoleOb1Re);
+    ui->doubleSpinBox_polo2Re_ob->setValue(auxPoleOb1Re);
+    ui->doubleSpinBox_polo2Im_ob->setValue(auxPoleOb1Re);
 
     /* -----------------------------------------------
      * END - Set valores na interface grafica
@@ -1110,8 +1119,6 @@ void supervisorio::setPolesOb()
     ui->doubleSpinBox_polo1Im_ob->setValue(polesOb[0].imag());
     ui->doubleSpinBox_polo2Re_ob->setValue(polesOb[1].real());
     ui->doubleSpinBox_polo2Im_ob->setValue(polesOb[1].imag());
-    qDebug() << "p1="<< polesOb[0].real() << " " << polesOb[0].imag();
-    qDebug() << "p2="<< polesOb[1].real() << " " << polesOb[1].imag();
 }
 
 void supervisorio::getLOb()
