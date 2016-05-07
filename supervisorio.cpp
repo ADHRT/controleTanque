@@ -70,8 +70,6 @@ supervisorio::supervisorio(QWidget *parent) :
     double auxPoleOb1Im = 0.5;
     double auxPoleOb2Re = 0.5;
     double auxPoleOb2Im = 0.5;
-//    qDebug() << "p1="<< polesOb[0].real() << " " << polesOb[0].imag();
-//    qDebug() << "p2="<< polesOb[1].real() << " " << polesOb[1].imag();
     /* -----------------------------------------------
      * END - Valores para popular a interface grafica
      * -----------------------------------------------
@@ -135,11 +133,11 @@ supervisorio::supervisorio(QWidget *parent) :
     setLOb();
 
     //Polos
-    //setPolesOb();
+    //nao pode usar pois nao usa variavel auxiliar setPolesOb();
     ui->doubleSpinBox_polo1Re_ob->setValue(auxPoleOb1Re);
-    ui->doubleSpinBox_polo1Im_ob->setValue(auxPoleOb1Re);
-    ui->doubleSpinBox_polo2Re_ob->setValue(auxPoleOb1Re);
-    ui->doubleSpinBox_polo2Im_ob->setValue(auxPoleOb1Re);
+    ui->doubleSpinBox_polo1Im_ob->setValue(auxPoleOb1Im);
+    ui->doubleSpinBox_polo2Re_ob->setValue(auxPoleOb2Re);
+    ui->doubleSpinBox_polo2Im_ob->setValue(auxPoleOb2Im);
 
     /* -----------------------------------------------
      * END - Set valores na interface grafica
@@ -776,7 +774,7 @@ void supervisorio::on_radioButton_10_clicked()
     //ui->doubleSpinBox_3->setMaximum(30);
     //ui->doubleSpinBox_3->setMinimum(0);
 
-    //Ativa a combo box dos parâmetros de controle
+    //Ativa a combo box dos parametros de controle
     ui->groupBox_10->setEnabled(true);
 
     //Ativa o group box da analise
@@ -1144,26 +1142,30 @@ bool supervisorio::isStableOb()
     double mod0 = moduleOfPole(polesOb[0]);
     double mod1 = moduleOfPole(polesOb[1]);
     if(mod0 > 1 || mod1 > 1)
-        erro = 0;
+        erro = 1;
     else if(mod0 == 1 && polesOb[0] == polesOb[1])
+        erro = 1;
+    else
         erro = 0;
-    erro = 1;
 
     qDebug()<<"MODs: "<<mod0<<mod1;
     // caso sistema nao seja estavel nao pode enviar valores, e notifica o usuario
     if(erro){
-        //grpControls is a QGroupBox which is parented to another widget
-        //palette.setColor(grpControls->backgroundRole(), QColor(0,255,255));
+        // warning color
         QPalette p = ui->groupBox_polos_ob->palette();
         p.setColor(QPalette::Window, Qt::red);
         p.setColor(QPalette::Highlight, Qt::red);
         ui->groupBox_polos_ob->setPalette(p);
+        ui->groupBox_l->setPalette(p);
 
     } else {
+        // unwarning color
         ui->groupBox_polos_ob->setPalette( ui->groupBox_polos_ob->style()->standardPalette() );
+        ui->groupBox_l->setPalette(ui->groupBox_l->style()->standardPalette());
+
     }
 
-    ui->pushButton_8->setEnabled(erro);
+    ui->pushButton_8->setDisabled(erro);
     return erro;
 }
 
@@ -1172,8 +1174,45 @@ double supervisorio::moduleOfPole(complex<double> pole)
     return sqrt(pow(pole.real(),2) + pow(pole.imag(),2));
 }
 
-void supervisorio::on_doubleSpinBox_polo1Re_ob_valueChanged(double arg1)
+void supervisorio::on_doubleSpinBox_polo1Re_ob_valueChanged(double)
+{
+    on_poles_valueChange();
+}
+
+void supervisorio::on_doubleSpinBox_polo1Im_ob_valueChanged(double)
+{
+    on_poles_valueChange();
+}
+
+void supervisorio::on_doubleSpinBox_polo2Re_ob_valueChanged(double)
+{
+    on_poles_valueChange();
+}
+
+void supervisorio::on_doubleSpinBox_polo2Im_ob_valueChanged(double)
+{
+    on_poles_valueChange();
+}
+
+void supervisorio::on_poles_valueChange(void)
 {
     getPolesOb();
-    //calcLOb();
+    calcLOb();
+    setLOb();
+}
+
+void supervisorio::on_doubleSpinBox_l1_valueChanged(double)
+{
+    on_l_valueChange();
+}
+
+void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
+{
+    on_l_valueChange();
+}
+
+void supervisorio::on_l_valueChange(void){
+    getLOb();
+    //calcPoles();
+    setPolesOb();
 }

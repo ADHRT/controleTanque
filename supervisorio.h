@@ -121,6 +121,16 @@ private slots:
 
   void on_doubleSpinBox_polo1Re_ob_valueChanged(double arg1);
 
+  void on_doubleSpinBox_polo1Im_ob_valueChanged(double arg1);
+
+  void on_doubleSpinBox_polo2Re_ob_valueChanged(double arg1);
+
+  void on_doubleSpinBox_polo2Im_ob_valueChanged(double arg1);
+
+  void on_doubleSpinBox_l1_valueChanged(double arg1);
+
+  void on_doubleSpinBox_l2_valueChanged(double arg1);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -163,6 +173,8 @@ private:
     void setPolesOb();
     bool isStableOb();
     double moduleOfPole(complex<double> pole);
+    void on_poles_valueChange();
+    void on_l_valueChange();
 };
 
 #endif // SUPERVISORIO_H
