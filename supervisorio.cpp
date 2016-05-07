@@ -772,9 +772,9 @@ void supervisorio::on_radioButton_10_clicked()
     ui->label_2->setText("Amplitude (cm)");
     ui->label_3->setText("Offset (cm)");
 
-    ui->doubleSpinBox_3->setValue(0);
-    ui->doubleSpinBox_3->setMaximum(30);
-    ui->doubleSpinBox_3->setMinimum(0);
+    //ui->doubleSpinBox_3->setValue(0);
+    //ui->doubleSpinBox_3->setMaximum(30);
+    //ui->doubleSpinBox_3->setMinimum(0);
 
     //Ativa a combo box dos parâmetros de controle
     ui->groupBox_10->setEnabled(true);
