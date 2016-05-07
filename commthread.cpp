@@ -23,8 +23,8 @@ commThread::commThread(QObject *parent):
     contEscravo.lastI = 0;
     contEscravo.lastD = 0;
 
-    polesOb[0] = complex<double>(10.0,1.0);
-    polesOb[1] = complex<double>(10.0,1.0);
+    polesOb[0] = complex<double>(0.99876,0);
+    polesOb[1] = complex<double>(0.0999273,0);
 
 
     //Inicializando variáveis do observador de estados;
@@ -43,16 +43,16 @@ commThread::commThread(QObject *parent):
     //L2_dot_const2 = -L2_dot_const1;
 
     // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
-    //double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
-    double g_temp[4] = {1.59, 6.481, -3.8894, 2};
-    //double h_temp[2] = {0.021258786853757, 0.000006975673074};
-    double h_temp[2] = {-0.3654, 8.5549};
-    //double c_temp[2] = {0, 1};
+    double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
+    //double g_temp[4] = {1.59, 6.481, -3.8894, 2};
+    double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    //double h_temp[2] = {-0.3654, 8.5549};
     double c_temp[2] = {0, 1};
-    //double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
-    double wo_temp[4] = {0, 6.481, 1, 2};
-    //double l_temp[2] = {1, 2};
-    double l_temp[2] = {-3.7045, 2.59};
+    //double c_temp[2] = {0, 1};
+    double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
+    //double wo_temp[4] = {0, 6.481, 1, 2};
+    double l_temp[2] = {0.9, 0.9};
+    //double l_temp[2] = {-3.7045, 2.59};
 
     // Matrizes do sistema
     G = mat(g_temp, 2, 2);
@@ -66,7 +66,7 @@ commThread::commThread(QObject *parent):
     erroEst = mat(2, 1, arma::fill::zeros);
     yEst = mat(1, 1, arma::fill::zeros);
 
-    //calcPoles();
+    calcPoles();
     //calcObs();
 }
 
@@ -174,7 +174,7 @@ void commThread::run(){
                 else{
                     contEscravo.sinalSaturado=contMestre.sinalSaturado;
                 }
-
+                //calcObs();
                 calcEstimated(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
             }
 
@@ -206,8 +206,6 @@ void commThread::run(){
 }
 
 void commThread::calcObs(void){
-    polesOb[0] = complex <double>(0.5, 0.1);
-    polesOb[1] = complex <double>(0.5, -0.1);
     double coef1 =  -polesOb[0].real() - polesOb[1].real();
     complex <double>coef2 = polesOb[0] * polesOb[1];
 
@@ -227,19 +225,13 @@ void commThread::calcObs(void){
 
 void commThread::calcPoles()
 {
-    //double a_temp[4] = {1, 2, 3, 4};
-    //mat A(a_temp, 2, 2);
-
-    //mat temp = A - L*C;
-
     mat temp = G - L*C;
 
     arma::cx_vec eigVal = eig_gen(temp);
-    //arma::vec eigVal = eig_sym(temp);
+    //qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
 
-    //qDebug() << "autovalores: " << eigVal[0] << eigVal[1];
-    qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
-    //qDebug() << "temp" << temp[0] << temp[1] << temp[2] << temp[3];
+    polesOb[0] = eigVal[0];
+    polesOb[1] = eigVal[1];
 }
 
 void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado)
@@ -247,7 +239,8 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     double x_temp[2] = {nivelTanque1, nivelTanque2};
     mat x(x_temp, 2, 1);
 
-    qDebug() << "Niveis reais: " << nivelTanque1 << nivelTanque2;
+    qDebug() << "Niveis reais: " << x[0] << x[1];
+    //qDebug() << "Sinal Saturado: " << sinalSaturado;
 
     erroEst = x - xEst;
     erroEst = (G - L*C)*erroEst;
@@ -256,6 +249,9 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     yEst = C*xEst;
     xEst = xEst_temp;
 
+    qDebug() << "L: " << L[0] << L[1];
+
+    qDebug() << "Erro: " << erroEst[0] << erroEst[1];
     qDebug() << "Niveis Estimados: " << xEst[0] << xEst[1];
 }
 
@@ -450,6 +446,37 @@ int commThread::start(void)
     }
     if(!erro) super::start();
     return erro;
+}
+
+void commThread::getPoles(double *l, complex<double> *pole)
+{
+    double l_temp[2] = {l[0], l[1]};
+    mat L_temp(l_temp, 2, 1);
+
+    mat temp = G - L_temp*C;
+
+    arma::cx_vec eigVal = eig_gen(temp);
+    //qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
+
+    pole[0] = eigVal[0];
+    pole[1] = eigVal[1];
+}
+
+void commThread::getL(complex<double> *pole, double *l)
+{
+    double coef1 =  -pole[0].real() - pole[1].real();
+    complex <double>coef2 = pole[0] * pole[1];
+
+    mat A = arma::eye<mat> (2,2);
+    double l_aux[2] = {0, 1};
+    mat l_array(l_aux, 2, 1);
+
+    mat q = G*G + coef1*G + coef2.real()*A;
+
+    mat l_mat = q*inv(Wo)*l_array;
+
+    l[0] = l_mat[0];
+    l[1] = l_mat[1];
 }
 
 
