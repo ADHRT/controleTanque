@@ -13,7 +13,7 @@ supervisorio::supervisorio(QWidget *parent) :
     QMainWindow::showFullScreen();
 
     //Cria Threads e conecta signals com slots
-    cThread = new commThread(this);
+    //cThread = new commThread(this);
 
     plotRange = 60;
     ui->spinBox->setValue(plotRange);
@@ -156,7 +156,8 @@ supervisorio::supervisorio(QWidget *parent) :
 
 
     //Threads signals com slots
-    //cThread = new commThread(this);
+    //
+    cThread = new commThread(this);
     connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
     supervisorio::on_pushButton_8_clicked();//Atualiza valores (evita bug no demo)
 
@@ -1223,8 +1224,8 @@ void supervisorio::on_doubleSpinBox_polo2Im_ob_valueChanged(double)
 void supervisorio::on_poles_valueChange(void)
 {
     //getPolesOb();
-    calcLOb();
-    setLOb();
+    //calcLOb();
+    //setLOb();
 }
 
 void supervisorio::on_doubleSpinBox_l1_valueChanged(double)
