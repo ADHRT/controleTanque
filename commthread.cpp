@@ -42,27 +42,32 @@ commThread::commThread(QObject *parent):
     //L2_dot_const1 = L1_dot_const1;
     //L2_dot_const2 = -L2_dot_const1;
 
-    //carregando valores de G no vetor temp para uso posterior no armadilo
+    // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
     double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
-    G = mat (g_temp, 2, 2);
-
     double h_temp[2] = {0.021258786853757, 0.000006975673074};
-    H = mat(h_temp, 2, 1);
-
     double c_temp[2] = {0, 1};
-    C = mat(c_temp, 1, 2);
-
     double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
-    Wo = mat(wo_temp, 2, 2);
-
     double l_temp[2] = {1, 2};
+
+    // Matrizes do sistema
+    G = mat(g_temp, 2, 2);
+    H = mat(h_temp, 2, 1);
+    C = mat(c_temp, 1, 2);
+    Wo = mat(wo_temp, 2, 2);
     L = mat(l_temp, 2, 1);
+
+    // Valores estimados
+    xEst = mat(2, 1, fill::zeros);
+    erroEst = mat(2, 1, zeros);
+    yEst = 0;
+
+    calcPoles();
 }
 
 void commThread::run(){
 
     //calcObs();
-    calcPoles();
+    //calcPoles();
 
     double nivelTanque = 0, nivelTanque1 = 0, nivelTanque2 = 0, timeStamp;
 
@@ -206,7 +211,7 @@ void commThread::calcObs(void){
 
     mat q = pow(G,2) + coef1*G + coef2.real()*A;
 
-    //L = q*inv(Wo)*l_array;
+    L = q*inv(Wo)*l_array;
 
     //qDebug() << "q: " << L[0] << L[1];
 }
@@ -216,21 +221,27 @@ void commThread::calcPoles()
     double a_temp[4] = {1, 2, 3, 4};
     mat A(a_temp, 2, 2);
 
-
-    //qDebug() << "Size L" << L.n_elem;
     mat temp = A - L*C;
+
     arma::cx_vec eigVal = eig_gen(temp);
+    //arma::vec eigVal = eig_sym(temp);
 
-    //eigs_gen()
-
-    qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
-
-    qDebug() << "temp" << temp[0] << temp[1] << temp[2] << temp[3];
-    //qDebug() << "C" << C[0] << C[1];
+    //qDebug() << "autovalores: " << eigVal[0] << eigVal[1];
+    //qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
+    //qDebug() << "temp" << temp[0] << temp[1] << temp[2] << temp[3];
 }
 
-void commThread::calcEstimated(double nivelTanque2, double sinalSaturado)
+void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado)
 {
+    x_temp[2] = {nivelTanque1, nivelTanque2};
+    mat x = (x_temp, 2, 1);
+
+    erroEst = x - xEst;
+    erroEst = (G - L*C)*erroEst;
+
+    xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
+    yEst = C*xEst;
+    xEst = xEst_temp;
 
 }
 
