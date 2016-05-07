@@ -10,6 +10,7 @@
 
 using std::complex;
 using arma::mat;
+
 struct Controlador {
   double p, i, d;
   double sinalCalculado, sinalSaturado;
@@ -59,18 +60,17 @@ private:
     // Entrada do usuario ou calculado pelo auto-valores
     complex<double> polesOb[2];
 
-    // Vetores para construcao da matriz para o calculo do observador
-//    double g_temp[4];
-//    double h_temp[2];
-//    double c_temp[2];
-//    double wo_temp[4];
-//    double l_temp[2];
-
+    // Matrizes para o calculo do observador
     mat G;
     mat H;
     mat C;
     mat Wo;
     mat L;
+
+    //Valores estimados
+    mat xEst;
+    mat erroEst;
+    mat yEst;
 
     // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
@@ -80,7 +80,7 @@ private:
 
     void calcObs();
     void calcPoles();
-    void calcEstimated(double nivelTanque2, double sinalSaturado);
+    void calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado);
 
 signals:
     void plotValues(double, double, double, double, double, double, double, double, double, double, double, double);

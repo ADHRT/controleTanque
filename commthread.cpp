@@ -57,9 +57,9 @@ commThread::commThread(QObject *parent):
     L = mat(l_temp, 2, 1);
 
     // Valores estimados
-    xEst = mat(2, 1, fill::zeros);
-    erroEst = mat(2, 1, zeros);
-    yEst = 0;
+    xEst = mat(2, 1, arma::fill::zeros);
+    erroEst = mat(2, 1, arma::fill::zeros);
+    yEst = mat(1, 1, arma::fill::zeros);
 
     calcPoles();
 }
@@ -233,13 +233,13 @@ void commThread::calcPoles()
 
 void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado)
 {
-    x_temp[2] = {nivelTanque1, nivelTanque2};
-    mat x = (x_temp, 2, 1);
+    double x_temp[2] = {nivelTanque1, nivelTanque2};
+    mat x(x_temp, 2, 1);
 
     erroEst = x - xEst;
     erroEst = (G - L*C)*erroEst;
 
-    xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
+    mat xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
     yEst = C*xEst;
     xEst = xEst_temp;
 
