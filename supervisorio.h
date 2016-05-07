@@ -175,6 +175,7 @@ private:
     double moduleOfPole(complex<double> pole);
     void on_poles_valueChange();
     void on_l_valueChange();
+    void calcPoles();
 };
 
 #endif // SUPERVISORIO_H

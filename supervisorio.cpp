@@ -12,6 +12,9 @@ supervisorio::supervisorio(QWidget *parent) :
     ui->setupUi(this);
     QMainWindow::showFullScreen();
 
+    //Cria Threads e conecta signals com slots
+    cThread = new commThread(this);
+
     plotRange = 60;
     ui->spinBox->setValue(plotRange);
     ui->scaleValue->setValue(plotRange);
@@ -152,8 +155,8 @@ supervisorio::supervisorio(QWidget *parent) :
      */
 
 
-    //Cria Threads e conecta signals com slots
-    cThread = new commThread(this);
+    //Threads signals com slots
+    //cThread = new commThread(this);
     connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
     supervisorio::on_pushButton_8_clicked();//Atualiza valores (evita bug no demo)
 
@@ -1139,11 +1142,14 @@ void supervisorio::setLOb()
     ui->doubleSpinBox_l2->setValue(lOb[1]);
 }
 
+void supervisorio::calcPoles()
+{
+    cThread->getPoles(lOb, polesOb);
+}
+
 void supervisorio::calcLOb()
 {
-    //commThread::getPoles(double *l, complex<double> *pole);
-    //cThread->getL(polesOb, lOb);
-    //commThread::getL(polesOb, lOb);
+    cThread->getL(polesOb, lOb);
 }
 
 bool supervisorio::isStableOb()
@@ -1158,7 +1164,7 @@ bool supervisorio::isStableOb()
     else
         erro = 0;
 
-    qDebug()<<"MODs: "<<mod0<<mod1;
+    //qDebug()<<"MODs: "<<mod0<<mod1;
     // caso sistema nao seja estavel nao pode enviar valores, e notifica o usuario
     if(erro){
         // warning color
@@ -1172,7 +1178,6 @@ bool supervisorio::isStableOb()
         // unwarning color
         ui->groupBox_polos_ob->setPalette( ui->groupBox_polos_ob->style()->standardPalette() );
         ui->groupBox_l->setPalette(ui->groupBox_l->style()->standardPalette());
-
     }
 
     ui->pushButton_8->setDisabled(erro);
@@ -1237,5 +1242,5 @@ void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
 void supervisorio::on_l_valueChange(void){
     //getLOb();
     //calcPoles();
-    setPolesOb();
+    //setPolesOb();
 }
