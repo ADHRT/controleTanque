@@ -43,11 +43,16 @@ commThread::commThread(QObject *parent):
     //L2_dot_const2 = -L2_dot_const1;
 
     // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
-    double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
-    double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    //double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
+    double g_temp[4] = {1.59, 6.481, -3.8894, 2};
+    //double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    double h_temp[2] = {-0.3654, 8.5549};
+    //double c_temp[2] = {0, 1};
     double c_temp[2] = {0, 1};
-    double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
-    double l_temp[2] = {1, 2};
+    //double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
+    double wo_temp[4] = {0, 6.481, 1, 2};
+    //double l_temp[2] = {1, 2};
+    double l_temp[2] = {-3.7045, 2.59};
 
     // Matrizes do sistema
     G = mat(g_temp, 2, 2);
@@ -61,7 +66,8 @@ commThread::commThread(QObject *parent):
     erroEst = mat(2, 1, arma::fill::zeros);
     yEst = mat(1, 1, arma::fill::zeros);
 
-    calcPoles();
+    //calcPoles();
+    //calcObs();
 }
 
 void commThread::run(){
@@ -154,22 +160,22 @@ void commThread::run(){
                     lastControl[1] = control[1];
                 }
 
+                contMestre.setPoint = sinalDaOndaGerada;
+                contMestre.erro = contMestre.setPoint - nivelTanque;
 
+                calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
 
-contMestre.setPoint = sinalDaOndaGerada;
-contMestre.erro = contMestre.setPoint - nivelTanque;
+                if(cascade){
+                    contEscravo.setPoint = contMestre.sinalCalculado;
+                    contEscravo.erro = contEscravo.setPoint - nivelTanque1;
 
-calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
+                    calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
+                }
+                else{
+                    contEscravo.sinalSaturado=contMestre.sinalSaturado;
+                }
 
-if(cascade){
-    contEscravo.setPoint = contMestre.sinalCalculado;
-    contEscravo.erro = contEscravo.setPoint - nivelTanque1;
-
-    calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
-}
-else{
-    contEscravo.sinalSaturado=contMestre.sinalSaturado;
-}
+                calcEstimated(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
             }
 
             // Escreve no canal selecionado
@@ -200,8 +206,8 @@ else{
 }
 
 void commThread::calcObs(void){
-    polesOb[0] = complex <double>(2, 3);
-    polesOb[1] = complex <double>(2, -3);
+    polesOb[0] = complex <double>(0.5, 0.1);
+    polesOb[1] = complex <double>(0.5, -0.1);
     double coef1 =  -polesOb[0].real() - polesOb[1].real();
     complex <double>coef2 = polesOb[0] * polesOb[1];
 
@@ -209,25 +215,30 @@ void commThread::calcObs(void){
     double l_aux[2] = {0, 1};
     mat l_array(l_aux, 2, 1);
 
-    mat q = pow(G,2) + coef1*G + coef2.real()*A;
+    mat q = G*G + coef1*G + coef2.real()*A;
 
     L = q*inv(Wo)*l_array;
 
-    //qDebug() << "q: " << L[0] << L[1];
+//    qDebug() << "coef1: " << coef1 << "coef2: " << coef2.real();
+//    qDebug() << "G: " << G[0] << G[1] << G[2] << G[3];
+//    qDebug() << "Q: " << q[0] << q[1] << q[2] << q[3];
+//    qDebug() << "L: " << L[0] << L[1];
 }
 
 void commThread::calcPoles()
 {
-    double a_temp[4] = {1, 2, 3, 4};
-    mat A(a_temp, 2, 2);
+    //double a_temp[4] = {1, 2, 3, 4};
+    //mat A(a_temp, 2, 2);
 
-    mat temp = A - L*C;
+    //mat temp = A - L*C;
+
+    mat temp = G - L*C;
 
     arma::cx_vec eigVal = eig_gen(temp);
     //arma::vec eigVal = eig_sym(temp);
 
     //qDebug() << "autovalores: " << eigVal[0] << eigVal[1];
-    //qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
+    qDebug() << "autovalores: " << eigVal[0].real() << eigVal[0].imag() << eigVal[1].real() << eigVal[1].imag();
     //qDebug() << "temp" << temp[0] << temp[1] << temp[2] << temp[3];
 }
 
@@ -236,6 +247,8 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     double x_temp[2] = {nivelTanque1, nivelTanque2};
     mat x(x_temp, 2, 1);
 
+    qDebug() << "Niveis reais: " << nivelTanque1 << nivelTanque2;
+
     erroEst = x - xEst;
     erroEst = (G - L*C)*erroEst;
 
@@ -243,6 +256,7 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     yEst = C*xEst;
     xEst = xEst_temp;
 
+    qDebug() << "Niveis Estimados: " << xEst[0] << xEst[1];
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
