@@ -1142,7 +1142,8 @@ void supervisorio::setLOb()
 void supervisorio::calcLOb()
 {
     //commThread::getPoles(double *l, complex<double> *pole);
-    cThread->getL(polesOb, lOb);
+    //cThread->getL(polesOb, lOb);
+    //commThread::getL(polesOb, lOb);
 }
 
 bool supervisorio::isStableOb()
