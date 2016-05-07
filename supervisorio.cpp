@@ -139,7 +139,7 @@ supervisorio::supervisorio(QWidget *parent) :
     //L
     setLOb();
     ui->checkBox_observador_ativar->setChecked(observador);
-    on_checkBox_observador_ativar_clicked(observador);
+    //on_checkBox_observador_ativar_clicked(observador);
     //Polos
     //nao pode usar pois nao usa variavel auxiliar setPolesOb();
     ui->doubleSpinBox_polo1Re_ob->setValue(auxPoleOb1Re);
