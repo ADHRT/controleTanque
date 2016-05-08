@@ -9,11 +9,24 @@ supervisorio::supervisorio(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::supervisorio)
 {
+    /* +++++++++++++++++++++++++++++++++++++++++++++++++
+     * BEGIN - Flags
+     * +++++++++++++++++++++++++++++++++++++++++++++++++
+     */
+    lObHasChanged = false;
+    poleObHasChanged = false;
+    /* -----------------------------------------------
+     * END - Flags
+     * -----------------------------------------------
+     */
+
+    /* +++++++++++++++++++++++++++++++++++++++++++++++++
+     * BEGIN - Vincula e exibe interface
+     * +++++++++++++++++++++++++++++++++++++++++++++++++
+     */
+
     ui->setupUi(this);
     QMainWindow::showFullScreen();
-
-    //Cria Threads e conecta signals com slots
-    //cThread = new commThread(this);
 
     plotRange = 60;
     ui->spinBox->setValue(plotRange);
@@ -25,6 +38,43 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //Inicialização para o plot randômico
     timeToNextRandomNumber=0;
+
+    /* -----------------------------------------------
+     * END - Vincula e exibe interface
+     * -----------------------------------------------
+     */
+
+    /* +++++++++++++++++++++++++++++++++++++++++++++++++
+     * BEGIN - Thread init
+     * +++++++++++++++++++++++++++++++++++++++++++++++++
+     */
+
+    cThread = new commThread(this);
+    connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
+
+    /* -----------------------------------------------
+     * END - Thread init
+     * -----------------------------------------------
+     */
+
+
+    /* +++++++++++++++++++++++++++++++++++++++++++++++++
+     * BEGIN - Analist init
+     * +++++++++++++++++++++++++++++++++++++++++++++++++
+     */
+
+    //Analist calcula valores para relatorios e analise da dinamica
+    analist = new Analist();
+    //Tool Tips
+    ui->label_tr_0->setToolTip("Tempo de Subida");
+    ui->label_tp_0->setToolTip("Tempo de Pico");
+    ui->label_ts_0->setToolTip("Tempo de Estabilização");
+    ui->label_mp_0->setToolTip("Overshoot");
+
+    /* -----------------------------------------------
+     * END - Analist init
+     * -----------------------------------------------
+     */
 
     /* +++++++++++++++++++++++++++++++++++++++++++++++++
      * BEGIN - Valores para popular a interface grafica
@@ -65,15 +115,10 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //observador
     bool observador = true;
-    lOb[0] = 10;
-    lOb[1] = 15;
-    //Parece inutil mas nao e, os valores seram setados mais a baixo e precisam estar em variaveis auxiliares
-    // pois ao mudar um valor na interface todos os outros sao sobre-escritos com valores que ja estao na inter-
-    // face. Apos setar eles seram automaticamente carregados em polesOb[]
-    double auxPoleOb1Re = 0.5;
-    double auxPoleOb1Im = 0.5;
-    double auxPoleOb2Re = 0.5;
-    double auxPoleOb2Im = 0.5;
+    //lOb[0] = 10;
+    //lOb[1] = 15;
+    polesOb[0] = complex <double>(0.5,0.5);
+    polesOb[1] = complex <double>(0.5,-0.5);
 
     //seguidor
     bool seguidor = false;
@@ -137,15 +182,16 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //Observador
     //L
-    setLOb();
+    //setLOb(-1);
+    //carrega os polos
+    //on_l_valueChange();
     ui->checkBox_observador_ativar->setChecked(observador);
+    //HANOCH-desabilitaPID
     //on_checkBox_observador_ativar_clicked(observador);
     //Polos
-    //nao pode usar pois nao usa variavel auxiliar setPolesOb();
-    ui->doubleSpinBox_polo1Re_ob->setValue(auxPoleOb1Re);
-    ui->doubleSpinBox_polo1Im_ob->setValue(auxPoleOb1Im);
-    ui->doubleSpinBox_polo2Re_ob->setValue(auxPoleOb2Re);
-    ui->doubleSpinBox_polo2Im_ob->setValue(auxPoleOb2Im);
+    setPolesOb(-1);
+    //carrega os Ls
+    on_poles_valueChange();
 
     //seguidor
     ui->groupBox_seguidorDeRef->setEnabled(seguidor);
@@ -155,20 +201,10 @@ supervisorio::supervisorio(QWidget *parent) :
      */
 
 
-    //Threads signals com slots
-    //
-    cThread = new commThread(this);
-    connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
+    //Carrega valores da interface para cthread
     supervisorio::on_pushButton_8_clicked();//Atualiza valores (evita bug no demo)
 
-    //Analist calcula valores para relatorios e analise da dinamica
-    analist = new Analist();
 
-    //Tool Tips
-    ui->label_tr_0->setToolTip("Tempo de Subida");
-    ui->label_tp_0->setToolTip("Tempo de Pico");
-    ui->label_ts_0->setToolTip("Tempo de Estabilização");
-    ui->label_mp_0->setToolTip("Overshoot");
 }
 
 supervisorio::~supervisorio()
@@ -1106,12 +1142,14 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
         ui->checkBox_9->setChecked(!checked);
         ui->radioButton_tanque2->setChecked(checked);
     }
+    ui->groupBox_Observador->setEnabled(checked);
+    //Desabilita controle
+    //desabilita cascata
+    ui->checkBox_9->setChecked(!checked);
     ui->groupBox_10->setEnabled(!checked);
     ui->groupBox_11->setEnabled(!checked);
     ui->groupBox_4->setEnabled(!checked);
     ui->groupBox_select_tanque->setEnabled(!checked);
-    ui->checkBox_9->setChecked(!checked);
-    ui->groupBox_Observador->setEnabled(checked);
 }
 
 
@@ -1120,15 +1158,26 @@ void supervisorio::getPolesOb()
 {
     polesOb[0] = complex <double>(ui->doubleSpinBox_polo1Re_ob->value(), ui->doubleSpinBox_polo1Im_ob->value());
     polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
-    isStableOb();
+    isInstableOb();
 }
 
-void supervisorio::setPolesOb()
+/*  Altera os polos na interface grafica
+    Params: -1 para todos
+             1 para polo 1
+             2 para polo 2
+*/
+void supervisorio::setPolesOb(int poleNum)
 {
-    ui->doubleSpinBox_polo1Re_ob->setValue(polesOb[0].real());
-    ui->doubleSpinBox_polo1Im_ob->setValue(polesOb[0].imag());
-    ui->doubleSpinBox_polo2Re_ob->setValue(polesOb[1].real());
-    ui->doubleSpinBox_polo2Im_ob->setValue(polesOb[1].imag());
+    poleObHasChanged = true;
+    if(poleNum == 1 || poleNum == -1) {
+        ui->doubleSpinBox_polo1Re_ob->setValue(polesOb[0].real());
+        ui->doubleSpinBox_polo1Im_ob->setValue(polesOb[0].imag());
+    }
+    if (poleNum == 2 || poleNum == -1) {
+        ui->doubleSpinBox_polo2Re_ob->setValue(polesOb[1].real());
+        ui->doubleSpinBox_polo2Im_ob->setValue(polesOb[1].imag());
+    }
+    poleObHasChanged = false;
 }
 
 void supervisorio::getLOb()
@@ -1137,10 +1186,14 @@ void supervisorio::getLOb()
     lOb[1] = ui->doubleSpinBox_l2->value();
 }
 
-void supervisorio::setLOb()
+void supervisorio::setLOb(int lNum)
 {
-    ui->doubleSpinBox_l1->setValue(lOb[0]);
-    ui->doubleSpinBox_l2->setValue(lOb[1]);
+    lObHasChanged = true;
+    if(lNum == 1 || lNum == -1)
+        ui->doubleSpinBox_l1->setValue(lOb[0]);
+    if(lNum == 2 || lNum == -1)
+        ui->doubleSpinBox_l2->setValue(lOb[1]);
+    lObHasChanged = false;
 }
 
 void supervisorio::calcPoles()
@@ -1153,19 +1206,23 @@ void supervisorio::calcLOb()
     cThread->getL(polesOb, lOb);
 }
 
-bool supervisorio::isStableOb()
+bool supervisorio::isInstableOb()
 {
-    int erro;
+    int erro = 0;
     double mod0 = moduleOfPole(polesOb[0]);
     double mod1 = moduleOfPole(polesOb[1]);
+
+    //verifica validade dos polos conjugados
+    if (polesOb[0].imag() != 0 || polesOb[1].imag() != 0)
+        if(polesOb[0].imag() != -polesOb[1].imag() || polesOb[0].real() != polesOb[1].real())
+            erro = 1;
+
+    //verifica instabilidade
     if(mod0 > 1 || mod1 > 1)
         erro = 1;
     else if(mod0 == 1 && polesOb[0] == polesOb[1])
         erro = 1;
-    else
-        erro = 0;
 
-    //qDebug()<<"MODs: "<<mod0<<mod1;
     // caso sistema nao seja estavel nao pode enviar valores, e notifica o usuario
     if(erro){
         // warning color
@@ -1181,6 +1238,7 @@ bool supervisorio::isStableOb()
         ui->groupBox_l->setPalette(ui->groupBox_l->style()->standardPalette());
     }
 
+    //desabilita o botao de atualizar caso haja erro
     ui->pushButton_8->setDisabled(erro);
     return erro;
 }
@@ -1192,56 +1250,82 @@ double supervisorio::moduleOfPole(complex<double> pole)
 
 void supervisorio::on_doubleSpinBox_polo1Re_ob_valueChanged(double)
 {
-    polesOb[0].real(ui->doubleSpinBox_polo1Re_ob->value());
-    //complex <double>(ui->doubleSpinBox_polo1Re_ob->value(), ui->doubleSpinBox_polo1Im_ob->value());
-    //polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
-    isStableOb();
-    on_poles_valueChange();
+    if(!lObHasChanged && !poleObHasChanged) {
+        polesOb[0].real(ui->doubleSpinBox_polo1Re_ob->value());
+        replicaPolo(1);
+        on_poles_valueChange();
+    }
 }
 
 void supervisorio::on_doubleSpinBox_polo1Im_ob_valueChanged(double)
 {
-    polesOb[0].imag(ui->doubleSpinBox_polo1Im_ob->value());
-    //polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
-    isStableOb();
-    on_poles_valueChange();
+    if(!lObHasChanged && !poleObHasChanged) {
+        polesOb[0].imag(ui->doubleSpinBox_polo1Im_ob->value());
+        replicaPolo(1);
+        on_poles_valueChange();
+    }
 }
 
 void supervisorio::on_doubleSpinBox_polo2Re_ob_valueChanged(double)
 {
-    polesOb[1].real(ui->doubleSpinBox_polo2Re_ob->value());
-    isStableOb();
-    on_poles_valueChange();
+    if(!lObHasChanged && !poleObHasChanged) {
+        polesOb[1].real(ui->doubleSpinBox_polo2Re_ob->value());
+        replicaPolo(2);
+        on_poles_valueChange();
+    }
 }
 
 void supervisorio::on_doubleSpinBox_polo2Im_ob_valueChanged(double)
 {
-    polesOb[1].imag(ui->doubleSpinBox_polo2Im_ob->value());
-    isStableOb();
-    on_poles_valueChange();
+    if(!lObHasChanged && !poleObHasChanged) {
+        polesOb[1].imag(ui->doubleSpinBox_polo2Im_ob->value());
+        replicaPolo(2);
+        on_poles_valueChange();
+    }
+}
+
+void supervisorio::replicaPolo(int numPolo){
+    //sera utilizado como idice do vetor
+    numPolo--;
+
+    //um polo e o numPolo que foi alterado pelo usuario o outro e o !numPolo que sera modificado
+    if(polesOb[numPolo].imag() != 0) {
+        polesOb[!numPolo].imag(-polesOb[numPolo].imag());
+        polesOb[!numPolo].real(polesOb[numPolo].real());
+        //volta a ser o numero de polo, modificado
+        setPolesOb((!numPolo)+1);
+    }
+
 }
 
 void supervisorio::on_poles_valueChange(void)
 {
     //getPolesOb();
-    //calcLOb();
-    //setLOb();
+    isInstableOb();
+    calcLOb();
+    setLOb(-1);
 }
 
 void supervisorio::on_doubleSpinBox_l1_valueChanged(double)
 {
-    lOb[0] = ui->doubleSpinBox_l1->value();
-    on_l_valueChange();
+    if(!lObHasChanged && !poleObHasChanged) {
+        lOb[0] = ui->doubleSpinBox_l1->value();
+        on_l_valueChange();
+    }
 }
 
 void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
 {
-    lOb[1] = ui->doubleSpinBox_l2->value();
-    on_l_valueChange();
+    if(!lObHasChanged && !poleObHasChanged) {
+        lOb[1] = ui->doubleSpinBox_l2->value();
+        on_l_valueChange();
+    }
 }
 
 void supervisorio::on_l_valueChange(void){
     //getLOb();
-    //calcPoles();
-    //setPolesOb();
+    calcPoles();
+    isInstableOb();
+    //seta na interface todos os polos
+    setPolesOb(-1);
 }

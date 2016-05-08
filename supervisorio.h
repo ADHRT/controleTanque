@@ -169,13 +169,17 @@ private:
     void getPolesOb();
     void calcLOb();
     void getLOb();
-    void setLOb();
-    void setPolesOb();
-    bool isStableOb();
+    void setLOb(int lNum);
+    void setPolesOb(int poleNum);
+    bool isInstableOb();
     double moduleOfPole(complex<double> pole);
     void on_poles_valueChange();
     void on_l_valueChange();
     void calcPoles();
+    // flags para evitarem loop infinito de atualizacao dos valores
+    bool lObHasChanged;
+    bool poleObHasChanged;
+    void replicaPolo(int numPolo);
 };
 
 #endif // SUPERVISORIO_H
