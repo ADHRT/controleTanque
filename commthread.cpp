@@ -178,7 +178,7 @@ void commThread::run(){
 
             // Escreve no canal selecionado
             if(!simulationMode) {
-//                qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
+                //qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
                 q->writeDA(channel, contEscravo.sinalSaturado);
             } else { //Simulacao
 

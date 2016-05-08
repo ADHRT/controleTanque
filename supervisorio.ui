@@ -1195,19 +1195,6 @@
         </property>
        </widget>
       </widget>
-      <widget class="QCheckBox" name="checkBox_observador_ativar">
-       <property name="geometry">
-        <rect>
-         <x>280</x>
-         <y>0</y>
-         <width>97</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Ativar</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_seguidorDeRef">
       <property name="geometry">
@@ -1582,6 +1569,19 @@
         </property>
        </item>
       </widget>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_observador_ativar">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>0</y>
+        <width>97</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ativar</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_pid">
