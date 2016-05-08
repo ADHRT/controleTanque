@@ -26,7 +26,7 @@ public:
     explicit commThread(QObject *parent =0);
     enum Control { P, PI, PD, PID, PI_D, SEM };
     void run();
-    void setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade);
+    void setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade, bool observador, double *lOb);
     void setNullParameters(void);
     void setSimulationMode(bool on);
     void disconnect(void);

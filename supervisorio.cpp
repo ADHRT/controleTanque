@@ -917,7 +917,9 @@ void supervisorio::on_pushButton_8_clicked()
     int castControl[2];
     castControl[0] = static_cast<int>(control[0]);
     castControl[1] = static_cast<int>(control[1]);
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade);
+
+    bool observador = ui->checkBox_observador_ativar;
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observador ,lOb);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo){

@@ -288,7 +288,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade, bool observador, double *lOb)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -322,6 +322,11 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
 
     this->tank = tank;
     this->cascade = cascade;
+
+    //TAYNARA receber observador e lob
+    L = mat(lOb, 2, 1);
+
+    qDebug() << "cT| L:"<<L[0] << " " << L[1];
 }
 
 // Zera todos os valores
