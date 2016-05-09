@@ -12,8 +12,8 @@ commThread::commThread(QObject *parent):
     waveTime = 0;
     control[0] = P; control[1] = P;
     lastControl[0] = control[0]; lastControl[1] = control[1];
-    char ip[] = "10.13.99.69";
-    q = new Quanser(ip, 20081);
+    //char ip[] = "10.13.99.69";
+    q = new Quanser("10.13.99.69", 20081);
     period = 0.1;
     tank = 1; // tanque2
 
@@ -46,8 +46,8 @@ commThread::commThread(QObject *parent):
     // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
     double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
     //double g_temp[4] = {1.59, 6.481, -3.8894, 2};
-    //double h_temp[2] = {0.021258786853757, 0.000006975673074};
-    double h_temp[2] = {0.0269, 0.0000963};
+    double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    //double h_temp[2] = {0.0269, 0.0000963};
     double c_temp[2] = {0, 1};
     //double c_temp[2] = {0, 1};
     double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
@@ -172,7 +172,6 @@ void commThread::run(){
                 else{
                     contEscravo.sinalSaturado=contMestre.sinalSaturado;
                 }
-                //calcObs();
                 calcEstimated(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
             }
 
@@ -194,7 +193,7 @@ void commThread::run(){
            }
 
             // Envia valores para o supervisorio
-            emit plotValues(timeStamp, contMestre.sinalCalculado, contEscravo.sinalCalculado, contEscravo.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contEscravo.i, contMestre.d, contEscravo.d);
+            emit plotValues(timeStamp, contMestre.sinalCalculado, contEscravo.sinalCalculado, contEscravo.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contEscravo.i, contMestre.d, contEscravo.d, xEst[0], xEst[1], erroEst[0], erroEst[1]);
         }
     }
     if(!simulationMode) {
@@ -239,17 +238,15 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
 
     //qDebug() << "Sinal Saturado: " << sinalSaturado;
 
-    erroEst = x - xEst;
-    erroEst = (G - L*C)*erroEst;
-
     mat xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
     yEst = C*xEst;
     xEst = xEst_temp;
+    erroEst = x - xEst;
 
     //qDebug() << "L: " << L[0] << L[1];
-    //qDebug() << "Erro: " << erroEst[0] << erroEst[1];
     qDebug() << "Nivel 1: " << x[0] << xEst[0];
     qDebug() << "Nivel 2: " << x[1] << xEst[1];
+    qDebug() << "Erro: " << erroEst[0] << erroEst[1];
     //qDebug() << "Sinal Saturado: " << sinalSaturado;
 }
 
@@ -319,6 +316,9 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     //TAYNARA receber observador e lob
     this->L = mat(lOb, 2, 1);
     this->observer = observer;
+    this->xEst = mat(2, 1, arma::fill::zeros);
+    this->erroEst = mat(2, 1, arma::fill::zeros);
+    this->yEst = mat(1, 1, arma::fill::zeros);
 }
 
 // Zera todos os valores

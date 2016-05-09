@@ -24,13 +24,13 @@ public:
     void setupPlot1(QCustomPlot *customPlot);
     void setupPlot2(QCustomPlot *customPlo2);
     void updatePlot1(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot, double blue2Plot, double green2Plot, double orange2Plot);
-    void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot);
+    void updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double green2Plot, double pinkPlot, double blue2Plot, double orangePlot, double orange2Plot);
     double lockSignal(double sinalCalculado, double nivelTanque1);
     commThread *cThread;
     Analist *analist;
 
 public slots:
-     void onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo);
+     void onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2);
 
 private slots:
   void on_comboBox_currentIndexChanged(int index);
@@ -131,11 +131,19 @@ private slots:
 
   void on_doubleSpinBox_l2_valueChanged(double arg1);
 
+  void on_pushButton_14_clicked();
+
+  void on_pushButton_15_clicked();
+
+  void on_pushButton_16_clicked();
+
+  void on_pushButton_17_clicked();
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
     QTimer dataTimer;
-    bool plot1Enable[7], plot2Enable[4];
+    bool plot1Enable[7], plot2Enable[8];
     double lastTimeStamp;
     double sinalCalculado[2];
     double timeToNextRandomNumber;
@@ -180,6 +188,7 @@ private:
     bool lObHasChanged;
     bool poleObHasChanged;
     void replicaPolo(int numPolo);
+    void setObsGraph(bool checked);
 };
 
 #endif // SUPERVISORIO_H

@@ -50,7 +50,7 @@ supervisorio::supervisorio(QWidget *parent) :
      */
 
     cThread = new commThread(this);
-    connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double)));
+    connect(cThread,SIGNAL(plotValues(double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double)),this,SLOT(onPlotValues(double, double, double, double, double, double, double, double, double, double, double, double, double, double, double, double)));
 
     /* -----------------------------------------------
      * END - Thread init
@@ -116,9 +116,9 @@ supervisorio::supervisorio(QWidget *parent) :
     //observador
     bool observador = true;
     //lOb[0] = 10;
-    //lOb[1] = 15;
-    polesOb[0] = complex <double>(0.5,0.5);
-    polesOb[1] = complex <double>(0.5,-0.5);
+    //lOb[1] = 15;    
+    polesOb[0] = complex<double>(0.99876,0);
+    polesOb[1] = complex<double>(0.0999273,0);
 
     //seguidor
     bool seguidor = false;
@@ -230,7 +230,6 @@ void supervisorio::setupPlot1(QCustomPlot *customPlot)
   ui->pushButton_12->setCheckable(true);//Green2 Enabled
   ui->pushButton_13->setCheckable(true);//Orange2 Enabled
 
-
   customPlot->addGraph(); // blue line
   customPlot->graph(0)->setPen(QPen(Qt::blue));
   customPlot->graph(0)->setAntialiasedFill(false);
@@ -312,7 +311,11 @@ void supervisorio::setupPlot2(QCustomPlot *customPlot2)
   plot2Enable[0]=true;//Red Enabled
   plot2Enable[1]=true;//Blue Enabled
   plot2Enable[2]=true;//Green Enabled
-  plot2Enable[3]=true;//Orange Enabled
+  plot2Enable[3]=true;//Green2 Enabled
+  plot2Enable[4]=true;//Pink Enabled
+  plot2Enable[5]=true;//Blue2 Enabled
+  plot2Enable[6]=true;//Orange Enabled
+  plot2Enable[7]=true;//Orange2 Enabled
 
   customPlot2->addGraph(); // red line
   customPlot2->graph(0)->setPen(QPen(Qt::red));
@@ -321,25 +324,49 @@ void supervisorio::setupPlot2(QCustomPlot *customPlot2)
   customPlot2->graph(1)->setPen(QPen(Qt::blue));
   customPlot2->addGraph(); // green line
   customPlot2->graph(2)->setPen(QPen(Qt::green));
-  customPlot2->addGraph(); // orange line
-  customPlot2->graph(3)->setPen(QPen(qRgb(255,128,0)));
+  customPlot2->addGraph(); // green2 line
+  customPlot2->graph(3)->setPen(QPen(qRgb(0,102,0)));
+  customPlot2->addGraph(); // Pink line
+  customPlot2->graph(4)->setPen(QPen(qRgb(255,0,180)));
+  customPlot2->addGraph(); // Blue2 line
+  customPlot2->graph(5)->setPen(QPen(qRgb(0,0,102)));
+  customPlot2->addGraph(); // Orange line
+  customPlot2->graph(6)->setPen(QPen(qRgb(255,128,0)));
+  customPlot2->addGraph(); // Orange2 line
+  customPlot2->graph(7)->setPen(QPen(qRgb(127,64,0)));
 
   customPlot2->addGraph(); // red dot
-  customPlot2->graph(4)->setPen(QPen(Qt::red));
-  customPlot2->graph(4)->setLineStyle(QCPGraph::lsNone);
-  customPlot2->graph(4)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->graph(8)->setPen(QPen(Qt::red));
+  customPlot2->graph(8)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(8)->setScatterStyle(QCPScatterStyle::ssDisc);
   customPlot2->addGraph(); // blue dot
-  customPlot2->graph(5)->setPen(QPen(Qt::blue));
-  customPlot2->graph(5)->setLineStyle(QCPGraph::lsNone);
-  customPlot2->graph(5)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->graph(9)->setPen(QPen(Qt::blue));
+  customPlot2->graph(9)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(9)->setScatterStyle(QCPScatterStyle::ssDisc);
   customPlot2->addGraph(); // green dot
-  customPlot2->graph(6)->setPen(QPen(Qt::green));
-  customPlot2->graph(6)->setLineStyle(QCPGraph::lsNone);
-  customPlot2->graph(6)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->graph(10)->setPen(QPen(Qt::green));
+  customPlot2->graph(10)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(10)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->addGraph(); // green2 dot
+  customPlot2->graph(11)->setPen(QPen(qRgb(0,102,0)));
+  customPlot2->graph(11)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(11)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->addGraph(); // pink dot
+  customPlot2->graph(12)->setPen(QPen(qRgb(255,0,180)));
+  customPlot2->graph(12)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(12)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->addGraph(); // blue2 dot
+  customPlot2->graph(13)->setPen(QPen(qRgb(0,0,102)));
+  customPlot2->graph(13)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(13)->setScatterStyle(QCPScatterStyle::ssDisc);
   customPlot2->addGraph(); // orange dot
-  customPlot2->graph(7)->setPen(QPen(qRgb(255,128,0)));
-  customPlot2->graph(7)->setLineStyle(QCPGraph::lsNone);
-  customPlot2->graph(7)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->graph(14)->setPen(QPen(qRgb(255,128,0)));
+  customPlot2->graph(14)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(14)->setScatterStyle(QCPScatterStyle::ssDisc);
+  customPlot2->addGraph(); // orange2 dot
+  customPlot2->graph(15)->setPen(QPen(qRgb(127,64,0)));
+  customPlot2->graph(15)->setLineStyle(QCPGraph::lsNone);
+  customPlot2->graph(15)->setScatterStyle(QCPScatterStyle::ssDisc);
 
   customPlot2->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   customPlot2->xAxis->setDateTimeFormat("hh:mm:ss");
@@ -431,15 +458,13 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
 
 }
 
-void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot, double greenPlot, double orangePlot)
+void supervisorio::updatePlot2(double timeStamp, double redPlot, double bluePlot, double greenPlot, double green2Plot, double pinkPlot, double blue2Plot, double orangePlot, double orange2Plot)
 {
-
-
   //Red
   if(plot2Enable[0]) {
       ui->customPlot2->graph(0)->addData(timeStamp, redPlot);
-      ui->customPlot2->graph(4)->clearData();
-      ui->customPlot2->graph(4)->addData(timeStamp, redPlot);
+      ui->customPlot2->graph(8)->clearData();
+      ui->customPlot2->graph(8)->addData(timeStamp, redPlot);
       ui->customPlot2->graph(0)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(0)->rescaleValueAxis(true);
   }
@@ -447,8 +472,8 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
   //Blue
   if(plot2Enable[1]){
       ui->customPlot2->graph(1)->addData(timeStamp, bluePlot);
-      ui->customPlot2->graph(5)->clearData();
-      ui->customPlot2->graph(5)->addData(timeStamp, bluePlot);
+      ui->customPlot2->graph(9)->clearData();
+      ui->customPlot2->graph(9)->addData(timeStamp, bluePlot);
       ui->customPlot2->graph(1)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(1)->rescaleValueAxis(true);
   }
@@ -456,19 +481,55 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
   //Green
   if(plot2Enable[2]) {
       ui->customPlot2->graph(2)->addData(timeStamp, greenPlot);
-      ui->customPlot2->graph(6)->clearData();
-      ui->customPlot2->graph(6)->addData(timeStamp, greenPlot);
+      ui->customPlot2->graph(10)->clearData();
+      ui->customPlot2->graph(10)->addData(timeStamp, greenPlot);
       ui->customPlot2->graph(2)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(2)->rescaleValueAxis(true);
   }
 
-  //Orange
+  //Green2
   if(plot2Enable[3]) {
-      ui->customPlot2->graph(3)->addData(timeStamp, orangePlot);
-      ui->customPlot2->graph(7)->clearData();
-      ui->customPlot2->graph(7)->addData(timeStamp, orangePlot);
+      ui->customPlot2->graph(3)->addData(timeStamp, green2Plot);
+      ui->customPlot2->graph(11)->clearData();
+      ui->customPlot2->graph(11)->addData(timeStamp, green2Plot);
       ui->customPlot2->graph(3)->removeDataBefore(timeStamp-plotRange);
       ui->customPlot2->graph(3)->rescaleValueAxis(true);
+  }
+
+  //Pink
+  if(plot2Enable[4]) {
+      ui->customPlot2->graph(4)->addData(timeStamp, pinkPlot);
+      ui->customPlot2->graph(12)->clearData();
+      ui->customPlot2->graph(12)->addData(timeStamp, pinkPlot);
+      ui->customPlot2->graph(4)->removeDataBefore(timeStamp-plotRange);
+      ui->customPlot2->graph(4)->rescaleValueAxis(true);
+  }
+
+  //Blue2
+  if(plot2Enable[5]) {
+      ui->customPlot2->graph(5)->addData(timeStamp, blue2Plot);
+      ui->customPlot2->graph(13)->clearData();
+      ui->customPlot2->graph(13)->addData(timeStamp, blue2Plot);
+      ui->customPlot2->graph(5)->removeDataBefore(timeStamp-plotRange);
+      ui->customPlot2->graph(5)->rescaleValueAxis(true);
+  }
+
+  //Orange
+  if(plot2Enable[6]) {
+      ui->customPlot2->graph(6)->addData(timeStamp, orangePlot);
+      ui->customPlot2->graph(14)->clearData();
+      ui->customPlot2->graph(14)->addData(timeStamp, orangePlot);
+      ui->customPlot2->graph(6)->removeDataBefore(timeStamp-plotRange);
+      ui->customPlot2->graph(6)->rescaleValueAxis(true);
+  }
+
+  //Orange2
+  if(plot2Enable[7]) {
+      ui->customPlot2->graph(7)->addData(timeStamp, orange2Plot);
+      ui->customPlot2->graph(15)->clearData();
+      ui->customPlot2->graph(15)->addData(timeStamp, orange2Plot);
+      ui->customPlot2->graph(7)->removeDataBefore(timeStamp-plotRange);
+      ui->customPlot2->graph(7)->rescaleValueAxis(true);
   }
 
 
@@ -476,6 +537,24 @@ void supervisorio::updatePlot2(double timeStamp,double redPlot, double bluePlot,
   ui->customPlot2->xAxis->setRange(timeStamp+0.25, plotRange, Qt::AlignRight);
   ui->customPlot2->replot();
 
+}
+
+void supervisorio::setObsGraph(bool checked){
+    if (checked){
+        ui->pushButton_14->setIcon(QIcon(QString::fromUtf8(":/img/Colors/pink2.png")));
+        ui->pushButton_15->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
+        ui->pushButton_16->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+        ui->pushButton_17->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
+    }
+    else {
+        ui->pushButton_14->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        ui->pushButton_15->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        ui->pushButton_16->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        ui->pushButton_17->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    }
+
+    for (int i = 0; i < 4; i++)
+        plot2Enable[i+4] = checked;
 }
 
 void supervisorio::setLayout(bool frequencia, bool amplitude, bool offset, bool duracao) {
@@ -661,7 +740,7 @@ void supervisorio::on_pushButton_4_clicked()
         plot2Enable[0]=false;
     }
     else{
-        ui->pushButton_4->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue.png")));
+        ui->pushButton_4->setIcon(QIcon(QString::fromUtf8(":/img/Colors/red.png")));
         plot2Enable[0]=true;
     }
 }
@@ -672,7 +751,7 @@ void supervisorio::on_pushButton_5_clicked()
         plot2Enable[1]=false;
     }
     else{
-        ui->pushButton_5->setIcon(QIcon(QString::fromUtf8(":/img/Colors/red.png")));
+        ui->pushButton_5->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue.png")));
         plot2Enable[1]=true;
     }
 }
@@ -694,10 +773,60 @@ void supervisorio::on_pushButton_7_clicked()
         plot2Enable[3]=false;
     }
     else if (ui->radioButton_10->isChecked()){//Malha está fechada
-        ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+        ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
         plot2Enable[3]=true;
     }
 }
+
+void supervisorio::on_pushButton_14_clicked()
+{
+    if(plot2Enable[4]==true){
+        ui->pushButton_14->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot2Enable[4]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_14->setIcon(QIcon(QString::fromUtf8(":/img/Colors/pink2.png")));
+        plot2Enable[4]=true;
+    }
+}
+
+void supervisorio::on_pushButton_15_clicked()
+{
+    if(plot2Enable[5]==true){
+        ui->pushButton_15->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot2Enable[5]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_15->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
+        plot2Enable[5]=true;
+    }
+}
+
+void supervisorio::on_pushButton_16_clicked()
+{
+    if(plot2Enable[6]==true){
+        ui->pushButton_16->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot2Enable[6]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_16->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+        plot2Enable[6]=true;
+    }
+}
+
+void supervisorio::on_pushButton_17_clicked()
+{
+    if(plot2Enable[7]==true){
+        ui->pushButton_17->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        plot2Enable[7]=false;
+    }
+    else if (ui->radioButton_10->isChecked()){//Malha está fechada
+        ui->pushButton_17->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
+        plot2Enable[7]=true;
+    }
+}
+
+
 
 void supervisorio::on_pushButton_10_clicked()
 {
@@ -766,14 +895,8 @@ void supervisorio::on_radioButton_9_clicked()
     plot2Enable[3]=false;
     ui->pushButton_10->setChecked(true);
     ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-    plot2Enable[4]=false;
-    ui->pushButton_11->setChecked(true);
-    ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-    plot2Enable[5]=false;
-    ui->pushButton_12->setChecked(true);
-    ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
-    plot2Enable[6]=false;
-    ui->pushButton_13->setChecked(true);
+
+    setObsGraph(false);
 
     ui->label_2->setText("Amplitude (V)");
     ui->label_3->setText("Offset (V)");
@@ -795,8 +918,9 @@ void supervisorio::on_radioButton_10_clicked()
 {
     ui->pushButton_6->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green.png")));
     plot2Enable[2]=true;
-    ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
+    ui->pushButton_7->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
     plot2Enable[3]=true;
+    setObsGraph(true);
 
     ui->pushButton_9->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange.png")));
     plot1Enable[2]=true;
@@ -922,11 +1046,11 @@ void supervisorio::on_pushButton_8_clicked()
     cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observer ,lOb);
 }
 
-void supervisorio::onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo){
+void supervisorio::onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2){
 
     //Update plots
     supervisorio::updatePlot1(timeStamp, sinalSaturado, sinalCalculadoMestre, iMestre, dMestre, sinalCalculadoEscravo, iEscravo, dEscravo);//Esses ultimos sao os valores integrativos e derivativos
-    supervisorio::updatePlot2(timeStamp, nivelTanque1, nivelTanque2, setPoint, erro);
+    supervisorio::updatePlot2(timeStamp, nivelTanque1, nivelTanque2, setPoint, erro, nivelTanque1Est, nivelTanque2Est, erroEst1, erroEst2);
 
     //Update Water Level
     ui->progressBar->setValue(nivelTanque1*100);
@@ -1153,6 +1277,8 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
         //tanque 2
         ui->radioButton_tanque2->setChecked(checked);
     }
+
+    setObsGraph(checked);
 
     //GroupBox's
 

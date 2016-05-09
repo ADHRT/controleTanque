@@ -87,9 +87,7 @@ private:
     void calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado);
 
 signals:
-    void plotValues(double, double, double, double, double, double, double, double, double, double, double, double);
-
-
+    void plotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2);
 
 };
 #endif // COMMTHREAD_H
