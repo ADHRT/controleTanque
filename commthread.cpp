@@ -12,8 +12,15 @@ commThread::commThread(QObject *parent):
     waveTime = 0;
     control[0] = P; control[1] = P;
     lastControl[0] = control[0]; lastControl[1] = control[1];
-    char ip[] = "10.13.99.69";
-    q = new Quanser(ip, 20081);
+
+    //IP para o quanser
+    string IPs = "10.13.99.69";
+    char * IP3 = new char[IPs.size() + 1];
+    copy(IPs.begin(), IPs.end(), IP3);
+    IP3[IPs.size()] = '\0';
+    q = new Quanser(IP3, 20081);
+
+
     period = 0.1;
     tank = 1; // tanque2
 
