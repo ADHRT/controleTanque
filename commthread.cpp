@@ -50,12 +50,16 @@ commThread::commThread(QObject *parent):
     // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
     double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
     //double g_temp[4] = {1.59, 6.481, -3.8894, 2};
+
     double h_temp[2] = {0.021258786853757, 0.000006975673074};
     //double h_temp[2] = {0.0269, 0.0000963};
+
     double c_temp[2] = {0, 1};
     //double c_temp[2] = {0, 1};
+
     double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
     //double wo_temp[4] = {0, 6.481, 1, 2};
+
     double l_temp[2] = {0.8, 0.9};
     //double l_temp[2] = {-3.7045, 2.59};
 
@@ -66,10 +70,19 @@ commThread::commThread(QObject *parent):
     Wo = mat(wo_temp, 2, 2);
     L = mat(l_temp, 2, 1);
 
+
+//    g[0] = 0.999343880971910; g[1] = 0.000655903734910; g[2] = 0; g[3] = 0.999343880971910;
+//    h[0] = 0.021258786853757; h[1] = 0.000006975673074;
+
+    xEstP[0] = 4;
+    xEstP[1] = 5;
+    yEstP = 0;
+    erroEstP = 0;
+
     // Valores estimados
     xEst = mat(2, 1, arma::fill::zeros);
     erroEst = mat(2, 1, arma::fill::zeros);
-    yEst = mat(1, 1, arma::fill::zeros);
+    yEst = 0;
 
     double x_tempDaniel[2] = {4, 5};
     xEst_tempDaniel = mat(x_tempDaniel,2,1);
@@ -244,11 +257,10 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     double x_temp[2] = {nivelTanque1, nivelTanque2};
     mat x(x_temp, 2, 1);
 
-    mat xEst_temp = G*xEst + L*(nivelTanque2 - yEst[0]) + H*sinalSaturado;
 
-    mat xEst_tempDanielT = G*xEst_tempDaniel + L*(2 - yEst_tempDaniel) + H*3;
-    yEst_tempDaniel = xEst_tempDanielT[1];
-    xEst_tempDaniel = xEst_tempDanielT;
+    yEst_tempDaniel = xEst_tempDaniel[1];
+    xEst_tempDaniel = G*xEst_tempDaniel + L*(2 - yEst_tempDaniel) + H*3;
+//    xEst_tempDaniel = xEst_tempDanielT;
 
     qDebug() << "Daniel" << xEst_tempDaniel[0] << " " << xEst_tempDaniel[1];
     //Debug
@@ -257,8 +269,9 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     //qDebug() << "Xest = [" << Gx[0] << " " << Gx[1] << "] + [" << L[0] << " " << L[1] << "]*(" << nivelTanque2 << " - " << yEst[0] ) + [" << H[0] << " " << H[1] << "]*" << sinalSaturado;
     //qDebug() << "Xest = [" << Gx[0] << " " << Gx[1] << "] + [" << L[0] << " " << L[1] << "]*(" << nivelTanque2 << " - [" << yEst[0] << " " << yEst[1] << "]) + [" << H[0] << " " << H[1] << "]*" << sinalSaturado;
 
-    yEst = C*xEst;
-    xEst = xEst_temp;
+    yEst = xEst[1];
+    xEst = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
+
     erroEst = x - xEst;
 
     //qDebug() << "L: " << L[0] << L[1];
@@ -266,6 +279,16 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     //qDebug() << "Nivel 2: " << x[1] << xEst[1];
     //qDebug() << "Erro: " << erroEst[0] << erroEst[1];
     //qDebug() << "Sinal Saturado: " << sinalSaturado;
+
+//    sinalSaturado = 3;
+//    nivelTanque2 = 2;
+
+//    double yTemp = yEstP;
+//    yEstP = xEstP[1];
+//    xEstP[0] = g[0]*xEstP[0] + g[2]*xEstP[1] + l[0]*(nivelTanque2 - yTemp) + h[0]*sinalSaturado;
+//    xEstP[1] = g[1]*xEstP[0] + g[3]*xEstP[1] + l[1]*(nivelTanque2 - yTemp) + h[1]*sinalSaturado;
+
+//    qDebug() << xEstP[0] << xEstP[1];
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
@@ -336,7 +359,8 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->observer = observer;
     this->xEst = mat(2, 1, arma::fill::zeros);
     this->erroEst = mat(2, 1, arma::fill::zeros);
-    this->yEst = mat(1, 1, arma::fill::zeros);
+    //this->yEst = mat(1, 1, arma::fill::zeros);
+    this->yEst = 0;
 }
 
 // Zera todos os valores

@@ -71,10 +71,15 @@ private:
     mat Wo;
     mat L;
 
+    double g[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
+    double h[2] = {0.021258786853757, 0.000006975673074};
+    double l[2] = {0.8, 0.9};
+    double xEstP[2], yEstP, erroEstP;
+
     //Valores estimados
     mat xEst;
     mat erroEst;
-    mat yEst;
+    double yEst;
     double yEst_tempDaniel;
     mat xEst_tempDaniel;
 
