@@ -70,6 +70,10 @@ commThread::commThread(QObject *parent):
     xEst = mat(2, 1, arma::fill::zeros);
     erroEst = mat(2, 1, arma::fill::zeros);
     yEst = mat(1, 1, arma::fill::zeros);
+
+    double x_tempDaniel[2] = {4, 5};
+    xEst_tempDaniel = mat(x_tempDaniel,2,1);
+    yEst_tempDaniel = 0;
 }
 
 void commThread::run(){
@@ -240,17 +244,27 @@ void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double 
     double x_temp[2] = {nivelTanque1, nivelTanque2};
     mat x(x_temp, 2, 1);
 
-    //qDebug() << "Sinal Saturado: " << sinalSaturado;
+    mat xEst_temp = G*xEst + L*(nivelTanque2 - yEst[0]) + H*sinalSaturado;
 
-    mat xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
+    mat xEst_tempDanielT = G*xEst_tempDaniel + L*(2 - yEst_tempDaniel) + H*3;
+    yEst_tempDaniel = xEst_tempDanielT[1];
+    xEst_tempDaniel = xEst_tempDanielT;
+
+    qDebug() << "Daniel" << xEst_tempDaniel[0] << " " << xEst_tempDaniel[1];
+    //Debug
+    //mat Gx = G*xEst;
+    //qDebug() << "xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado";
+    //qDebug() << "Xest = [" << Gx[0] << " " << Gx[1] << "] + [" << L[0] << " " << L[1] << "]*(" << nivelTanque2 << " - " << yEst[0] ) + [" << H[0] << " " << H[1] << "]*" << sinalSaturado;
+    //qDebug() << "Xest = [" << Gx[0] << " " << Gx[1] << "] + [" << L[0] << " " << L[1] << "]*(" << nivelTanque2 << " - [" << yEst[0] << " " << yEst[1] << "]) + [" << H[0] << " " << H[1] << "]*" << sinalSaturado;
+
     yEst = C*xEst;
     xEst = xEst_temp;
     erroEst = x - xEst;
 
     //qDebug() << "L: " << L[0] << L[1];
-    qDebug() << "Nivel 1: " << x[0] << xEst[0];
-    qDebug() << "Nivel 2: " << x[1] << xEst[1];
-    qDebug() << "Erro: " << erroEst[0] << erroEst[1];
+    //qDebug() << "Nivel 1: " << x[0] << xEst[0];
+    //qDebug() << "Nivel 2: " << x[1] << xEst[1];
+    //qDebug() << "Erro: " << erroEst[0] << erroEst[1];
     //qDebug() << "Sinal Saturado: " << sinalSaturado;
 }
 

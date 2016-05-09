@@ -75,6 +75,8 @@ private:
     mat xEst;
     mat erroEst;
     mat yEst;
+    double yEst_tempDaniel;
+    mat xEst_tempDaniel;
 
     // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
