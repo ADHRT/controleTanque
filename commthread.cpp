@@ -12,7 +12,8 @@ commThread::commThread(QObject *parent):
     waveTime = 0;
     control[0] = P; control[1] = P;
     lastControl[0] = control[0]; lastControl[1] = control[1];
-    q = new Quanser("10.13.99.69", 20081);
+    char ip[] = "10.13.99.69";
+    q = new Quanser(ip, 20081);
     period = 0.1;
     tank = 1; // tanque2
 
@@ -65,14 +66,6 @@ commThread::commThread(QObject *parent):
     xEst = mat(2, 1, arma::fill::zeros);
     erroEst = mat(2, 1, arma::fill::zeros);
     yEst = mat(1, 1, arma::fill::zeros);
-
-    //calcPoles();
-    double l[2];
-    //calcObs();
-    //getL(polesOb, l);
-    //getPoles(l, polesOb);
-
-    qDebug() << polesOb[0].real() << polesOb[1].real();
 }
 
 void commThread::run(){
@@ -185,7 +178,7 @@ void commThread::run(){
 
             // Escreve no canal selecionado
             if(!simulationMode) {
-//                qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
+                //qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
                 q->writeDA(channel, contEscravo.sinalSaturado);
             } else { //Simulacao
 
@@ -288,7 +281,7 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     return sinalSaturado;
 }
 
-void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade, bool observador, double *lOb)
+void commThread::setParameters(double frequencia, double amplitude, double offset , double duracaoMax, double duracaoMin, int wave, bool malha, int channel, int *control, double *kp, double *ki, double *kd, bool *windup, bool *conditionalIntegration, double *taw, int tank, bool cascade, bool observer, double *lOb)
 {
     this->frequencia = frequencia;
     this->amplitude = amplitude;
@@ -324,9 +317,8 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->cascade = cascade;
 
     //TAYNARA receber observador e lob
-    L = mat(lOb, 2, 1);
-
-    qDebug() << "cT| L:"<<L[0] << " " << L[1];
+    this->L = mat(lOb, 2, 1);
+    this->observer = observer;
 }
 
 // Zera todos os valores

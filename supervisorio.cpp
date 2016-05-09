@@ -187,7 +187,7 @@ supervisorio::supervisorio(QWidget *parent) :
     //on_l_valueChange();
     ui->checkBox_observador_ativar->setChecked(observador);
     //HANOCH-desabilitaPID
-    //on_checkBox_observador_ativar_clicked(observador);
+    on_checkBox_observador_ativar_clicked(observador);
     //Polos
     setPolesOb(-1);
     //carrega os Ls
@@ -918,8 +918,8 @@ void supervisorio::on_pushButton_8_clicked()
     castControl[0] = static_cast<int>(control[0]);
     castControl[1] = static_cast<int>(control[1]);
 
-    bool observador = ui->checkBox_observador_ativar;
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observador ,lOb);
+    bool observer = ui->checkBox_observador_ativar;
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observer ,lOb);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo){
@@ -1133,24 +1133,42 @@ void supervisorio::on_demo_clicked()
 void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
 {
     if(checked) {
-        int index = ui->comboBox_tipoControle->findText("Sem");
+        //controlador mestre
+        int index = ui->comboBox_tipoControle->findText("P");
         ui->comboBox_tipoControle->setCurrentIndex(index);
         ui->doubleSpinBox_6->setValue(1.0);
         ui->doubleSpinBox_7->setValue(0.0);
         ui->doubleSpinBox_8->setValue(0.0);
-        index = ui->comboBox_windup->findText("P");
+
+        //controlador escravo
+        index = ui->comboBox_windup->findText("Sem");
         ui->comboBox_windup->setCurrentIndex(index);
+
+        //malha fechada on
         ui->radioButton_10->setChecked(checked);
+
+        //cascata off
         ui->checkBox_9->setChecked(!checked);
+
+        //tanque 2
         ui->radioButton_tanque2->setChecked(checked);
     }
+
+    //GroupBox's
+
+    //Habilita/desabilita Observador
     ui->groupBox_Observador->setEnabled(checked);
-    //Desabilita controle
-    //desabilita cascata
-    ui->checkBox_9->setChecked(!checked);
+
+    //Desabilita/habilita controlador mestre
     ui->groupBox_10->setEnabled(!checked);
+
+    //Desabilita/habilita controlador escravo
     ui->groupBox_11->setEnabled(!checked);
+
+    //Desabilita/habilita malha
     ui->groupBox_4->setEnabled(!checked);
+
+    //Desabilita/habilita tanques
     ui->groupBox_select_tanque->setEnabled(!checked);
 }
 
