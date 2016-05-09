@@ -193,7 +193,8 @@ void commThread::run(){
                 else{
                     contEscravo.sinalSaturado=contMestre.sinalSaturado;
                 }
-                calcEstimated(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
+
+                if(observer) calcEstimated(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
             }
 
             // Escreve no canal selecionado
@@ -395,6 +396,10 @@ void commThread::setNullParameters()
     contEscravo.lastD = 0;
     contEscravo.diferencaSaida = 0;
     contEscravo.sinalCalculado = 0;
+
+    this->xEst = mat(2, 1, arma::fill::zeros);
+    this->erroEst = mat(2, 1, arma::fill::zeros);
+    this->yEst = 0;
 
     qDebug() << "setNullParametres()\n";
 }
