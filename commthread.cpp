@@ -45,8 +45,8 @@ commThread::commThread(QObject *parent):
     // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
     double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
     //double g_temp[4] = {1.59, 6.481, -3.8894, 2};
-    double h_temp[2] = {0.021258786853757, 0.000006975673074};
-    //double h_temp[2] = {-0.3654, 8.5549};
+    //double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    double h_temp[2] = {0.0269, 0.0000963};
     double c_temp[2] = {0, 1};
     //double c_temp[2] = {0, 1};
     double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
