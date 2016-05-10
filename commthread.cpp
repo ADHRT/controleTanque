@@ -48,10 +48,13 @@ commThread::commThread(QObject *parent):
     //L2_dot_const2 = -L2_dot_const1;
 
     // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
-    double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
+    //double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
+    double g_temp[4] = {0.993458148011545, 0.006520407260849, 0, 0.993458148011545};
     //double g_temp[4] = {1.59, 6.481, -3.8894, 2};
 
-    double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    //double h_temp[2] = {0.021258786853757, 0.000006975673074};
+    double h_temp[2] = {0.021196129223099, 0.000069482650830};
+
     //double h_temp[2] = {0.0269, 0.0000963};
 
     double c_temp[2] = {0, 1};
