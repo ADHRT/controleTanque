@@ -1447,7 +1447,8 @@ void supervisorio::replicaPolo(int numPolo){
 void supervisorio::on_poles_valueChange(void)
 {
     //getPolesOb();
-    isInstableOb();
+    //DESCOMENTE
+    //isInstableOb();
     calcLOb();
     setLOb(-1);
 }
@@ -1471,7 +1472,8 @@ void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
 void supervisorio::on_l_valueChange(void){
     //getLOb();
     calcPoles();
-    isInstableOb();
+    //DESCOMENTE
+    //isInstableOb();
     //seta na interface todos os polos
     setPolesOb(-1);
 }

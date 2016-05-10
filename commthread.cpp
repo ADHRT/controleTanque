@@ -31,48 +31,12 @@ commThread::commThread(QObject *parent):
     polesOb[0] = complex<double>(0.99876,0);
     polesOb[1] = complex<double>(0.0999273,0);
 
-
-    //Inicializando variáveis do observador de estados;
-    //double A1 = 15.5179;//A2=A1
-    //double L10 = 15;//L2=L1
-    //double a1 = 0.17813919765;//a2=a1
-    //double Km = 3.3;
-    //double g = 9.8066;
-
-    //Note que L1_dot=L1_dot_const1*L1+L1_dot_const1*Vp
-    //L1_dot_const1 = -a1/A1*sqrt(g/(2*L10));
-    //L1_dot_const2 = Km/A1;
-
-    //Note que L2_dot=L2_dot_const1*L2+L2_dot_const2*L1
-    //L2_dot_const1 = L1_dot_const1;
-    //L2_dot_const2 = -L2_dot_const1;
-
-    // Carregando valores das matrizes nos vetores temp para uso posterior no armadilo
-    double g_temp[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
-    //double g_temp[4] = {1.59, 6.481, -3.8894, 2};
-
-    double h_temp[2] = {0.021258786853757, 0.000006975673074};
-    //double h_temp[2] = {0.0269, 0.0000963};
-
-    double c_temp[2] = {0, 1};
-    //double c_temp[2] = {0, 1};
-
-    double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
-    //double wo_temp[4] = {0, 6.481, 1, 2};
-
-    double l_temp[2] = {0.8, 0.9};
-    //double l_temp[2] = {-3.7045, 2.59};
-
     // Matrizes do sistema
-    G = mat(g_temp, 2, 2);
-    H = mat(h_temp, 2, 1);
-    C = mat(c_temp, 1, 2);
-    Wo = mat(wo_temp, 2, 2);
-    L = mat(l_temp, 2, 1);
-
-
-//    g[0] = 0.999343880971910; g[1] = 0.000655903734910; g[2] = 0; g[3] = 0.999343880971910;
-//    h[0] = 0.021258786853757; h[1] = 0.000006975673074;
+    G = mat("0.999343880971910 0; 0.000655903734910 0.999343880971910");
+    H = mat("0.021258786853757; 0.000006975673074");
+    C = mat("0 1");
+    Wo = mat("0 1; 6.481 2");
+    L = mat("0.8; 0.9");
 
     xEstP[0] = 4;
     xEstP[1] = 5;
@@ -396,10 +360,6 @@ void commThread::setNullParameters()
     contEscravo.lastD = 0;
     contEscravo.diferencaSaida = 0;
     contEscravo.sinalCalculado = 0;
-
-    this->xEst = mat(2, 1, arma::fill::zeros);
-    this->erroEst = mat(2, 1, arma::fill::zeros);
-    this->yEst = 0;
 
     qDebug() << "setNullParametres()\n";
 }
