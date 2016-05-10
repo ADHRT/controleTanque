@@ -1234,8 +1234,8 @@ void supervisorio::on_button_limpar_clicked()
     for (int i=0;i<8;i++){
             ui->customPlot2->graph(i)->clearData();
     }
-    ui->customPlot2->yAxis->setRangeUpper(20);
-    ui->customPlot2->yAxis->setRangeLower(-20);
+    ui->customPlot2->yAxis->setRangeUpper(0);
+    ui->customPlot2->yAxis->setRangeLower(0);
 
 }
 
