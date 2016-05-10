@@ -147,7 +147,7 @@ void commThread::run(){
                 else{
                     contEscravo.sinalSaturado=contMestre.sinalSaturado;
                 }
-                if(observer) calcObs(nivelTanque1, nivelTanque2, contMestre.setPoint);
+                if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
             }
 
             // Escreve no canal selecionado
