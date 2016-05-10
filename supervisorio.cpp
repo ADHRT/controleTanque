@@ -536,6 +536,7 @@ void supervisorio::updatePlot2(double timeStamp, double redPlot, double bluePlot
   // make key axis range scroll with the data (at a constant range size of 8):
   ui->customPlot2->xAxis->setRange(timeStamp+0.25, plotRange, Qt::AlignRight);
   ui->customPlot2->replot();
+  //ui->customPlot2->yAxis->setRange(0, 30, Qt::AlignCenter);
 
 }
 
@@ -1233,6 +1234,8 @@ void supervisorio::on_button_limpar_clicked()
     for (int i=0;i<8;i++){
             ui->customPlot2->graph(i)->clearData();
     }
+    ui->customPlot2->yAxis->setRangeUpper(20);
+    ui->customPlot2->yAxis->setRangeLower(-20);
 
 }
 
