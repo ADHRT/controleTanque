@@ -1091,6 +1091,7 @@ void supervisorio::on_connect_clicked(bool checked)
             ui->demo->setChecked(false);
         }
         cThread->setNullParameters();
+        cThread->zerarObs();
         cThread->setSimulationMode(false);
         int erro = cThread->start();
         if(!erro) {
@@ -1242,6 +1243,7 @@ void supervisorio::on_button_limpar_clicked()
 void supervisorio::on_pushButton_zerar_clicked()
 {
     cThread->setNullParameters();
+    cThread->zerarObs();
 }
 
 void supervisorio::on_checkBox_9_clicked(bool checked)
@@ -1450,7 +1452,8 @@ void supervisorio::replicaPolo(int numPolo){
 void supervisorio::on_poles_valueChange(void)
 {
     //getPolesOb();
-    isInstableOb();
+    //DESCOMENTE
+    //isInstableOb();
     calcLOb();
     setLOb(-1);
 }
@@ -1474,7 +1477,8 @@ void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
 void supervisorio::on_l_valueChange(void){
     //getLOb();
     calcPoles();
-    isInstableOb();
+    //DESCOMENTE
+    //isInstableOb();
     //seta na interface todos os polos
     setPolesOb(-1);
 }
