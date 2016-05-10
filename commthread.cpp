@@ -60,7 +60,7 @@ commThread::commThread(QObject *parent):
     double c_temp[2] = {0, 1};
     //double c_temp[2] = {0, 1};
 
-    double wo_temp[4] = {0, 0.000655903734910, 1, 0.999343880971910};
+    double wo_temp[4] = {0, 0.006520407260849, 1, 0.993458148011545};
     //double wo_temp[4] = {0, 6.481, 1, 2};
 
     double l_temp[2] = {0.8, 0.9};
