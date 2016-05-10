@@ -35,6 +35,7 @@ public:
     int start();
     void getPoles(double *l, complex<double> *pole);
     void getL(complex<double> *pole, double *l);
+    void zerarObs();
 
 private:
     Controlador contMestre, contEscravo;
@@ -71,27 +72,16 @@ private:
     mat Wo;
     mat L;
 
-    double g[4] = {0.999343880971910, 0.000655903734910, 0, 0.999343880971910};
-    double h[2] = {0.021258786853757, 0.000006975673074};
-    double l[2] = {0.8, 0.9};
-    double xEstP[2], yEstP, erroEstP;
-
     //Valores estimados
     mat xEst;
     mat erroEst;
-    double yEst;
-    double yEst_tempDaniel;
-    mat xEst_tempDaniel;
 
     // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
-    //Variáveis para observador de estados
-    double L1_dot_const1, L1_dot_const2, L2_dot_const1, L2_dot_const2;
-
-    void calcObs();
+    void calcL();
     void calcPoles();
-    void calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado);
+    void calcObs(double nivelTanque1, double nivelTanque2, double sinalSaturado);
 
 signals:
     void plotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2);

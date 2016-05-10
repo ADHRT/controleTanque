@@ -35,22 +35,12 @@ commThread::commThread(QObject *parent):
     G = mat("0.999343880971910 0; 0.000655903734910 0.999343880971910");
     H = mat("0.021258786853757; 0.000006975673074");
     C = mat("0 1");
-    Wo = mat("0 1; 6.481 2");
+    Wo = mat("0 1; 0.000655903734910 0.999343880971910");
     L = mat("0.8; 0.9");
-
-    xEstP[0] = 4;
-    xEstP[1] = 5;
-    yEstP = 0;
-    erroEstP = 0;
 
     // Valores estimados
     xEst = mat(2, 1, arma::fill::zeros);
     erroEst = mat(2, 1, arma::fill::zeros);
-    yEst = 0;
-
-    double x_tempDaniel[2] = {4, 5};
-    xEst_tempDaniel = mat(x_tempDaniel,2,1);
-    yEst_tempDaniel = 0;
 }
 
 void commThread::run(){
@@ -157,8 +147,7 @@ void commThread::run(){
                 else{
                     contEscravo.sinalSaturado=contMestre.sinalSaturado;
                 }
-
-                if(observer) calcEstimated(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
+                if(observer) calcObs(nivelTanque1, nivelTanque2, contMestre.setPoint);
             }
 
             // Escreve no canal selecionado
@@ -188,7 +177,7 @@ void commThread::run(){
     }
 }
 
-void commThread::calcObs(void){
+void commThread::calcL(void){
     double coef1 =  -polesOb[0].real() - polesOb[1].real();
     complex <double>coef2 = polesOb[0] * polesOb[1];
 
@@ -199,11 +188,6 @@ void commThread::calcObs(void){
     mat q = G*G + coef1*G + coef2.real()*A;
 
     L = q*inv(Wo)*l_array;
-
-//    qDebug() << "coef1: " << coef1 << "coef2: " << coef2.real();
-//    qDebug() << "G: " << G[0] << G[1] << G[2] << G[3];
-//    qDebug() << "Q: " << q[0] << q[1] << q[2] << q[3];
-//    qDebug() << "L: " << L[0] << L[1];
 }
 
 void commThread::calcPoles()
@@ -217,43 +201,20 @@ void commThread::calcPoles()
     polesOb[1] = eigVal[1];
 }
 
-void commThread::calcEstimated(double nivelTanque1, double nivelTanque2, double sinalSaturado)
+void commThread::calcObs(double nivelTanque1, double nivelTanque2, double sinalSaturado)
 {
     double x_temp[2] = {nivelTanque1, nivelTanque2};
     mat x(x_temp, 2, 1);
 
-
-    yEst_tempDaniel = xEst_tempDaniel[1];
-    xEst_tempDaniel = G*xEst_tempDaniel + L*(2 - yEst_tempDaniel) + H*3;
-//    xEst_tempDaniel = xEst_tempDanielT;
-
-    qDebug() << "Daniel" << xEst_tempDaniel[0] << " " << xEst_tempDaniel[1];
-    //Debug
-    //mat Gx = G*xEst;
-    //qDebug() << "xEst_temp = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado";
-    //qDebug() << "Xest = [" << Gx[0] << " " << Gx[1] << "] + [" << L[0] << " " << L[1] << "]*(" << nivelTanque2 << " - " << yEst[0] ) + [" << H[0] << " " << H[1] << "]*" << sinalSaturado;
-    //qDebug() << "Xest = [" << Gx[0] << " " << Gx[1] << "] + [" << L[0] << " " << L[1] << "]*(" << nivelTanque2 << " - [" << yEst[0] << " " << yEst[1] << "]) + [" << H[0] << " " << H[1] << "]*" << sinalSaturado;
-
-    yEst = xEst[1];
-    xEst = G*xEst + L*(nivelTanque2 - yEst) + H*sinalSaturado;
+    xEst = G*xEst + L*(nivelTanque2 - xEst[1]) + H*sinalSaturado;
 
     erroEst = x - xEst;
+}
 
-    //qDebug() << "L: " << L[0] << L[1];
-    //qDebug() << "Nivel 1: " << x[0] << xEst[0];
-    //qDebug() << "Nivel 2: " << x[1] << xEst[1];
-    //qDebug() << "Erro: " << erroEst[0] << erroEst[1];
-    //qDebug() << "Sinal Saturado: " << sinalSaturado;
-
-//    sinalSaturado = 3;
-//    nivelTanque2 = 2;
-
-//    double yTemp = yEstP;
-//    yEstP = xEstP[1];
-//    xEstP[0] = g[0]*xEstP[0] + g[2]*xEstP[1] + l[0]*(nivelTanque2 - yTemp) + h[0]*sinalSaturado;
-//    xEstP[1] = g[1]*xEstP[0] + g[3]*xEstP[1] + l[1]*(nivelTanque2 - yTemp) + h[1]*sinalSaturado;
-
-//    qDebug() << xEstP[0] << xEstP[1];
+void commThread::zerarObs()
+{
+    this->xEst = mat(2, 1, arma::fill::zeros);
+    this->erroEst = mat(2, 1, arma::fill::zeros);
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
@@ -279,7 +240,6 @@ double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double
     //Trava 5
     if(nivelTanque2 > 26 && nivelTanque1 > 8) sinalSaturado = -4;
     else if (nivelTanque2 > 26) sinalSaturado = 0;
-
 
     return sinalSaturado;
 }
@@ -324,8 +284,6 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->observer = observer;
     this->xEst = mat(2, 1, arma::fill::zeros);
     this->erroEst = mat(2, 1, arma::fill::zeros);
-    //this->yEst = mat(1, 1, arma::fill::zeros);
-    this->yEst = 0;
 }
 
 // Zera todos os valores
