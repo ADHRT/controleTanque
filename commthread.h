@@ -69,7 +69,7 @@ private:
     mat G;
     mat H;
     mat C;
-    mat Wo;
+    mat invWo;
     mat L;
 
     //Valores estimados

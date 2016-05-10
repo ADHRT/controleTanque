@@ -32,10 +32,10 @@ commThread::commThread(QObject *parent):
     polesOb[1] = complex<double>(0.0999273,0);
 
     // Matrizes do sistema
-    G = mat("0.999343880971910 0; 0.000655903734910 0.999343880971910");
-    H = mat("0.021258786853757; 0.000006975673074");
+    G = mat("0.993458148011545 0; 0.006520407260849 0.993458148011545");
+    H = mat("0.021196129223099; 0.000069482650830");
     C = mat("0 1");
-    Wo = mat("0 1; 0.000655903734910 0.999343880971910");
+    invWo = mat(" -152.3613646001405 153.3646534633584; 1 0");
     L = mat("0.8; 0.9");
 
     // Valores estimados
@@ -187,7 +187,7 @@ void commThread::calcL(void){
 
     mat q = G*G + coef1*G + coef2.real()*A;
 
-    L = q*inv(Wo)*l_array;
+    L = q*invWo*l_array;
 }
 
 void commThread::calcPoles()
@@ -441,7 +441,7 @@ void commThread::getL(complex<double> *pole, double *l)
 
     mat q = G*G + coef1*G + coef2.real()*A;
 
-    mat l_mat = q*inv(Wo)*l_array;
+    mat l_mat = q*invWo*l_array;
 
     l[0] = l_mat[0];
     l[1] = l_mat[1];
