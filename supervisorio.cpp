@@ -83,7 +83,7 @@ supervisorio::supervisorio(QWidget *parent) :
     //Inicializa valores
     frequencia = 20;
     amplitude = 5;
-    offset = 10;
+    offset = 15;
     duracaoMax = 3;
     duracaoMin = 1;
     wave = 0;
@@ -1235,8 +1235,8 @@ void supervisorio::on_button_limpar_clicked()
     for (int i=0;i<8;i++){
             ui->customPlot2->graph(i)->clearData();
     }
-    ui->customPlot2->yAxis->setRangeUpper(20);
-    ui->customPlot2->yAxis->setRangeLower(-20);
+    ui->customPlot2->yAxis->setRangeUpper(2);
+    ui->customPlot2->yAxis->setRangeLower(-2);
 
 }
 
@@ -1257,7 +1257,6 @@ void supervisorio::on_demo_clicked()
 {
 
 }
-
 
 void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
 {
