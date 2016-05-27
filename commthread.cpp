@@ -143,7 +143,7 @@ void commThread::run(){
                 else{
                     contEscravo.sinalSaturado=contMestre.sinalSaturado;
                 }
-                if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado);
+                if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado*3);
             }
 
             // Escreve no canal selecionado
@@ -178,12 +178,11 @@ void commThread::calcL(void){
     complex <double>coef2 = polesOb[0] * polesOb[1];
 
     mat I = arma::eye<mat> (2,2);
-    double l_aux[2] = {0, 1};
-    mat l_array(l_aux, 2, 1);
+    mat l("0; 1");
 
     mat q = G*G + coef1*G + coef2.real()*I;
 
-    L = q*invWo*l_array;
+    L = q*invWo*l;
 }
 
 void commThread::calcPoles()

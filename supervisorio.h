@@ -139,6 +139,24 @@ private slots:
 
   void on_pushButton_17_clicked();
 
+  void on_checkBox_seguidor_ativar_clicked(bool checked);
+
+  void on_doubleSpinBox_polo1Re_seg_valueChanged(double arg1);
+
+  void on_doubleSpinBox_polo1Im_seg_valueChanged(double);
+
+  void on_doubleSpinBox_polo2Re_seg_valueChanged(double);
+
+  void on_doubleSpinBox_polo2Im_seg_valueChanged(double);
+
+  void on_doubleSpinBox_polo3Re_seg_valueChanged(double);
+
+  void on_doubleSpinBox_k1_valueChanged(double);
+
+  void on_doubleSpinBox_k2_1_valueChanged(double);
+
+  void on_doubleSpinBox_k2_2_valueChanged(double);
+
 private:
     Ui::supervisorio *ui;
     QString demoName;
@@ -165,6 +183,10 @@ private:
 
     complex<double> polesOb[2];
     double lOb[2];
+
+    complex<double> polesSeg[3];
+    double kSeg[3];
+
     int plotRange;
 
     int channel;
@@ -185,10 +207,24 @@ private:
     void on_l_valueChange();
     void calcPoles();
     // flags para evitarem loop infinito de atualizacao dos valores
+        //observador
     bool lObHasChanged;
     bool poleObHasChanged;
     void replicaPolo(int numPolo);
     void setObsGraph(bool checked);
+        //seguidor
+    bool kSegHasChanged;
+    bool poleSegHasChanged;
+    void replicaPoloSeg(int numPolo);
+    void getPolesSeg();
+    void setPolesSeg(int poleNum);
+    void getKSeg();
+    void setKSeg(int num);
+    void calcPolesSeg();
+    void calcKSeg();
+    bool isInstableSeg();
+    void on_k_valueChange();
+    void on_poles_seg_valueChange();
 };
 
 #endif // SUPERVISORIO_H
