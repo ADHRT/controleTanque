@@ -48,6 +48,7 @@ commThread::commThread(QObject *parent):
     invWc = mat("0 0 1; 70.741834006738 -7188.169264136371 0; -23.718572056820 7235.502852861834 0");
     kMatAux = mat("-0.5010938890433 151.8619115450547 1.0; 0 -1.0 1.0; 47.0237705882343 46.8697910620831 0.3086342756075");
     k2 = mat("0 0");
+    v = 0;
 }
 
 void commThread::run(){
@@ -132,20 +133,22 @@ void commThread::run(){
                 contMestre.setPoint = sinalDaOndaGerada;
                 contMestre.erro = contMestre.setPoint - nivelTanque;
 
-                calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
+                seguidor = true;
+                if(seguidor) calculoDeControleSeguidor(nivelTanque1, nivelTanque2, contMestre.erro);
 
-                calculoDeControleEspEst();
+                else {
+                    calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
+                    if(cascade){
+                        contEscravo.setPoint = contMestre.sinalCalculado;
+                        contEscravo.erro = contEscravo.setPoint - nivelTanque1;
 
-                if(cascade){
-                    contEscravo.setPoint = contMestre.sinalCalculado;
-                    contEscravo.erro = contEscravo.setPoint - nivelTanque1;
-
-                    calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
+                        calculoDeControle(&contEscravo, nivelTanque,nivelTanque1,nivelTanque2);
+                    }
+                    else{
+                        contEscravo.sinalSaturado=contMestre.sinalSaturado;
+                    }
+                    if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado*3);
                 }
-                else{
-                    contEscravo.sinalSaturado=contMestre.sinalSaturado;
-                }
-                if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado*3);
             }
 
             // Escreve no canal selecionado
@@ -235,15 +238,16 @@ void commThread::calcK()
 void commThread::calcPolesSeg()
 {
     bool flagPole[2] = {0};
-//    mat aux1 = k2 - k2*G - k1*C*G;
-//    mat aux2 = 1 - k2*H - k1*C*H;
+    mat aux1 = k2 - k2*G - k1*C*G;
+    mat aux2 = 1 - k2*H - k1*C*H;
 
-//    mat sist(3,3);
+    mat sist(3,3);
 
-//    sist[0] = G[0]; sist[1] = G[1]; sist[3] = G[2]; sist[4] = G[3];
-//    sist[6] = H[0]; sist[7] = H[1];
-//    sist[2] = aux1[0]; sist[5] = aux1[1]; sist[8] = aux2[0];
-    mat sist = G + H*K;
+    sist[0] = G[0]; sist[1] = G[1]; sist[3] = G[2]; sist[4] = G[3];
+    sist[6] = H[0]; sist[7] = H[1];
+    sist[2] = aux1[0]; sist[5] = aux1[1]; sist[8] = aux2[0];
+
+    //    mat sist = G + H*K;
 
     arma::cx_vec eigVal = eig_gen(sist);
 
@@ -260,6 +264,15 @@ void commThread::calcPolesSeg()
             polesSeg[1] = eigVal[i];
         }
     }
+}
+
+void commThread::calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro)
+{
+    v += erro;
+    contEscravo.sinalCalculado = -(k2[0]*nivelTanque1 + k2[1]*nivelTanque2) + k1*v;
+
+    contEscravo.sinalSaturado = lockSignal(contEscravo.sinalCalculado, nivelTanque1, nivelTanque2);
+
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
@@ -363,6 +376,8 @@ void commThread::setNullParameters()
     contEscravo.lastD = 0;
     contEscravo.diferencaSaida = 0;
     contEscravo.sinalCalculado = 0;
+
+    v = 0;
 
     qDebug() << "setNullParametres()\n";
 }
