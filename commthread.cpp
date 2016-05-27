@@ -216,6 +216,36 @@ void commThread::zerarObs()
     this->erroEst = mat(2, 1, arma::fill::zeros);
 }
 
+void commThread::getPoles(double *l, complex<double> *pole)
+{
+    double l_temp[2] = {l[0], l[1]};
+    mat L_temp(l_temp, 2, 1);
+
+    mat temp = G - L_temp*C;
+
+    arma::cx_vec eigVal = eig_gen(temp);
+
+    pole[0] = eigVal[0];
+    pole[1] = eigVal[1];
+}
+
+void commThread::getL(complex<double> *pole, double *l)
+{
+    double coef1 = -pole[0].real() - pole[1].real();
+    complex <double>coef2 = pole[0] * pole[1];
+
+    mat A = arma::eye<mat> (2,2);
+    double l_aux[2] = {0, 1};
+    mat l_array(l_aux, 2, 1);
+
+    mat q = G*G + coef1*G + coef2.real()*A;
+
+    mat l_mat = q*invWo*l_array;
+
+    l[0] = l_mat[0];
+    l[1] = l_mat[1];
+}
+
 void commThread::calcK()
 {
     double coef1 = polesSeg[2].real() + 2*polesSeg[0].real();
@@ -237,17 +267,10 @@ void commThread::calcK()
 
 void commThread::calcPolesSeg()
 {
-    bool flagPole[2] = {0};
-    mat aux1 = k2 - k2*G - k1*C*G;
-    mat aux2 = 1 - k2*H - k1*C*H;
+    bool flagPole[2];
+    flagPole[0] = false; flagPole[1] = false;
 
-    mat sist(3,3);
-
-    sist[0] = G[0]; sist[1] = G[1]; sist[3] = G[2]; sist[4] = G[3];
-    sist[6] = H[0]; sist[7] = H[1];
-    sist[2] = aux1[0]; sist[5] = aux1[1]; sist[8] = aux2[0];
-
-    //    mat sist = G + H*K;
+    mat sist = Ga - Ha*Ka;
 
     arma::cx_vec eigVal = eig_gen(sist);
 
@@ -273,6 +296,55 @@ void commThread::calculoDeControleSeguidor(double nivelTanque1, double nivelTanq
 
     contEscravo.sinalSaturado = lockSignal(contEscravo.sinalCalculado, nivelTanque1, nivelTanque2);
 
+}
+
+void commThread::getPolesSeg(double *kSeg, complex<double> *poleSeg)
+{
+    bool flagPole[2];
+    flagPole[0] = false; flagPole[1] = false;
+
+    mat vec = ("0 0 1");
+    double kTemp[3] = {kSeg[0], kSeg[1], kSeg[2]};
+    mat kSegT(kTemp, 1, 3);
+
+    mat ka = kSegT*inv(kMatAux) - vec;
+
+    mat sist = Ga - Ha*ka;
+
+    arma::cx_vec eigVal = eig_gen(sist);
+
+    for (int i = 0; i < 3; i++){
+        if (eigVal[i].imag() == 0 && !flagPole[1]){
+            flagPole[1] = true;
+            poleSeg[2] = eigVal[i];
+        }
+        else if (!flagPole[0]){
+            poleSeg[0] = eigVal[i];
+            flagPole[0] = true;
+        }
+        else {
+            poleSeg[1] = eigVal[i];
+        }
+    }
+}
+
+void commThread::getK(complex<double> *poleSeg, double *kSeg)
+{
+    double coef1 = poleSeg[2].real() + 2*poleSeg[0].real();
+    double coef2 = 2*poleSeg[0].real()*poleSeg[2].real() + pow(poleSeg[0].real(),2) + pow(poleSeg[0].imag(),2);
+    double coef3 = (pow(poleSeg[0].real(),2) + pow(poleSeg[0].imag(),2))*poleSeg[2].real();
+
+    mat I = arma::eye<mat> (3,3);
+    mat vec = ("0 0 1");
+
+    mat q = Ga*Ga*Ga + coef1*Ga*Ga + coef2*Ga + coef3*I;
+
+    mat ka = vec*invWc*q;
+    mat k = (ka + vec)*kMatAux;
+
+    kSeg[0] = k[0];
+    kSeg[1] = k[1];
+    kSeg[2] = k[2];
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
@@ -472,36 +544,6 @@ int commThread::start(void)
     }
     if(!erro) super::start();
     return erro;
-}
-
-void commThread::getPoles(double *l, complex<double> *pole)
-{
-    double l_temp[2] = {l[0], l[1]};
-    mat L_temp(l_temp, 2, 1);
-
-    mat temp = G - L_temp*C;
-
-    arma::cx_vec eigVal = eig_gen(temp);
-
-    pole[0] = eigVal[0];
-    pole[1] = eigVal[1];
-}
-
-void commThread::getL(complex<double> *pole, double *l)
-{
-    double coef1 = -pole[0].real() - pole[1].real();
-    complex <double>coef2 = pole[0] * pole[1];
-
-    mat A = arma::eye<mat> (2,2);
-    double l_aux[2] = {0, 1};
-    mat l_array(l_aux, 2, 1);
-
-    mat q = G*G + coef1*G + coef2.real()*A;
-
-    mat l_mat = q*invWo*l_array;
-
-    l[0] = l_mat[0];
-    l[1] = l_mat[1];
 }
 
 

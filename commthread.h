@@ -33,11 +33,13 @@ public:
     void terminate(void);
     void calculoDeControle(Controlador*, double,double,double);
     int start();
+    //Observador
     void getPoles(double *l, complex<double> *pole);
     void getL(complex<double> *pole, double *l);
     void zerarObs();
-    void getPolesSeg();
-    void getK();
+    //Seguidor
+    void getPolesSeg(double *kSeg, complex<double> *poleSeg);
+    void getK(complex<double> *poleSeg, double *kSeg);
 
 private:
     Controlador contMestre, contEscravo;
