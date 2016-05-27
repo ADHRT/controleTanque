@@ -124,8 +124,8 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //seguidor
     bool seguidor = true;
-    polesSeg[0] = complex<double>(0.9,0.5);
-    polesSeg[1] = complex<double>(0.9,-0.5);
+    polesSeg[0] = complex<double>(0.7,0.5);
+    polesSeg[1] = complex<double>(0.7,-0.5);
     polesSeg[2] = complex<double>(0.5,0);
         /* -----------------------------------------------
      * END - Valores para popular a interface grafica
@@ -1054,7 +1054,8 @@ void supervisorio::on_pushButton_8_clicked()
     castControl[1] = static_cast<int>(control[1]);
 
     bool observer = ui->checkBox_observador_ativar;
-    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observer ,lOb);
+    bool follower = ui->checkBox_seguidor_ativar;
+    cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observer ,lOb, follower, kSeg);
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2){
@@ -1446,6 +1447,8 @@ void supervisorio::calcPoles()
 
 void supervisorio::calcPolesSeg()
 {
+    double kSeg[3] = {this->kSeg[1], this->kSeg[2], this->kSeg[0]};
+
     //cThread->getPolesSeg(kSeg, polesSeg);
 }
 
@@ -1456,7 +1459,11 @@ void supervisorio::calcLOb()
 
 void supervisorio::calcKSeg()
 {
+    double kSeg[3];
     //cThread->getK(polesSeg, kSeg);
+    this->kSeg[0] = kSeg[2];
+    this->kSeg[1] = kSeg[0];
+    this->kSeg[2] = kSeg[1];
 }
 
 bool supervisorio::isInstableOb()
