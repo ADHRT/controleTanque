@@ -150,7 +150,7 @@ void commThread::run(){
                     if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado*3);
                 }
             }
-            qDebug() << "SinalSaturado: " << contEscravo.sinalSaturado;
+//            qDebug() << "SinalSaturado: " << contEscravo.sinalSaturado;
             // Escreve no canal selecionado
             if(!simulationMode) {
                 //qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
@@ -291,10 +291,16 @@ void commThread::calcPolesSeg()
 
 void commThread::calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro)
 {
+    qDebug() << "nivelTanque1" << nivelTanque1 << "nivelTanque2" << nivelTanque2 << "erro" << erro;
+    qDebug() << "k1" << k1;
+    qDebug() << "k2" << k2[0] << k2[1];
+
     v += erro;
     contEscravo.sinalCalculado = -(k2[0]*nivelTanque1 + k2[1]*nivelTanque2) + k1*v;
 
     contEscravo.sinalSaturado = lockSignal(contEscravo.sinalCalculado, nivelTanque1, nivelTanque2);
+
+    qDebug() << "v:" << v << "SinalCalculado:" << contEscravo.sinalCalculado << "SinalSaturado:" << contEscravo.sinalSaturado;
 
 }
 
@@ -420,7 +426,11 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
 
     //Seguidor
     this->follower = follower;
-    this->K = mat(kSeg, 3, 1);
+//    this->K = mat(kSeg, 3, 1);
+    this->k1 = kSeg[0];
+    this->k2[0] = kSeg[1];
+    this->k2[1] = kSeg[2];
+
 }
 
 // Zera todos os valores

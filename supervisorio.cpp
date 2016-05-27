@@ -124,9 +124,9 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //seguidor
     bool seguidor = true;
-    polesSeg[0] = complex<double>(0.7,0.5);
-    polesSeg[1] = complex<double>(0.7,-0.5);
-    polesSeg[2] = complex<double>(0.5,0);
+    polesSeg[0] = complex<double>(0.9048,0);
+    polesSeg[1] = complex<double>(0.992,0);
+    polesSeg[2] = complex<double>(0.998,0);
         /* -----------------------------------------------
      * END - Valores para popular a interface grafica
      * -----------------------------------------------
