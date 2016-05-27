@@ -1447,6 +1447,8 @@ void supervisorio::calcPoles()
 
 void supervisorio::calcPolesSeg()
 {
+    double kSeg[3] = {this->kSeg[1], this->kSeg[2], this->kSeg[0]};
+
     //cThread->getPolesSeg(kSeg, polesSeg);
 }
 
@@ -1457,7 +1459,11 @@ void supervisorio::calcLOb()
 
 void supervisorio::calcKSeg()
 {
+    double kSeg[3];
     //cThread->getK(polesSeg, kSeg);
+    this->kSeg[0] = kSeg[2];
+    this->kSeg[1] = kSeg[0];
+    this->kSeg[2] = kSeg[1];
 }
 
 bool supervisorio::isInstableOb()
