@@ -41,6 +41,13 @@ commThread::commThread(QObject *parent):
     // Valores estimados
     xEst = mat(2, 1, arma::fill::zeros);
     erroEst = mat(2, 1, arma::fill::zeros);
+
+    //Seguidor
+    Ga = mat("0.993458148011545 0 0.021196129223099; 0.006520407260849 0.993458148011545 0.000069482650830; 0 0 0");
+    Ha = mat("0; 0; 1");
+    invWc = mat("0 0 1; -0.1551633878 14439.4154689764 0; 2233.1241816492 -681228.8846229955 0");
+    kMatAux = mat("-0.5010938890433 151.8619115450547 1.0; 0 -1.0 1.0; 47.0237705882343 46.8697910620831 0.3086342756075");
+    k2 = mat("0 0");
 }
 
 void commThread::run(){
@@ -170,11 +177,11 @@ void commThread::calcL(void){
     double coef1 =  -polesOb[0].real() - polesOb[1].real();
     complex <double>coef2 = polesOb[0] * polesOb[1];
 
-    mat A = arma::eye<mat> (2,2);
+    mat I = arma::eye<mat> (2,2);
     double l_aux[2] = {0, 1};
     mat l_array(l_aux, 2, 1);
 
-    mat q = G*G + coef1*G + coef2.real()*A;
+    mat q = G*G + coef1*G + coef2.real()*I;
 
     L = q*invWo*l_array;
 }
@@ -203,6 +210,55 @@ void commThread::zerarObs()
 {
     this->xEst = mat(2, 1, arma::fill::zeros);
     this->erroEst = mat(2, 1, arma::fill::zeros);
+}
+
+void commThread::calcK()
+{
+    double coef1 = polesSeg[2].real() + 2*polesSeg[0].real();
+    double coef2 = 2*polesSeg[0].real()*polesSeg[2].real() + pow(polesSeg[0].real(),2) + pow(polesSeg[0].imag(),2);
+    double coef3 = (pow(polesSeg[0].real(),2) + pow(polesSeg[0].imag(),2))*polesSeg[2].real();
+
+    mat I = arma::eye<mat> (3,3);
+    mat vec = ("0 0 1");
+
+    mat q = Ga*Ga*Ga + coef1*Ga*Ga + coef2*Ga + coef3*I;
+
+    Ka = vec*invWc*q;
+
+    K = (Ka + vec)*kMatAux;
+    k1 = K[2];
+    k2[0] = K[0];
+    k2[1] = K[1];
+}
+
+void commThread::calcPolesSeg()
+{
+    bool flagPole[2] = {0};
+//    mat aux1 = k2 - k2*G - k1*C*G;
+//    mat aux2 = 1 - k2*H - k1*C*H;
+
+//    mat sist(3,3);
+
+//    sist[0] = G[0]; sist[1] = G[1]; sist[3] = G[2]; sist[4] = G[3];
+//    sist[6] = H[0]; sist[7] = H[1];
+//    sist[2] = aux1[0]; sist[5] = aux1[1]; sist[8] = aux2[0];
+    mat sist = G + H*K;
+
+    arma::cx_vec eigVal = eig_gen(sist);
+
+    for (int i = 0; i < 3; i++){
+        if (eigVal[i].imag() == 0 && !flagPole[1]){
+            flagPole[1] = true;
+            polesSeg[2] = eigVal[i];
+        }
+        else if (!flagPole[0]){
+            polesSeg[0] = eigVal[i];
+            flagPole[0] = true;
+        }
+        else {
+            polesSeg[1] = eigVal[i];
+        }
+    }
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){

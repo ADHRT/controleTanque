@@ -36,6 +36,8 @@ public:
     void getPoles(double *l, complex<double> *pole);
     void getL(complex<double> *pole, double *l);
     void zerarObs();
+    void getPolesSeg();
+    void getK();
 
 private:
     Controlador contMestre, contEscravo;
@@ -65,6 +67,9 @@ private:
     // Entrada do usuario ou calculado pelo auto-valores
     complex<double> polesOb[2];
 
+    // Polos seguidor
+    complex<double> polesSeg[3];
+
     // Matrizes para o calculo do observador
     mat G;
     mat H;
@@ -76,12 +81,28 @@ private:
     mat xEst;
     mat erroEst;
 
+    //Matrizes para o calculo do seguidor
+    mat Ga;
+    mat Ha;
+    mat invWc;
+    mat K;
+    mat Ka;
+    double k1;
+    mat k2;
+    mat kMatAux; //Matriz auxiliar para o calculo de k1 e k2
+
     // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
+    // Observador
     void calcL();
     void calcPoles();
     void calcObs(double nivelTanque1, double nivelTanque2, double sinalSaturado);
+
+    // Seguidor
+    void calcK();
+    void calcPolesSeg();
+    void calcSeg();
 
 signals:
     void plotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2);
