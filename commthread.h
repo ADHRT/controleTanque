@@ -58,7 +58,7 @@ private:
     bool levelSimulationFinished;
     bool connected;
     //flag para ligar o observador
-    bool observer;
+    bool observer, seguidor;
     int channel, tank;
     int simulationNivelTanque1;
     double waveTime, waveTimeStamp;
@@ -90,6 +90,7 @@ private:
     double k1;
     mat k2;
     mat kMatAux; //Matriz auxiliar para o calculo de k1 e k2
+    double v;
 
     // Travas
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
@@ -103,6 +104,7 @@ private:
     void calcK();
     void calcPolesSeg();
     void calcSeg();
+    void calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro);
 
 signals:
     void plotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2);
