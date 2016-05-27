@@ -15,6 +15,8 @@ supervisorio::supervisorio(QWidget *parent) :
      */
     lObHasChanged = false;
     poleObHasChanged = false;
+    kSegHasChanged = false;
+    poleSegHasChanged = false;
     /* -----------------------------------------------
      * END - Flags
      * -----------------------------------------------
@@ -114,15 +116,18 @@ supervisorio::supervisorio(QWidget *parent) :
     conditionalIntegration[1] = false;
 
     //observador
-    bool observador = true;
+    bool observador = false;
     //lOb[0] = 10;
     //lOb[1] = 15;    
     polesOb[0] = complex<double>(0.99876,0);
     polesOb[1] = complex<double>(0.0999273,0);
 
     //seguidor
-    bool seguidor = false;
-    /* -----------------------------------------------
+    bool seguidor = true;
+    polesSeg[0] = complex<double>(0.9,0.5);
+    polesSeg[1] = complex<double>(0.9,-0.5);
+    polesSeg[2] = complex<double>(0.5,0);
+        /* -----------------------------------------------
      * END - Valores para popular a interface grafica
      * -----------------------------------------------
      */
@@ -186,7 +191,6 @@ supervisorio::supervisorio(QWidget *parent) :
     //carrega os polos
     //on_l_valueChange();
     ui->checkBox_observador_ativar->setChecked(observador);
-    //HANOCH-desabilitaPID
     on_checkBox_observador_ativar_clicked(observador);
     //Polos
     setPolesOb(-1);
@@ -194,7 +198,13 @@ supervisorio::supervisorio(QWidget *parent) :
     on_poles_valueChange();
 
     //seguidor
-    ui->groupBox_seguidorDeRef->setEnabled(seguidor);
+    //ui->groupBox_seguidorDeRef->setEnabled(seguidor);
+    ui->checkBox_seguidor_ativar->setChecked(seguidor);
+    on_checkBox_seguidor_ativar_clicked(seguidor);
+    //Polos
+    setPolesSeg(-1);
+    //carrega os Ls
+    on_poles_seg_valueChange();
     /* -----------------------------------------------
      * END - Set valores na interface grafica
      * -----------------------------------------------
@@ -1267,8 +1277,6 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
         ui->doubleSpinBox_6->setValue(1.0);
         ui->doubleSpinBox_7->setValue(0.0);
         ui->doubleSpinBox_8->setValue(0.0);
-
-        //controlador escravo
         index = ui->comboBox_windup->findText("Sem");
         ui->comboBox_windup->setCurrentIndex(index);
 
@@ -1302,6 +1310,41 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
     ui->groupBox_select_tanque->setEnabled(!checked);
 }
 
+void supervisorio::on_checkBox_seguidor_ativar_clicked(bool checked)
+{
+
+    if(checked) {
+        //controlador mestre
+        int index = ui->comboBox_tipoControle->findText("Sem");
+        ui->comboBox_tipoControle->setCurrentIndex(index);
+
+        //malha fechada on
+        ui->radioButton_10->setChecked(checked);
+
+        //cascata off
+        ui->checkBox_9->setChecked(!checked);
+
+        //tanque 2
+        ui->radioButton_tanque2->setChecked(checked);
+    }
+
+    //GroupBox's
+
+    //Habilita/desabilita Seguidor
+    ui->groupBox_seguidorDeRef->setEnabled(checked);
+
+    //Desabilita/habilita controlador mestre
+    ui->groupBox_10->setEnabled(!checked);
+
+    //Desabilita/habilita controlador escravo
+    ui->groupBox_11->setEnabled(!checked);
+
+    //Desabilita/habilita malha
+    ui->groupBox_4->setEnabled(!checked);
+
+    //Desabilita/habilita tanques
+    ui->groupBox_select_tanque->setEnabled(!checked);
+}
 
 
 void supervisorio::getPolesOb()
@@ -1309,6 +1352,14 @@ void supervisorio::getPolesOb()
     polesOb[0] = complex <double>(ui->doubleSpinBox_polo1Re_ob->value(), ui->doubleSpinBox_polo1Im_ob->value());
     polesOb[1] = complex <double>(ui->doubleSpinBox_polo2Re_ob->value(), ui->doubleSpinBox_polo2Im_ob->value());
     isInstableOb();
+}
+
+void supervisorio::getPolesSeg()
+{
+    polesSeg[0] = complex <double>(ui->doubleSpinBox_polo1Re_seg->value(), ui->doubleSpinBox_polo1Im_seg->value());
+    polesSeg[1] = complex <double>(ui->doubleSpinBox_polo2Re_seg->value(), ui->doubleSpinBox_polo2Im_seg->value());
+    polesSeg[2] = complex <double>(ui->doubleSpinBox_polo3Re_seg->value(), 0);
+    isInstableSeg();
 }
 
 /*  Altera os polos na interface grafica
@@ -1330,10 +1381,40 @@ void supervisorio::setPolesOb(int poleNum)
     poleObHasChanged = false;
 }
 
+/*  Altera os polos na interface grafica
+    Params: -1 para todos
+             1 para polo 1
+             2 para polo 2
+             3 para polo 3
+*/
+void supervisorio::setPolesSeg(int poleNum)
+{
+    poleSegHasChanged = true;
+    if(poleNum == 1 || poleNum == -1) {
+        ui->doubleSpinBox_polo1Re_seg->setValue(polesSeg[0].real());
+        ui->doubleSpinBox_polo1Im_seg->setValue(polesSeg[0].imag());
+    }
+    if (poleNum == 2 || poleNum == -1) {
+        ui->doubleSpinBox_polo2Re_seg->setValue(polesSeg[1].real());
+        ui->doubleSpinBox_polo2Im_seg->setValue(polesSeg[1].imag());
+    }
+    if (poleNum == 3 || poleNum == -1) {
+        ui->doubleSpinBox_polo3Re_seg->setValue(polesSeg[2].real());
+    }
+    poleSegHasChanged = false;
+}
+
 void supervisorio::getLOb()
 {
     lOb[0] = ui->doubleSpinBox_l1->value();
     lOb[1] = ui->doubleSpinBox_l2->value();
+}
+
+void supervisorio::getKSeg()
+{
+    kSeg[0] = ui->doubleSpinBox_k1->value();
+    kSeg[1] = ui->doubleSpinBox_k2_1->value();
+    kSeg[2] = ui->doubleSpinBox_k2_2->value();
 }
 
 void supervisorio::setLOb(int lNum)
@@ -1346,14 +1427,36 @@ void supervisorio::setLOb(int lNum)
     lObHasChanged = false;
 }
 
+void supervisorio::setKSeg(int num)
+{
+    kSegHasChanged = true;
+    if(num == 1 || num == -1)
+        ui->doubleSpinBox_k1->setValue(kSeg[0]);
+    if(num == 2 || num == -1)
+        ui->doubleSpinBox_k2_1->setValue(kSeg[1]);
+    if(num == 3 || num == -1)
+        ui->doubleSpinBox_k2_2->setValue(kSeg[2]);
+    kSegHasChanged = false;
+}
+
 void supervisorio::calcPoles()
 {
     cThread->getPoles(lOb, polesOb);
 }
 
+void supervisorio::calcPolesSeg()
+{
+    //cThread->getPolesSeg(kSeg, polesSeg);
+}
+
 void supervisorio::calcLOb()
 {
     cThread->getL(polesOb, lOb);
+}
+
+void supervisorio::calcKSeg()
+{
+    //cThread->getK(polesSeg, kSeg);
 }
 
 bool supervisorio::isInstableOb()
@@ -1386,6 +1489,52 @@ bool supervisorio::isInstableOb()
         // unwarning color
         ui->groupBox_polos_ob->setPalette( ui->groupBox_polos_ob->style()->standardPalette() );
         ui->groupBox_l->setPalette(ui->groupBox_l->style()->standardPalette());
+    }
+
+    //desabilita o botao de atualizar caso haja erro
+    ui->pushButton_8->setDisabled(erro);
+    return erro;
+}
+
+bool supervisorio::isInstableSeg()
+{
+    int erro = 0;
+    double mod0 = moduleOfPole(polesSeg[0]);
+    double mod1 = moduleOfPole(polesSeg[1]);
+    double mod2 = moduleOfPole(polesSeg[2]);
+
+    //verifica validade dos polos conjugados
+    if (polesSeg[0].imag() != 0 || polesSeg[1].imag() != 0)
+        if(polesSeg[0].imag() != -polesSeg[1].imag() || polesSeg[0].real() != polesSeg[1].real())
+            erro = 1;
+
+    //verifica instabilidade
+    if(mod0 > 1 || mod1 > 1 || mod2 > 1)
+        erro = 1;
+    else {
+        if(mod0 == 1 && polesSeg[0] == polesSeg[1])
+            erro = 1;
+        if(mod2 == 1 && polesSeg[0] == polesSeg[2])
+            erro = 1;
+        if(mod2 == 1 && polesSeg[1] == polesSeg[2])
+            erro = 1;
+    }
+
+    // caso sistema nao seja estavel nao pode enviar valores, e notifica o usuario
+    if(erro){
+        // warning color
+        QPalette p = ui->groupBox_polos_seg->palette();
+        p.setColor(QPalette::Window, Qt::red);
+        p.setColor(QPalette::Highlight, Qt::red);
+        ui->groupBox_polos_seg->setPalette(p);
+        ui->groupBox_k1->setPalette(p);
+        ui->groupBox_k2->setPalette(p);
+
+    } else {
+        // unwarning color
+        ui->groupBox_polos_seg->setPalette( ui->groupBox_polos_seg->style()->standardPalette() );
+        ui->groupBox_k1->setPalette(ui->groupBox_k1->style()->standardPalette());
+        ui->groupBox_k2->setPalette(ui->groupBox_k2->style()->standardPalette());
     }
 
     //desabilita o botao de atualizar caso haja erro
@@ -1434,16 +1583,80 @@ void supervisorio::on_doubleSpinBox_polo2Im_ob_valueChanged(double)
     }
 }
 
+//seguidor
+
+void supervisorio::on_doubleSpinBox_polo1Re_seg_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        polesSeg[0].real(ui->doubleSpinBox_polo1Re_seg->value());
+        replicaPoloSeg(1);
+        on_poles_seg_valueChange();
+    }
+}
+
+void supervisorio::on_doubleSpinBox_polo1Im_seg_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        polesSeg[0].imag(ui->doubleSpinBox_polo1Im_seg->value());
+        replicaPoloSeg(1);
+        on_poles_seg_valueChange();
+    }
+}
+
+void supervisorio::on_doubleSpinBox_polo2Re_seg_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        polesSeg[1].real(ui->doubleSpinBox_polo2Re_seg->value());
+        replicaPoloSeg(2);
+        on_poles_seg_valueChange();
+    }
+}
+
+void supervisorio::on_doubleSpinBox_polo2Im_seg_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        polesSeg[1].imag(ui->doubleSpinBox_polo2Im_seg->value());
+        replicaPoloSeg(2);
+        on_poles_seg_valueChange();
+    }
+}
+
+void supervisorio::on_doubleSpinBox_polo3Re_seg_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        polesSeg[2].real(ui->doubleSpinBox_polo3Re_seg->value());
+        on_poles_seg_valueChange();
+    }
+}
+
 void supervisorio::replicaPolo(int numPolo){
     //sera utilizado como idice do vetor
     numPolo--;
-
     //um polo e o numPolo que foi alterado pelo usuario o outro e o !numPolo que sera modificado
     if(polesOb[numPolo].imag() != 0) {
         polesOb[!numPolo].imag(-polesOb[numPolo].imag());
         polesOb[!numPolo].real(polesOb[numPolo].real());
         //volta a ser o numero de polo, modificado
         setPolesOb((!numPolo)+1);
+    } else {
+        polesOb[!numPolo].imag(polesOb[numPolo].imag());
+        setPolesOb((!numPolo)+1);
+    }
+
+}
+
+void supervisorio::replicaPoloSeg(int numPolo){
+    //sera utilizado como idice do vetor
+    numPolo--;
+    //um polo e o numPolo que foi alterado pelo usuario o outro e o !numPolo que sera modificado
+    if(polesSeg[numPolo].imag() != 0) {
+        polesSeg[!numPolo].imag(-polesSeg[numPolo].imag());
+        polesSeg[!numPolo].real(polesSeg[numPolo].real());
+        //volta a ser o numero de polo, modificado
+        setPolesSeg((!numPolo)+1);
+    } else {
+        polesSeg[!numPolo].imag(polesSeg[numPolo].imag());
+        setPolesSeg((!numPolo)+1);
     }
 
 }
@@ -1451,10 +1664,17 @@ void supervisorio::replicaPolo(int numPolo){
 void supervisorio::on_poles_valueChange(void)
 {
     //getPolesOb();
-    //DESCOMENTE
-    //isInstableOb();
+    isInstableOb();
     calcLOb();
     setLOb(-1);
+}
+
+void supervisorio::on_poles_seg_valueChange(void)
+{
+    //getPolesSeg();
+    isInstableSeg();
+    calcKSeg();
+    setKSeg(-1);
 }
 
 void supervisorio::on_doubleSpinBox_l1_valueChanged(double)
@@ -1473,11 +1693,42 @@ void supervisorio::on_doubleSpinBox_l2_valueChanged(double)
     }
 }
 
+void supervisorio::on_doubleSpinBox_k1_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        kSeg[0] = ui->doubleSpinBox_k1->value();
+        on_k_valueChange();
+    }
+}
+
+void supervisorio::on_doubleSpinBox_k2_1_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        kSeg[1] = ui->doubleSpinBox_k2_1->value();
+        on_k_valueChange();
+    }
+}
+
+void supervisorio::on_doubleSpinBox_k2_2_valueChanged(double)
+{
+    if(!kSegHasChanged && !poleSegHasChanged) {
+        kSeg[2] = ui->doubleSpinBox_k2_2->value();
+        on_k_valueChange();
+    }
+}
+
 void supervisorio::on_l_valueChange(void){
     //getLOb();
     calcPoles();
-    //DESCOMENTE
-    //isInstableOb();
+    isInstableOb();
     //seta na interface todos os polos
     setPolesOb(-1);
+}
+
+void supervisorio::on_k_valueChange(void){
+    //getLOb();
+    calcPolesSeg();
+    isInstableSeg();
+    //seta na interface todos os polos
+    setPolesSeg(-1);
 }
