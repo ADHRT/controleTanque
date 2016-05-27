@@ -45,7 +45,7 @@ commThread::commThread(QObject *parent):
     //Seguidor
     Ga = mat("0.993458148011545 0 0.021196129223099; 0.006520407260849 0.993458148011545 0.000069482650830; 0 0 0");
     Ha = mat("0; 0; 1");
-    invWc = mat("0 0 1; -0.1551633878 14439.4154689764 0; 2233.1241816492 -681228.8846229955 0");
+    invWc = mat("0 0 1; 70.741834006738 -7188.169264136371 0; -23.718572056820 7235.502852861834 0");
     kMatAux = mat("-0.5010938890433 151.8619115450547 1.0; 0 -1.0 1.0; 47.0237705882343 46.8697910620831 0.3086342756075");
     k2 = mat("0 0");
 }
@@ -133,6 +133,8 @@ void commThread::run(){
                 contMestre.erro = contMestre.setPoint - nivelTanque;
 
                 calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
+
+                calculoDeControleEspEst();
 
                 if(cascade){
                     contEscravo.setPoint = contMestre.sinalCalculado;
