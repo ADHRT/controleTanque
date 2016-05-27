@@ -60,7 +60,7 @@ private:
     bool levelSimulationFinished;
     bool connected;
     //flag para ligar o observador
-    bool observer, seguidor;
+    bool observer, follower;
     int channel, tank;
     int simulationNivelTanque1;
     double waveTime, waveTimeStamp;

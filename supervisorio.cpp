@@ -1053,8 +1053,8 @@ void supervisorio::on_pushButton_8_clicked()
     castControl[0] = static_cast<int>(control[0]);
     castControl[1] = static_cast<int>(control[1]);
 
-    bool observer = ui->checkBox_observador_ativar;
-    bool follower = ui->checkBox_seguidor_ativar;
+    bool observer = ui->checkBox_observador_ativar->isChecked();
+    bool follower = ui->checkBox_seguidor_ativar->isChecked();
     cThread->setParameters(frequencia, amplitude, offset, duracaoMax, duracaoMin, wave, malha, channel, castControl, kp, ki, kd, windup, conditionalIntegration, taw, tank, cascade, observer ,lOb, follower, kSeg);
 }
 
@@ -1449,7 +1449,7 @@ void supervisorio::calcPolesSeg()
 {
     double kSeg[3] = {this->kSeg[1], this->kSeg[2], this->kSeg[0]};
 
-    //cThread->getPolesSeg(kSeg, polesSeg);
+    cThread->getPolesSeg(kSeg, polesSeg);
 }
 
 void supervisorio::calcLOb()
@@ -1460,7 +1460,7 @@ void supervisorio::calcLOb()
 void supervisorio::calcKSeg()
 {
     double kSeg[3];
-    //cThread->getK(polesSeg, kSeg);
+    cThread->getK(polesSeg, kSeg);
     this->kSeg[0] = kSeg[2];
     this->kSeg[1] = kSeg[0];
     this->kSeg[2] = kSeg[1];

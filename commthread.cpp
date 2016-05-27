@@ -133,8 +133,8 @@ void commThread::run(){
                 contMestre.setPoint = sinalDaOndaGerada;
                 contMestre.erro = contMestre.setPoint - nivelTanque;
 
-                seguidor = true;
-                if(seguidor) calculoDeControleSeguidor(nivelTanque1, nivelTanque2, contMestre.erro);
+                //follower = true;
+                if(follower) calculoDeControleSeguidor(nivelTanque1, nivelTanque2, contMestre.erro);
 
                 else {
                     calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
@@ -150,7 +150,7 @@ void commThread::run(){
                     if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado*3);
                 }
             }
-
+            qDebug() << "SinalSaturado: " << contEscravo.sinalSaturado;
             // Escreve no canal selecionado
             if(!simulationMode) {
                 //qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
@@ -337,7 +337,7 @@ void commThread::getK(complex<double> *poleSeg, double *kSeg)
     mat I = arma::eye<mat> (3,3);
     mat vec = ("0 0 1");
 
-    mat q = Ga*Ga*Ga + coef1*Ga*Ga + coef2*Ga + coef3*I;
+    mat q = Ga*Ga*Ga - coef1*Ga*Ga + coef2*Ga - coef3*I;
 
     mat ka = vec*invWc*q;
     mat k = (ka + vec)*kMatAux;
@@ -345,6 +345,9 @@ void commThread::getK(complex<double> *poleSeg, double *kSeg)
     kSeg[0] = k[0];
     kSeg[1] = k[1];
     kSeg[2] = k[2];
+
+//    qDebug() << "Coef:" <<coef1 << coef2 << coef3;
+//    qDebug() << "K:" << kSeg[0] << kSeg[1] << kSeg[2];
 }
 
 double commThread::lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2){
@@ -409,11 +412,15 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->tank = tank;
     this->cascade = cascade;
 
-    //TAYNARA receber observador e lob
+    //Observador
     this->L = mat(lOb, 2, 1);
     this->observer = observer;
     this->xEst = mat(2, 1, arma::fill::zeros);
     this->erroEst = mat(2, 1, arma::fill::zeros);
+
+    //Seguidor
+    this->follower = follower;
+    this->K = mat(kSeg, 3, 1);
 }
 
 // Zera todos os valores
