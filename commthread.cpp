@@ -133,11 +133,12 @@ void commThread::run(){
                 contMestre.setPoint = sinalDaOndaGerada;
                 contMestre.erro = contMestre.setPoint - nivelTanque;
 
-                //follower = true;
-                if(follower) calculoDeControleSeguidor(nivelTanque1, nivelTanque2, contMestre.erro);
-
+                if(follower) {
+                    calculoDeControleSeguidor(nivelTanque1, nivelTanque2, contMestre.erro);
+                }
                 else {
                     calculoDeControle(&contMestre, nivelTanque, nivelTanque1, nivelTanque2);
+                    qDebug();
                     if(cascade){
                         contEscravo.setPoint = contMestre.sinalCalculado;
                         contEscravo.erro = contEscravo.setPoint - nivelTanque1;
@@ -150,7 +151,7 @@ void commThread::run(){
                     if(observer) calcObs(nivelTanque1, nivelTanque2, contEscravo.sinalSaturado*3);
                 }
             }
-//            qDebug() << "SinalSaturado: " << contEscravo.sinalSaturado;
+//            kf() << "SinalSaturado: " << contEscravo.sinalSaturado;
             // Escreve no canal selecionado
             if(!simulationMode) {
                 //qDebug() << "sinalSaturado: " << sinalSaturado << "\n";
@@ -291,16 +292,16 @@ void commThread::calcPolesSeg()
 
 void commThread::calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro)
 {
-    qDebug() << "nivelTanque1" << nivelTanque1 << "nivelTanque2" << nivelTanque2 << "erro" << erro;
-    qDebug() << "k1" << k1;
-    qDebug() << "k2" << k2[0] << k2[1];
+//    qDebug() << "nivelTanque1" << nivelTanque1 << "nivelTanque2" << nivelTanque2 << "erro" << erro;
+//    qDebug() << "k1" << k1;
+//    qDebug() << "k2" << k2[0] << k2[1];
 
     v += erro;
     contEscravo.sinalCalculado = -(k2[0]*nivelTanque1 + k2[1]*nivelTanque2) + k1*v;
 
     contEscravo.sinalSaturado = lockSignal(contEscravo.sinalCalculado, nivelTanque1, nivelTanque2);
 
-    qDebug() << "v:" << v << "SinalCalculado:" << contEscravo.sinalCalculado << "SinalSaturado:" << contEscravo.sinalSaturado;
+//    qDebug() << "v:" << v << "SinalCalculado:" << contEscravo.sinalCalculado << "SinalSaturado:" << contEscravo.sinalSaturado;
 
 }
 
@@ -336,14 +337,28 @@ void commThread::getPolesSeg(double *kSeg, complex<double> *poleSeg)
 
 void commThread::getK(complex<double> *poleSeg, double *kSeg)
 {
-    double coef1 = poleSeg[2].real() + 2*poleSeg[0].real();
-    double coef2 = 2*poleSeg[0].real()*poleSeg[2].real() + pow(poleSeg[0].real(),2) + pow(poleSeg[0].imag(),2);
-    double coef3 = (pow(poleSeg[0].real(),2) + pow(poleSeg[0].imag(),2))*poleSeg[2].real();
+    double a = poleSeg[0].real();
+    double b = poleSeg[0].imag();
+    double c = poleSeg[1].real();
+    double d = poleSeg[2].real();
+
+    double coef1, coef2, coef3;
+
+    if(b != 0){
+        coef1 = -2*a-d;
+        coef2 = pow(a,2) + 2*a*d + pow(b,2);
+        coef3 = -d*(pow(a,2) + pow(b,2));
+    }
+    else {
+        coef1 = -(a + c + d);
+        coef2 = a*c + d*(a + c);
+        coef3 = -a*c*d;
+    }
 
     mat I = arma::eye<mat> (3,3);
     mat vec = ("0 0 1");
 
-    mat q = Ga*Ga*Ga - coef1*Ga*Ga + coef2*Ga - coef3*I;
+    mat q = Ga*Ga*Ga + coef1*Ga*Ga + coef2*Ga + coef3*I;
 
     mat ka = vec*invWc*q;
     mat k = (ka + vec)*kMatAux;
@@ -352,7 +367,10 @@ void commThread::getK(complex<double> *poleSeg, double *kSeg)
     kSeg[1] = k[1];
     kSeg[2] = k[2];
 
-//    qDebug() << "Coef:" <<coef1 << coef2 << coef3;
+    qDebug() << q[0] << q[3] << q[6];
+    qDebug() << q[1] << q[4] << q[7];
+    qDebug() << q[2] << q[5] << q[8];
+    qDebug() << "Coef:" << coef1 << coef2 << coef3;
 //    qDebug() << "K:" << kSeg[0] << kSeg[1] << kSeg[2];
 }
 
