@@ -495,7 +495,7 @@
     </property>
     <widget class="QWidget" name="tab_observador">
      <attribute name="title">
-      <string>Observador</string>
+      <string>Espaço de estados</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox_8">
       <property name="geometry">
@@ -1150,6 +1150,9 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
          <double>-100000.000000000000000</double>
         </property>
@@ -1180,6 +1183,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="decimals">
+         <number>4</number>
         </property>
         <property name="minimum">
          <double>-100000.000000000000000</double>
@@ -1238,6 +1244,9 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
          <double>-100000.000000000000000</double>
         </property>
@@ -1282,6 +1291,9 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
          <double>-100000.000000000000000</double>
         </property>
@@ -1312,6 +1324,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="decimals">
+         <number>4</number>
         </property>
         <property name="minimum">
          <double>-100000.000000000000000</double>
