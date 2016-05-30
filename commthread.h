@@ -34,8 +34,10 @@ private:
     double kp, ki, kd, taw, lastI, lastD, period;
     bool malha, windup, conditionalIntegration;
     bool simulationMode;
+    bool levelSimulationFinished;
     bool connected;
     int channel, tank;
+    int simulationNivelTanque1;
     double waveTime, waveTimeStamp;
     Quanser* q;
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);

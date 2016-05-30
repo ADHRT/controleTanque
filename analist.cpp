@@ -7,7 +7,7 @@ Analist::Analist()
         porcInital[i] = i*5/100.0;
         porcFinal[i] = (100 - i*5)/100.0;
         reachedTr[i] = false;
-        qDebug() << "P[" << i << "]: " << porcFinal[i];
+        //qDebug() << "P[" << i << "]: " << porcFinal[i];
     }
     initialLevel = -1;
 }
@@ -55,7 +55,7 @@ void Analist::reset(double setPoint)
     // detecta mudanca de setPoint para iniciar o calculo das variaveis
     if(setPoint != oldSetPoint) {
         //qDebug() << "reset";
-        qDebug() << "Entrou Reset";
+        //qDebug() << "Entrou Reset";
         oldSetPoint = setPoint;
         ts = 0;
         for(int i = 0; i < 3; i++) {
@@ -122,8 +122,8 @@ void Analist::calcTr(double nivel, double setPoint)
 {
     double timeStampTr = QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
     //if (tr[0] == 0) trOldTime[0] = timeStamp; //botar no reset
-    qDebug() <<  "SP: " << setPoint << " - IL: " << initialLevel <<  " - L: " << nivel <<" - tr: " << tr[0] << " - trOld: " << trOldTime[0] << " - TS: " << timeStampTr << "- Flag: " << reachedTr;
-    qDebug() << "condInic: " << (nivel <= (setPoint - initialLevel)*porcInital[0] + initialLevel) << "condFim: " << (nivel <= (setPoint - initialLevel)*porcFinal[0] + initialLevel);
+    //qDebug() <<  "SP: " << setPoint << " - IL: " << initialLevel <<  " - L: " << nivel <<" - tr: " << tr[0] << " - trOld: " << trOldTime[0] << " - TS: " << timeStampTr << "- Flag: " << reachedTr;
+    //qDebug() << "condInic: " << (nivel <= (setPoint - initialLevel)*porcInital[0] + initialLevel) << "condFim: " << (nivel <= (setPoint - initialLevel)*porcFinal[0] + initialLevel);
     if (initialLevel == -1) {
         initialLevel = nivel;
         //qDebug() << "PI: " << porcInital[0] << " - PF: " << porcFinal[0];
