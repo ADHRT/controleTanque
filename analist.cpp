@@ -1,4 +1,5 @@
 #include "analist.h"
+#include <qmath.h>
 
 Analist::Analist()
 {
@@ -12,12 +13,13 @@ Analist::Analist()
     initialLevel = -1;
 }
 
-void Analist::calc(double nivel, double setPoint, double timeStamp)
+void Analist::calc(double nivel, double setPoint, double timeStamp, int tsOpt)
 {
     //qDebug() << "SP: " << setPoint << "OSP: " << oldSetPoint;
     reset(setPoint);
     calcMpTp(nivel, setPoint);
     calcTr(nivel, setPoint);
+    calcTs( nivel,  setPoint,  timeStamp, tsOpt);
 }
 
 double Analist::getTs()
@@ -57,7 +59,7 @@ void Analist::reset(double setPoint)
         //qDebug() << "reset";
         //qDebug() << "Entrou Reset";
         oldSetPoint = setPoint;
-        ts = 0;
+        ts = -100;
         for(int i = 0; i < 3; i++) {
             trOldTime[i] = 0;
             tr[i] = 0;
@@ -70,30 +72,20 @@ void Analist::reset(double setPoint)
     }
 }
 
-double Analist::calcTs(double nivel, double setPoint, double timeStamp)
+double Analist::calcTs(double nivel, double setPoint, double timeStamp, int tsOpt)
 {
-    double tsAux[4];
 
-    if (ts == 0) tsOldTime = timeStamp; //botar no reset
-
-    if (direction){
-        if (nivel < abs(setPoint - initialLevel)*0.02 || nivel > abs(setPoint - initialLevel)*0.02)
-            tsAux[0] = timeStamp - tsOldTime;
-
-        if (nivel < abs(setPoint - initialLevel)*0.05 || nivel > abs(setPoint - initialLevel)*0.05)
-            tsAux[1] = timeStamp - tsOldTime;
-
-        if (nivel < abs(setPoint - initialLevel)*0.07 || nivel > abs(setPoint - initialLevel)*0.07)
-            tsAux[2] = timeStamp - tsOldTime;
-
-        if (nivel < abs(setPoint - initialLevel)*0.1 || nivel > abs(setPoint - initialLevel)*0.1)
-            tsAux[3] = timeStamp - tsOldTime;
+    if(ts == -100) {
+        ts=0;
+        InitialLevelTs=nivel;
+        tsInitialTime=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
     }
 
-    if (tsOpt == 2) ts = tsAux[0];
-    else if (tsOpt == 5) ts = tsAux[1];
-    else if (tsOpt == 7) ts = tsAux[2];
-    else ts = tsAux[3];
+    double currentTimeTs=QDateTime::currentDateTime().toMSecsSinceEpoch()/1000.0;
+
+    //qDebug() << currentTimeTs << tsInitialTime << currentTimeTs-tsInitialTime;
+    if (qFabs((setPoint-InitialLevelTs)*tsOpt/100)<qFabs(nivel-setPoint))
+        ts = currentTimeTs - tsInitialTime;
 
     return ts;
 }
