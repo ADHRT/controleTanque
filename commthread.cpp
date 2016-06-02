@@ -172,33 +172,13 @@ void commThread::run(){
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, contMestre.sinalCalculado, contEscravo.sinalCalculado, contEscravo.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contEscravo.i, contMestre.d, contEscravo.d, xEst[0], xEst[1], erroEst[0], erroEst[1]);
         }
+        qDebug() << "Kp:" << contMestre.kp << "Windup" << contMestre.windup << "controlador:" <<  control[0] << "seguidor" << follower << "Observador" << observer;
     }
+
     if(!simulationMode) {
         q->writeDA(channel, 0);
         //delete q;
     }
-}
-
-void commThread::calcL(void){
-    double coef1 =  -polesOb[0].real() - polesOb[1].real();
-    complex <double>coef2 = polesOb[0] * polesOb[1];
-
-    mat I = arma::eye<mat> (2,2);
-    mat l("0; 1");
-
-    mat q = G*G + coef1*G + coef2.real()*I;
-
-    L = q*invWo*l;
-}
-
-void commThread::calcPoles()
-{
-    mat temp = G - L*C;
-
-    arma::cx_vec eigVal = eig_gen(temp);
-
-    polesOb[0] = eigVal[0];
-    polesOb[1] = eigVal[1];
 }
 
 void commThread::calcObs(double nivelTanque1, double nivelTanque2, double sinalSaturado)
@@ -245,49 +225,6 @@ void commThread::getL(complex<double> *pole, double *l)
 
     l[0] = l_mat[0];
     l[1] = l_mat[1];
-}
-
-void commThread::calcK()
-{
-    double coef1 = polesSeg[2].real() + 2*polesSeg[0].real();
-    double coef2 = 2*polesSeg[0].real()*polesSeg[2].real() + pow(polesSeg[0].real(),2) + pow(polesSeg[0].imag(),2);
-    double coef3 = (pow(polesSeg[0].real(),2) + pow(polesSeg[0].imag(),2))*polesSeg[2].real();
-
-    mat I = arma::eye<mat> (3,3);
-    mat vec = ("0 0 1");
-
-    mat q = Ga*Ga*Ga + coef1*Ga*Ga + coef2*Ga + coef3*I;
-
-    Ka = vec*invWc*q;
-
-    K = (Ka + vec)*kMatAux;
-    k1 = K[2];
-    k2[0] = K[0];
-    k2[1] = K[1];
-}
-
-void commThread::calcPolesSeg()
-{
-    bool flagPole[2];
-    flagPole[0] = false; flagPole[1] = false;
-
-    mat sist = Ga - Ha*Ka;
-
-    arma::cx_vec eigVal = eig_gen(sist);
-
-    for (int i = 0; i < 3; i++){
-        if (eigVal[i].imag() == 0 && !flagPole[1]){
-            flagPole[1] = true;
-            polesSeg[2] = eigVal[i];
-        }
-        else if (!flagPole[0]){
-            polesSeg[0] = eigVal[i];
-            flagPole[0] = true;
-        }
-        else {
-            polesSeg[1] = eigVal[i];
-        }
-    }
 }
 
 void commThread::calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro)
@@ -367,10 +304,10 @@ void commThread::getK(complex<double> *poleSeg, double *kSeg)
     kSeg[1] = k[1];
     kSeg[2] = k[2];
 
-    qDebug() << q[0] << q[3] << q[6];
-    qDebug() << q[1] << q[4] << q[7];
-    qDebug() << q[2] << q[5] << q[8];
-    qDebug() << "Coef:" << coef1 << coef2 << coef3;
+//    qDebug() << q[0] << q[3] << q[6];
+//    qDebug() << q[1] << q[4] << q[7];
+//    qDebug() << q[2] << q[5] << q[8];
+//    qDebug() << "Coef:" << coef1 << coef2 << coef3;
 //    qDebug() << "K:" << kSeg[0] << kSeg[1] << kSeg[2];
 }
 
@@ -444,11 +381,9 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
 
     //Seguidor
     this->follower = follower;
-//    this->K = mat(kSeg, 3, 1);
     this->k1 = kSeg[0];
     this->k2[0] = kSeg[1];
     this->k2[1] = kSeg[2];
-
 }
 
 // Zera todos os valores
