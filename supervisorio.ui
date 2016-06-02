@@ -487,7 +487,7 @@
       <x>10</x>
       <y>10</y>
       <width>391</width>
-      <height>621</height>
+      <height>401</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -497,442 +497,6 @@
      <attribute name="title">
       <string>Espaço de estados</string>
      </attribute>
-     <widget class="QGroupBox" name="groupBox_8">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>310</y>
-        <width>171</width>
-        <height>271</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Demais Configurações</string>
-      </property>
-      <widget class="QComboBox" name="comboBox">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>30</y>
-         <width>131</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Frequência (Hz)</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Período (s)</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>60</y>
-         <width>131</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="minimum">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>2.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-      </widget>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>110</y>
-         <width>131</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="maximum">
-        <double>20.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>3.000000000000000</double>
-       </property>
-      </widget>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>160</y>
-         <width>131</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>30.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>90</y>
-         <width>161</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Amplitude (cm)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_3">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>140</y>
-         <width>161</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Offset (cm)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_12">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>-10</x>
-         <y>190</y>
-         <width>181</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Duração max e min (s)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>210</y>
-         <width>131</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="maximum">
-        <double>30.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>3.000000000000000</double>
-       </property>
-      </widget>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>240</y>
-         <width>131</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>30.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_analise">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>390</y>
-        <width>171</width>
-        <height>151</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Analise</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <widget class="QComboBox" name="comboBox_tr">
-       <property name="geometry">
-        <rect>
-         <x>38</x>
-         <y>26</y>
-         <width>51</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>100</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>95</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>90</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="label_tr">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>33</y>
-         <width>41</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0 s</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_tr_0">
-       <property name="geometry">
-        <rect>
-         <x>-4</x>
-         <y>31</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>tr</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::AutoText</enum>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_mp_0">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>63</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Mp</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_mp_cm">
-       <property name="geometry">
-        <rect>
-         <x>33</x>
-         <y>65</y>
-         <width>51</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0 cm</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_mp_percent">
-       <property name="geometry">
-        <rect>
-         <x>87</x>
-         <y>65</y>
-         <width>51</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0 %</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_tp_0">
-       <property name="geometry">
-        <rect>
-         <x>-4</x>
-         <y>92</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>tp</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_tp">
-       <property name="geometry">
-        <rect>
-         <x>27</x>
-         <y>95</y>
-         <width>51</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0 s</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_ts_0">
-       <property name="geometry">
-        <rect>
-         <x>-4</x>
-         <y>127</y>
-         <width>31</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>ts</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboBox_ts">
-       <property name="geometry">
-        <rect>
-         <x>38</x>
-         <y>120</y>
-         <width>51</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>5</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>7</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>10</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="label_ts">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>127</y>
-         <width>41</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>0 s</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="groupBox_Observador">
       <property name="geometry">
        <rect>
@@ -1206,7 +770,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>140</y>
         <width>371</width>
         <height>181</height>
        </rect>
@@ -1552,58 +1116,10 @@
        </widget>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_5">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>310</y>
-        <width>171</width>
-        <height>71</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Onda</string>
-      </property>
-      <widget class="QComboBox" name="comboBox_6">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>30</y>
-         <width>131</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Degrau</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Senoidal</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Quadrada</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Dente de Serra</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sinal Aleatório</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
      <widget class="QCheckBox" name="checkBox_observador_ativar">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>180</x>
         <y>0</y>
         <width>97</width>
         <height>22</height>
@@ -1616,8 +1132,8 @@
      <widget class="QCheckBox" name="checkBox_seguidor_ativar">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>130</y>
+        <x>180</x>
+        <y>140</y>
         <width>97</width>
         <height>22</height>
        </rect>
@@ -2160,8 +1676,8 @@
      <widget class="QGroupBox" name="groupBox_2">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
+        <x>30</x>
+        <y>20</y>
         <width>131</width>
         <height>281</height>
        </rect>
@@ -2283,8 +1799,8 @@
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>280</y>
+        <x>210</x>
+        <y>20</y>
         <width>131</width>
         <height>281</height>
        </rect>
@@ -2615,7 +2131,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>680</y>
+      <y>690</y>
       <width>231</width>
       <height>61</height>
      </rect>
@@ -2666,7 +2182,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>700</y>
+      <y>710</y>
       <width>121</width>
       <height>32</height>
      </rect>
@@ -2685,7 +2201,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>640</y>
+      <y>655</y>
       <width>171</width>
       <height>32</height>
      </rect>
@@ -2698,7 +2214,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>640</y>
+      <y>655</y>
       <width>171</width>
       <height>32</height>
      </rect>
@@ -2861,6 +2377,497 @@
     <property name="shortcut">
      <string/>
     </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>370</y>
+      <width>391</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Sinal e Análise</string>
+     </attribute>
+     <widget class="QGroupBox" name="groupBox_analise">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>171</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Análise</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QComboBox" name="comboBox_tr">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>26</y>
+         <width>51</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>100</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>95</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>90</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="label_tr">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>33</y>
+         <width>41</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0 s</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_tr_0">
+       <property name="geometry">
+        <rect>
+         <x>-4</x>
+         <y>31</y>
+         <width>31</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>tr</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_mp_0">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>63</y>
+         <width>31</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Mp</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_mp_cm">
+       <property name="geometry">
+        <rect>
+         <x>33</x>
+         <y>65</y>
+         <width>51</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0 cm</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_mp_percent">
+       <property name="geometry">
+        <rect>
+         <x>87</x>
+         <y>65</y>
+         <width>51</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0 %</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_tp_0">
+       <property name="geometry">
+        <rect>
+         <x>-4</x>
+         <y>92</y>
+         <width>31</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>tp</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_tp">
+       <property name="geometry">
+        <rect>
+         <x>27</x>
+         <y>95</y>
+         <width>51</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0 s</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_ts_0">
+       <property name="geometry">
+        <rect>
+         <x>-4</x>
+         <y>127</y>
+         <width>31</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ts</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_ts">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>120</y>
+         <width>51</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>10</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="label_ts">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>127</y>
+         <width>41</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>0 s</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>171</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Onda</string>
+      </property>
+      <widget class="QComboBox" name="comboBox_6">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>131</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Degrau</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Senoidal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Quadrada</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dente de Serra</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Sinal Aleatório</string>
+        </property>
+       </item>
+      </widget>
+      <zorder>comboBox_6</zorder>
+      <zorder>tabWidget_2</zorder>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>220</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="minimum">
+       <double>0.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>30.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>1.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>90</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="maximum">
+       <double>20.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="value">
+       <double>3.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>120</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Offset (cm)</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>40</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="minimum">
+       <double>0.010000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>2.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+      <property name="value">
+       <double>1.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>70</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Amplitude (cm)</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>10</y>
+        <width>131</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>Frequência (Hz)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Período (s)</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>140</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="minimum">
+       <double>0.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>30.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>190</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="maximum">
+       <double>30.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>3.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>170</y>
+        <width>181</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Duração max e min (s)</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

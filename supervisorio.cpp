@@ -124,9 +124,9 @@ supervisorio::supervisorio(QWidget *parent) :
 
     //seguidor
     bool seguidor = true;
-    polesSeg[0] = complex<double>(0.9048,0);
-    polesSeg[1] = complex<double>(0.992,0);
-    polesSeg[2] = complex<double>(0.998,0);
+    polesSeg[0] = complex<double>(0.99,0.0008);
+    polesSeg[1] = complex<double>(0.99,-0.0008);
+    polesSeg[2] = complex<double>(0.9048,0);
         /* -----------------------------------------------
      * END - Valores para popular a interface grafica
      * -----------------------------------------------
@@ -1209,9 +1209,9 @@ void supervisorio::on_radioButton_tanque1_clicked()
     // habilita malha aberta
     ui->radioButton_9->setEnabled(true);
 
-    // desabilita cascata
+    // cascata
+    on_checkBox_9_clicked(false);
     ui->checkBox_9->setEnabled(false);
-//    on_checkBox_9_clicked(false);
 }
 
 void supervisorio::on_radioButton_tanque2_clicked()
@@ -1264,6 +1264,8 @@ void supervisorio::on_checkBox_9_clicked(bool checked)
     ui->groupBox_11->setEnabled(checked);
 //    ui->checkBox_9->setEnabled(checked);
     ui->checkBox_9->setChecked(checked);
+
+    ui->comboBox_windup->setEnabled(!checked);
 }
 
 void supervisorio::on_demo_clicked()
@@ -1287,7 +1289,7 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
         ui->radioButton_10->setChecked(checked);
 
         //cascata off
-        ui->checkBox_9->setChecked(!checked);
+        on_checkBox_9_clicked(!checked);
 
         //tanque 2
         ui->radioButton_tanque2->setChecked(checked);
@@ -1306,9 +1308,6 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
 
     //Desabilita/habilita controlador mestre
     ui->groupBox_10->setEnabled(!checked);
-
-    //Desabilita/habilita controlador escravo
-    ui->groupBox_11->setEnabled(!checked);
 
     //Desabilita/habilita malha
     ui->groupBox_4->setEnabled(!checked);
@@ -1329,7 +1328,7 @@ void supervisorio::on_checkBox_seguidor_ativar_clicked(bool checked)
         ui->radioButton_10->setChecked(checked);
 
         //cascata off
-        ui->checkBox_9->setChecked(!checked);
+        on_checkBox_9_clicked(!checked);
 
         //tanque 2
         ui->radioButton_tanque2->setChecked(checked);
@@ -1347,9 +1346,6 @@ void supervisorio::on_checkBox_seguidor_ativar_clicked(bool checked)
 
     //Desabilita/habilita controlador mestre
     ui->groupBox_10->setEnabled(!checked);
-
-    //Desabilita/habilita controlador escravo
-    ui->groupBox_11->setEnabled(!checked);
 
     //Desabilita/habilita malha
     ui->groupBox_4->setEnabled(!checked);
