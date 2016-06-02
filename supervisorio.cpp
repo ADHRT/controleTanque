@@ -33,6 +33,7 @@ supervisorio::supervisorio(QWidget *parent) :
     qApp->setStyleSheet("QGroupBox { border: 0px solid gray;}");
 
     plotRange = 60;
+    plotRange = 300;
     ui->spinBox->setValue(plotRange);
     ui->scaleValue->setValue(plotRange);
 
@@ -1278,8 +1279,10 @@ void supervisorio::on_button_limpar_clicked()
     for (int i=0;i<8;i++){
             ui->customPlot2->graph(i)->clearData();
     }
-    ui->customPlot2->yAxis->setRangeUpper(2);
-    ui->customPlot2->yAxis->setRangeLower(-2);
+    ui->customPlot2->yAxis->setRangeUpper(0);
+    ui->customPlot2->yAxis->setRangeLower(0);
+    ui->customPlot->yAxis->setRangeUpper(0);
+    ui->customPlot->yAxis->setRangeLower(0);
 
 }
 

@@ -446,7 +446,7 @@
      <number>8</number>
     </property>
     <property name="maximum">
-     <number>200</number>
+     <number>600</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -478,7 +478,7 @@
      <number>8</number>
     </property>
     <property name="maximum">
-     <number>200</number>
+     <number>600</number>
     </property>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
