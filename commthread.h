@@ -98,13 +98,9 @@ private:
     double lockSignal(double sinalCalculado, double nivelTanque1, double nivelTanque2);
 
     // Observador
-    void calcL();
-    void calcPoles();
     void calcObs(double nivelTanque1, double nivelTanque2, double sinalSaturado);
 
     // Seguidor
-    void calcK();
-    void calcPolesSeg();
     void calcSeg();
     void calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro);
 

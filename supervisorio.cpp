@@ -118,9 +118,9 @@ supervisorio::supervisorio(QWidget *parent) :
     //observador
     bool observador = false;
     //lOb[0] = 10;
-    //lOb[1] = 15;    
-    polesOb[0] = complex<double>(0.99876,0);
-    polesOb[1] = complex<double>(0.0999273,0);
+    //lOb[1] = 15;
+    polesOb[0] = complex<double>(0.927459,0);
+    polesOb[1] = complex<double>(0.829457,0);
 
     //seguidor
     bool seguidor = true;
@@ -1291,12 +1291,16 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
 
         //tanque 2
         ui->radioButton_tanque2->setChecked(checked);
+
+        //seguidor
+        on_checkBox_seguidor_ativar_clicked(false);
     }
 
     setObsGraph(checked);
 
     //GroupBox's
 
+    ui->checkBox_observador_ativar->setChecked(checked);
     //Habilita/desabilita Observador
     ui->groupBox_Observador->setEnabled(checked);
 
@@ -1329,9 +1333,14 @@ void supervisorio::on_checkBox_seguidor_ativar_clicked(bool checked)
 
         //tanque 2
         ui->radioButton_tanque2->setChecked(checked);
+
+        on_checkBox_observador_ativar_clicked(false);
+
     }
 
     //GroupBox's
+
+    ui->checkBox_seguidor_ativar->setChecked(checked);
 
     //Habilita/desabilita Seguidor
     ui->groupBox_seguidorDeRef->setEnabled(checked);
