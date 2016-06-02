@@ -425,6 +425,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->contMestre.taw = taw[0];
     this->contMestre.windup = windup[0];
     this->contMestre.conditionalIntegration = conditionalIntegration[0];
+    this->contMestre.erro = 0;
 
     this->contEscravo.kp = kp[1];
     this->contEscravo.ki = ki[1];
@@ -432,6 +433,7 @@ void commThread::setParameters(double frequencia, double amplitude, double offse
     this->contEscravo.taw = taw[1];
     this->contEscravo.windup = windup[1];
     this->contEscravo.conditionalIntegration = conditionalIntegration[1];
+    this->contEscravo.erro = 0;
 
     this->tank = tank;
     this->cascade = cascade;
@@ -472,6 +474,7 @@ void commThread::setNullParameters()
     contMestre.lastD = 0;
     contMestre.diferencaSaida = 0;
     contMestre.sinalCalculado = 0;
+    contMestre.erro = 0;
 
     contEscravo.kp = 2;
     contEscravo.ki = 0.05;
@@ -483,8 +486,10 @@ void commThread::setNullParameters()
     contEscravo.lastD = 0;
     contEscravo.diferencaSaida = 0;
     contEscravo.sinalCalculado = 0;
+    contEscravo.erro = 0;
 
     v = 0;
+
 
     qDebug() << "setNullParametres()\n";
 }
