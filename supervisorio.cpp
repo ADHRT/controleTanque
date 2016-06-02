@@ -30,6 +30,8 @@ supervisorio::supervisorio(QWidget *parent) :
     ui->setupUi(this);
     QMainWindow::showFullScreen();
 
+    qApp->setStyleSheet("QGroupBox { border: 0px solid gray;}");
+
     plotRange = 60;
     ui->spinBox->setValue(plotRange);
     ui->scaleValue->setValue(plotRange);
@@ -550,6 +552,26 @@ void supervisorio::updatePlot2(double timeStamp, double redPlot, double bluePlot
 
 }
 
+void supervisorio::setCascadeGraph(bool checked){
+    if (checked){
+        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/blue2.png")));
+        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/green2.png")));
+        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/orange2.png")));
+    }
+    else {
+        ui->pushButton_11->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        ui->pushButton_12->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+        ui->pushButton_13->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
+    }
+
+    ui->pushButton_11->setEnabled(checked);
+    ui->pushButton_12->setEnabled(checked);
+    ui->pushButton_13->setEnabled(checked);
+
+    for (int i = 4; i < 7; i++)
+        plot1Enable[i] = checked;
+}
+
 void supervisorio::setObsGraph(bool checked){
     if (checked){
         ui->pushButton_14->setIcon(QIcon(QString::fromUtf8(":/img/Colors/pink2.png")));
@@ -564,8 +586,13 @@ void supervisorio::setObsGraph(bool checked){
         ui->pushButton_17->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
     }
 
-    for (int i = 0; i < 4; i++)
-        plot2Enable[i+4] = checked;
+    ui->pushButton_14->setEnabled(checked);
+    ui->pushButton_15->setEnabled(checked);
+    ui->pushButton_16->setEnabled(checked);
+    ui->pushButton_17->setEnabled(checked);
+
+    for (int i = 4; i < 8; i++)
+        plot2Enable[i] = checked;
 }
 
 void supervisorio::setLayout(bool frequencia, bool amplitude, bool offset, bool duracao) {
@@ -996,6 +1023,11 @@ void supervisorio::on_comboBox_6_currentIndexChanged(int index)
 void supervisorio::on_pushButton_8_clicked()
 {
     qDebug() << "Atualizar";
+
+    //Graficos
+    setObsGraph(ui->checkBox_observador_ativar->isChecked());
+    setCascadeGraph(ui->checkBox_9->isChecked());
+
     //Get wave configurations
     frequencia = ui->doubleSpinBox->value();
     if(ui->comboBox->currentIndex()==1) frequencia=1/frequencia; //Caso tenhamos escolhido período
@@ -1260,9 +1292,7 @@ void supervisorio::on_pushButton_zerar_clicked()
 void supervisorio::on_checkBox_9_clicked(bool checked)
 {
     ui->groupBox_11->setEnabled(checked);
-//    ui->checkBox_9->setEnabled(checked);
     ui->checkBox_9->setChecked(checked);
-
     ui->comboBox_windup->setEnabled(!checked);
 }
 
@@ -1296,8 +1326,6 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
         on_checkBox_seguidor_ativar_clicked(false);
     }
 
-    setObsGraph(checked);
-
     //GroupBox's
 
     ui->checkBox_observador_ativar->setChecked(checked);
@@ -1312,6 +1340,7 @@ void supervisorio::on_checkBox_observador_ativar_clicked(bool checked)
 
     //Desabilita/habilita tanques
     ui->groupBox_select_tanque->setEnabled(!checked);
+
 }
 
 void supervisorio::on_checkBox_seguidor_ativar_clicked(bool checked)

@@ -172,7 +172,7 @@ void commThread::run(){
             // Envia valores para o supervisorio
             emit plotValues(timeStamp, contMestre.sinalCalculado, contEscravo.sinalCalculado, contEscravo.sinalSaturado, nivelTanque1, nivelTanque2, contMestre.setPoint, contMestre.erro, contMestre.i, contEscravo.i, contMestre.d, contEscravo.d, xEst[0], xEst[1], erroEst[0], erroEst[1]);
         }
-        qDebug() << "Kp:" << contMestre.kp << "Windup" << contMestre.windup << "controlador:" <<  control[0] << "seguidor" << follower << "Observador" << observer;
+        //qDebug() << "Kp:" << contMestre.kp << "Windup" << contMestre.windup << "controlador:" <<  control[0] << "seguidor" << follower << "Observador" << observer;
     }
 
     if(!simulationMode) {

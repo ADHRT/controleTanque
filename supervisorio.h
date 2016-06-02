@@ -211,6 +211,7 @@ private:
     bool lObHasChanged;
     bool poleObHasChanged;
     void replicaPolo(int numPolo);
+    void setCascadeGraph(bool checked);
     void setObsGraph(bool checked);
         //seguidor
     bool kSegHasChanged;
