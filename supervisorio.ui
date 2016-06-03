@@ -55,7 +55,7 @@
     <widget class="QProgressBar" name="progressBar">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>25</x>
        <y>50</y>
        <width>31</width>
        <height>270</height>
@@ -74,7 +74,7 @@
     <widget class="QProgressBar" name="progressBar_2">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>25</x>
        <y>400</y>
        <width>31</width>
        <height>270</height>
@@ -99,7 +99,7 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>-14</x>
+       <x>1</x>
        <y>30</y>
        <width>80</width>
        <height>16</height>
@@ -115,7 +115,7 @@
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>-15</x>
+       <x>0</x>
        <y>330</y>
        <width>81</width>
        <height>16</height>
@@ -131,7 +131,7 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>-14</x>
+       <x>1</x>
        <y>380</y>
        <width>80</width>
        <height>16</height>
@@ -147,7 +147,7 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>-15</x>
+       <x>0</x>
        <y>680</y>
        <width>81</width>
        <height>16</height>
@@ -186,20 +186,7 @@
    <widget class="QLabel" name="label_17">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>330</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Calculado M.</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_18">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
+      <x>590</x>
       <y>330</y>
       <width>61</width>
       <height>16</height>
@@ -207,6 +194,19 @@
     </property>
     <property name="text">
      <string>Saturado</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>330</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Calculado M.</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_19">
@@ -264,7 +264,7 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>570</x>
       <y>330</y>
       <width>16</width>
       <height>16</height>
@@ -2566,8 +2566,6 @@
         </property>
        </item>
       </widget>
-      <zorder>comboBox_6</zorder>
-      <zorder>tabWidget_2</zorder>
      </widget>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
       <property name="enabled">
@@ -2851,23 +2849,6 @@
        <bool>true</bool>
       </property>
      </widget>
-     <zorder>groupBox_analise</zorder>
-     <zorder>groupBox_5</zorder>
-     <zorder>doubleSpinBox_5</zorder>
-     <zorder>doubleSpinBox_2</zorder>
-     <zorder>label_3</zorder>
-     <zorder>doubleSpinBox</zorder>
-     <zorder>label_2</zorder>
-     <zorder>comboBox</zorder>
-     <zorder>doubleSpinBox_3</zorder>
-     <zorder>doubleSpinBox_4</zorder>
-     <zorder>label_12</zorder>
-     <zorder>demo</zorder>
-     <zorder>pushButton_8</zorder>
-     <zorder>pushButton_zerar</zorder>
-     <zorder>connect</zorder>
-     <zorder>connectLabel</zorder>
-     <zorder>connect</zorder>
     </widget>
    </widget>
   </widget>

@@ -110,11 +110,20 @@ void commThread::run(){
                     if (timeToNextRandomNumber>duracaoMax)timeToNextRandomNumber=duracaoMax;//Isso não deveria acontecer
                 }
                 break;
+
             default:
                 qDebug() << "ERRO: Nenhuma onda selecionada!";
             }
 
-            if(malha == false){//malha fechada
+            //malha aberta
+            if (malha)
+            {
+                contMestre.sinalCalculado = sinalDaOndaGerada;
+                contEscravo.sinalCalculado = contMestre.sinalCalculado;
+                contEscravo.sinalSaturado = lockSignal(contEscravo.sinalCalculado, nivelTanque1, nivelTanque2);
+            }
+
+            else {//malha fechada
 
                 //Se houver mudanca de controlador zera o lastI e lastD
                 if(control[0] != lastControl[0]) {
@@ -229,17 +238,11 @@ void commThread::getL(complex<double> *pole, double *l)
 
 void commThread::calculoDeControleSeguidor(double nivelTanque1, double nivelTanque2, double erro)
 {
-//    qDebug() << "nivelTanque1" << nivelTanque1 << "nivelTanque2" << nivelTanque2 << "erro" << erro;
-//    qDebug() << "k1" << k1;
-//    qDebug() << "k2" << k2[0] << k2[1];
-
     v += erro;
     contEscravo.sinalCalculado = -(k2[0]*nivelTanque1 + k2[1]*nivelTanque2) + k1*v;
+    contMestre.sinalCalculado = contEscravo.sinalCalculado;
 
     contEscravo.sinalSaturado = lockSignal(contEscravo.sinalCalculado, nivelTanque1, nivelTanque2);
-
-//    qDebug() << "v:" << v << "SinalCalculado:" << contEscravo.sinalCalculado << "SinalSaturado:" << contEscravo.sinalSaturado;
-
 }
 
 void commThread::getPolesSeg(double *kSeg, complex<double> *poleSeg)
@@ -462,7 +465,7 @@ void commThread::calculoDeControle(Controlador *c, double nivelTanque, double ni
 
     switch (control[0]) {
     case SEM:
-        c->p = 0, c->i = 0, c->d = 0;
+        c->p = 1, c->i = 0, c->d = 0;
         break;
     case P:
         c->i = 0, c->d = 0;

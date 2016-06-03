@@ -400,7 +400,6 @@ void supervisorio::setupPlot2(QCustomPlot *customPlot2)
 
 void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot, double greenPlot, double orangePlot, double blue2Plot, double green2Plot, double orange2Plot)
 {
-
     //Red
     if(plot1Enable[0]) {
         ui->customPlot->graph(0)->addData(timeStamp, redPlot);
@@ -412,6 +411,7 @@ void supervisorio::updatePlot1(double timeStamp, double redPlot, double bluePlot
 
     //Blue
     if(plot1Enable[1]) {
+        qDebug() << "blueDot" << bluePlot;
         ui->customPlot->graph(1)->addData(timeStamp, bluePlot);
         ui->customPlot->graph(3)->clearData();
         ui->customPlot->graph(3)->addData(timeStamp, bluePlot);
@@ -586,7 +586,6 @@ void supervisorio::setObsGraph(bool checked){
         ui->pushButton_16->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
         ui->pushButton_17->setIcon(QIcon(QString::fromUtf8(":/img/Colors/gray.png")));
     }
-
     ui->pushButton_14->setEnabled(checked);
     ui->pushButton_15->setEnabled(checked);
     ui->pushButton_16->setEnabled(checked);
@@ -1092,7 +1091,6 @@ void supervisorio::on_pushButton_8_clicked()
 }
 
 void supervisorio::onPlotValues(double timeStamp, double sinalCalculadoMestre, double sinalCalculadoEscravo, double sinalSaturado, double nivelTanque1, double nivelTanque2, double setPoint, double erro, double iMestre, double iEscravo, double dMestre, double dEscravo, double nivelTanque1Est, double nivelTanque2Est, double erroEst1, double erroEst2){
-
     //Update plots
     supervisorio::updatePlot1(timeStamp, sinalSaturado, sinalCalculadoMestre, iMestre, dMestre, sinalCalculadoEscravo, iEscravo, dEscravo);//Esses ultimos sao os valores integrativos e derivativos
     supervisorio::updatePlot2(timeStamp, nivelTanque1, nivelTanque2, setPoint, erro, nivelTanque1Est, nivelTanque2Est, erroEst1, erroEst2);
